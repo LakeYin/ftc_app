@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import android.test.InstrumentationTestRunner;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -12,6 +13,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 /**
  * Created by citruseel on 10/26/2016.
  */
+@Disabled
 @Autonomous(name="MovementAutonomous", group="Autonomous")
 
 //Place robot backwards at atonomous because the beacon pressers are on the back, so we make the driving as if the robot was backwards

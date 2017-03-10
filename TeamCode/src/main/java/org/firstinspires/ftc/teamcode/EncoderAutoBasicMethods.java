@@ -38,6 +38,7 @@ public class EncoderAutoBasicMethods extends LinearOpMode {
 
 
     /** Declaring the motor variables **/
+    /* ------------------------------------------------------------------------------------------ */
     private DcMotorController motorControllerL;         // Left Motor Controllers
     private DcMotorController motorControllerR;         // Right Motor Controllers
     private DcMotorController motorControllerA1;        // Auxiliary Motor Controller 1
@@ -53,9 +54,11 @@ public class EncoderAutoBasicMethods extends LinearOpMode {
     private DcMotor motorStrafe;                        // Sideways Strafe Motor
 
     private Servo servo;                                // Ball Queue Servo
+    /* ------------------------------------------------------------------------------------------ */
 
 
     /** For Encoders and specific turn values **/
+    /* ------------------------------------------------------------------------------------------ */
     double ticksPerRev = 1120;             // This is the specific value for AndyMark motors
     double ticksPer360Turn = 4500;         // The amount of ticks for a 360 degree turn
     double tickTurnRatio = ticksPer360Turn / 360;
@@ -63,16 +66,21 @@ public class EncoderAutoBasicMethods extends LinearOpMode {
 
     double wheelDiameter = 4.0;         // Diameter of the current omniwheels in inches
     double ticksPerInch = (ticksPerRev / (wheelDiameter * 3.14159265));
+    /* ------------------------------------------------------------------------------------------ */
+
+
 
     /** Color Sensor Stuffs **/
+    /* ------------------------------------------------------------------------------------------ */
     ColorSensor colorBeacon;
 
     boolean LEDState = false;       // Tracks the mode of the color sensor; Active = true, Passive = false
+    /* ------------------------------------------------------------------------------------------ */
 
 
 
 
-    public void runOpMode() throws  InterruptedException{
+    public void runOpMode() throws InterruptedException{
         /** This is the method that executes the code and what the robot should do **/
         // Call any variables not stated before
 
