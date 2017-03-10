@@ -60,12 +60,15 @@ public class EncoderAutoBasicMethods extends LinearOpMode {
     /** For Encoders and specific turn values **/
     /* ------------------------------------------------------------------------------------------ */
     double ticksPerRev = 1120;             // This is the specific value for AndyMark motors
+    double ticksPerRevTetrix = 1440;       // The specific value for Tetrix, since only one encoded Tetrix motor (launcher arm)
     double ticksPer360Turn = 4500;         // The amount of ticks for a 360 degree turn
     double tickTurnRatio = ticksPer360Turn / 360;
     double inchToMm = 25.4;             // For conversion between the vectors
 
     double wheelDiameter = 4.0;         // Diameter of the current omniwheels in inches
     double ticksPerInch = (ticksPerRev / (wheelDiameter * 3.14159265));
+
+    double encoderResetSpeed = 0.25;        // Motor speed for when the robot resets launcher
     /* ------------------------------------------------------------------------------------------ */
 
 
@@ -182,6 +185,85 @@ public class EncoderAutoBasicMethods extends LinearOpMode {
 
         // Resets to run using encoders mode
         runUsingEncoders();
+
+    }
+
+    public void launcherShot(double power, double rotations) throws InterruptedException{
+        /** This method will allow the launcher to fire for a set amount of cycles (rotations)
+         *      NOTE: rotations should be an int, but is set to a double for testing purposes **/
+        // Assigning the target position of the launcher
+        int launchTarget = (int)(rotations * ticksPerRevTetrix);
+        int armPosition = motorLauncher.getCurrentPosition();
+        int targetPosition = launchTarget + armPosition;
+        power = Range.clip(power, 0, 1);
+
+        // Setting the encoder motor positions
+        motorLauncher.setTargetPosition(motorLauncher.getCurrentPosition() + launchTarget);
+
+        // Telemetry for Testing Purposes
+        telemetry.addData("Current Position", armPosition);
+        telemetry.addData("Target Position", targetPosition);
+        telemetry.addData("Translation", launchTarget);
+        telemetry.update();
+
+        motorLauncher.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorLauncher.setPower(power);
+
+        // Code for telemetry
+
+        while(motorLauncher.isBusy()) {
+            // Updating variables
+            double launcherPosition = motorLauncher.getCurrentPosition();
+
+            // Adds telemetry data
+            telemetry.addData("Launcher Position", launcherPosition);
+            telemetry.addData("Target Position", targetPosition);
+            telemetry.addData("Launcher Power", power);
+
+            // Updates the telemetry
+            telemetry.update();
+        }
+
+        // Stops the launcher motion
+        motorLauncher.setPower(0);
+
+        // Sets the encoder back to run using encoders
+        motorLauncher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public void resetLauncher() {
+        // This assumes that the robot was setup in the default launching position
+        // Creates variables
+        double launcherPos = motorLauncher.getCurrentPosition();
+
+        // This is the next multiple of 1440 (multiples of 1440 being the preset loaded position
+        int nextPosition = (int)(Math.ceil(launcherPos / ticksPerRevTetrix)) * 1440;
+
+        // Creates and returns telemetry
+        telemetry.addData("Current Position", launcherPos);
+        telemetry.addData("Next Reset Position", nextPosition);
+        telemetry.update();
+
+        // Motor stuff
+        motorLauncher.setTargetPosition(nextPosition);
+        motorLauncher.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorLauncher.setPower(0.25);
+
+        // Telemetry
+        while(motorLauncher.isBusy()) {
+            // Updating variables
+            double launcherPosition = motorLauncher.getCurrentPosition();
+
+            // Adds telemetry data
+            telemetry.addData("Launcher Position", launcherPosition);
+            telemetry.addData("Next Reset Position", nextPosition);
+
+            // Updates the telemetry
+            telemetry.update();
+        }
+
+        // Stops the launcher
+        motorLauncher.setPower(0);
 
     }
 
