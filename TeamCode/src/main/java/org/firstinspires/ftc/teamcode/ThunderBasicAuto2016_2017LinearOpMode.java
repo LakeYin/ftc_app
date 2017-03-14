@@ -19,6 +19,7 @@ import com.qualcomm.robotcore.hardware.ServoController;
 /**
  * Created by citruseel on 10/26/2016.
  */
+@Disabled
 @Autonomous(name="Thunder2016-2017 Autonomous Blue/Right", group="Autonomous")
 //Place robot backwards at atonomous because the beacon pressers are on the back, so we make the driving as if the robot was backwards
 

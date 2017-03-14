@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.util.Range;
 /**
  * Created by citruseel on 10/14/2016.
  */
-
+@Disabled
 @TeleOp(name="Basic TeleOp", group="TeleOp")
 public class ThunderBasicTeleOp2016_2017 extends OpMode {
 

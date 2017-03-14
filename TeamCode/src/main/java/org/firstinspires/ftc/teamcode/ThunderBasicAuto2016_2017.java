@@ -27,7 +27,7 @@ import com.qualcomm.robotcore.hardware.DcMotorController;
 
 //package org.firstinspires.ftc.robotcontroller.external.samples;
 
-
+@Disabled
 @Autonomous(name="Basic Autonomous", group="Autonomous")
 /**The line above demonstrates the new way to register opmodes inside the code. This method cannot
  * be used in FTC apps prior to version 2. (Update your phones to have matching version numbers
