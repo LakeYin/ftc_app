@@ -5,10 +5,12 @@ package org.firstinspires.ftc.teamcode;
  */
 
 public class EncoderInheritanceTest extends EncoderAutoBasicMethods{
+
     @Override
     public void runOpMode() throws InterruptedException {
         super.runOpMode();
 
         encoderMove(0.2, 6, 6);
     }
+
 }
