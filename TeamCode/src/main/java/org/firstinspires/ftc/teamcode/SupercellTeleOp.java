@@ -39,7 +39,7 @@ public class SupercellTeleOp extends OpMode {
         motorL = hardwareMap.dcMotor.get("motorL");             // Maps the Left Motor
         motorR = hardwareMap.dcMotor.get("motorR");             // Maps the Right Motor
 
-        motorL.setDirection(DcMotorSimple.Direction.REVERSE);   // Reverses Left Motor (so that the
+        motorR.setDirection(DcMotorSimple.Direction.REVERSE);   // Reverses Left Motor (so that the
                                                                 // robot can go forward)
 
         motorL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);    // Initially sets the motors to run
