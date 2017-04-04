@@ -27,7 +27,7 @@ public class SupercellTeleOp extends OpMode {
     private DeviceInterfaceModule DIM;
     /* -------------------------------------------------------------------------------------- */
 
-
+    //TESTING SIMULTANEOUS PUSH
     @Override
     public void init() {
         /* Initializing and mapping electronics */
@@ -49,7 +49,7 @@ public class SupercellTeleOp extends OpMode {
 
         /** DIM and Sensors **/
         /* -------------------------------------------------------------------------------------- */
-        DIM = hardwareMap.deviceInterfaceModule.get("DIM");     // Maps the Device Interface Module
+        //DIM = hardwareMap.deviceInterfaceModule.get("DIM");     // Maps the Device Interface Module
         /* -------------------------------------------------------------------------------------- */
     }
 
