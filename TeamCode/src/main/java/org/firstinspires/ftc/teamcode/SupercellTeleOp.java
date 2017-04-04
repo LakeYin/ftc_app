@@ -27,7 +27,7 @@ public class SupercellTeleOp extends OpMode {
     private DeviceInterfaceModule DIM;
     /* -------------------------------------------------------------------------------------- */
 
-    //TESTING SIMULTANEOUS PUSH
+    //TESTING SIMULTANEOUS PUSH!
     @Override
     public void init() {
         /* Initializing and mapping electronics */
