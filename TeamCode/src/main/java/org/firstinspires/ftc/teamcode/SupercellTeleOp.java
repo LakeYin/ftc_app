@@ -69,7 +69,6 @@ public class SupercellTeleOp extends OpMode {
         colorSensor = hardwareMap.colorSensor.get("colorSensor");
         Color.RGBToHSV(colorSensor.red(), colorSensor.green(), colorSensor.blue(), hsvValues);
         colorSensor.enableLed(bLedOn);
-        //DIM = hardwareMap.deviceInterfaceModule.get("DIM");     // Maps the Device Interface Module
         /* -------------------------------------------------------------------------------------- */
     }
 
