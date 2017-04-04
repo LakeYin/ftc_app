@@ -4,9 +4,14 @@ package org.firstinspires.ftc.teamcode;
  * Created by Alex on 3/14/2017.
  */
 
+import android.app.Activity;
+import android.graphics.Color;
+import android.view.View;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -25,9 +30,19 @@ public class SupercellTeleOp extends OpMode {
     private DcMotor motorR, motorL;
 
     private DeviceInterfaceModule DIM;
+
+    private ColorSensor colorSensor;
+
+    float hsvValues[] = {0F, 0F, 0F};
+    final float values[] = hsvValues;
+    final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(com.qualcomm.ftcrobotcontroller.R.id.RelativeLayout);
+
+    boolean bPrevState = false;
+    boolean bCurrState = false;
+    boolean bLedOn = true;
     /* -------------------------------------------------------------------------------------- */
 
-
+    //TESTING SIMULTANEOUS PUSH!
     @Override
     public void init() {
         /* Initializing and mapping electronics */
@@ -39,7 +54,7 @@ public class SupercellTeleOp extends OpMode {
         motorL = hardwareMap.dcMotor.get("motorL");             // Maps the Left Motor
         motorR = hardwareMap.dcMotor.get("motorR");             // Maps the Right Motor
 
-        motorL.setDirection(DcMotorSimple.Direction.REVERSE);   // Reverses Left Motor (so that the
+        motorR.setDirection(DcMotorSimple.Direction.REVERSE);   // Reverses Left Motor (so that the
                                                                 // robot can go forward)
 
         motorL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);    // Initially sets the motors to run
@@ -50,6 +65,12 @@ public class SupercellTeleOp extends OpMode {
         /** DIM and Sensors **/
         /* -------------------------------------------------------------------------------------- */
         DIM = hardwareMap.deviceInterfaceModule.get("DIM");     // Maps the Device Interface Module
+
+        /* - Color Sensors - */
+        colorSensor = hardwareMap.colorSensor.get("colorSensor");
+        Color.RGBToHSV(colorSensor.red(), colorSensor.green(), colorSensor.blue(), hsvValues);
+        colorSensor.enableLed(bLedOn);
+        //DIM = hardwareMap.deviceInterfaceModule.get("DIM");     // Maps the Device Interface Module
         /* -------------------------------------------------------------------------------------- */
     }
 
@@ -68,13 +89,41 @@ public class SupercellTeleOp extends OpMode {
 
         motorL.setPower(leftPower);                             // Sets the motor power equal to
         motorR.setPower(rightPower);                            // each's respective power
-
-        telemetry.addData("Left Motor Power", leftPower);       // Adds telemetry
-        telemetry.addData("Right Motor Power", rightPower);
         /* -------------------------------------------------------------------------------------- */
 
+        /** For the sensors **/
+        /* -------------------------------------------------------------------------------------- */
+        Color.RGBToHSV(colorSensor.red(), colorSensor.green(), colorSensor.blue(), hsvValues);
 
+        bCurrState = gamepad1.x;                                // check the status of the x button
+                                                                // on either gamepad.
+
+        // check for button state transitions.
+        if ((bCurrState == true) && (bCurrState != bPrevState))  {
+
+            // button is transitioning to a pressed state.  Toggle LED.
+            // on button press, enable the LED.
+            bLedOn = !bLedOn;
+            colorSensor.enableLed(bLedOn);
+        }
+        /* -------------------------------------------------------------------------------------- */
+
+        /** Add telemetry here **/
+        /* -------------------------------------------------------------------------------------- */
+        telemetry.addData("Left Motor Power", leftPower);       // Adds telemetry
+        telemetry.addData("Right Motor Power", rightPower);
+
+        /* - Color Sensors - */
+        telemetry.addData("LED", bLedOn ? "On" : "Off");
+        telemetry.addData("Clear", colorSensor.alpha());
+        telemetry.addData("Red  ", colorSensor.red());
+        telemetry.addData("Green", colorSensor.green());
+        telemetry.addData("Blue ", colorSensor.blue());
+        telemetry.addData("Hue", hsvValues[0]);
+
+        /* - UPDATE TELEMETRY - */
         telemetry.update();                                     // Updates telemetry
+        /* -------------------------------------------------------------------------------------- */
     }
 
 }
