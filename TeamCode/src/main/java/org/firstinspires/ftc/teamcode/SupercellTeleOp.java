@@ -42,7 +42,6 @@ public class SupercellTeleOp extends OpMode {
     boolean bLedOn = true;
     /* -------------------------------------------------------------------------------------- */
 
-    //TESTING SIMULTANEOUS PUSH!
     @Override
     public void init() {
         /* Initializing and mapping electronics */
