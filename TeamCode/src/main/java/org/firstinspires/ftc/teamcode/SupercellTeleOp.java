@@ -42,7 +42,6 @@ public class SupercellTeleOp extends OpMode {
     boolean bLedOn = true;
     /* -------------------------------------------------------------------------------------- */
 
-    // Dinosaur Eggs
     @Override
     public void init() {
         /* Initializing and mapping electronics */
