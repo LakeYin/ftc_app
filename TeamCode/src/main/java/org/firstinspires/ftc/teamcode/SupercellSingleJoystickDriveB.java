@@ -53,12 +53,14 @@ public class SupercellSingleJoystickDriveB extends OpMode {
 
         double vectorMagnitude = joystickY < 0 ? -1 * Math.hypot(joystickX, joystickY) : joystickY > 0 ? Math.hypot(joystickX, joystickY) : 0;  // The power of the motors
 
-        double angle = joystickX > 0 && joystickY > 0 ? Math.PI/2 - Math.atan(joystickY/joystickX) : joystickX < 0 && joystickY > 0 ? -1 * (Math.atan(joystickY/joystickX) - Math.PI/2) : joystickX < 0 && joystickY < 0 ? -1 * (Math.atan(joystickY/joystickX) - Math.PI) : joystickX > 0 && joystickY < 0 ? (2 * Math.PI - Math.atan(joystickY/joystickX)) : joystickX > 0 && joystickY == 0 ? 90 : joystickX < 0 && joystickY == 0 ? -90 : 0;
-//                                               first quadrant return postivie value           second quadrant return negative                                                     third quadrant return negative                                                          fourth quadrant return positive                                                       x axis return 90                      negative x axis return -90            origin return 0
+        double angle = joystickX > 0 && joystickY > 0 ? Math.PI/2 - Math.atan(joystickY/joystickX) : joystickX < 0 && joystickY > 0 ? -1 * (Math.atan(joystickY/joystickX) - Math.PI/2) : joystickX < 0 && joystickY < 0 ? -1 * (Math.atan(joystickY/joystickX) - Math.PI*3/2) : joystickX > 0 && joystickY < 0 ? Math.atan(joystickY/joystickX)- Math.PI * 3 / 2 : joystickX > 0 && joystickY == 0 ? 90 : joystickX < 0 && joystickY == 0 ? -90 : 0;
+//                                               first quadrant return positive value           second quadrant return negative                                                     third quadrant return negative                                                          fourth quadrant return positive                                                       x axis return 90                      negative x axis return -90            origin return 0
+        angle = Range.clip(angle, -90, 90);
+
         double anglePower = angle/(2 * Math.PI);
 
-        double leftPower = (vectorMagnitude - anglePower) / 2;
-        double rightPower = (vectorMagnitude + anglePower) / 2;
+        double leftPower = vectorMagnitude - 0.25 + anglePower;
+        double rightPower = vectorMagnitude + 0.25 - anglePower;
 
         leftPower = Range.clip(leftPower, -1, 1);
         rightPower = Range.clip(rightPower, -1, 1);
