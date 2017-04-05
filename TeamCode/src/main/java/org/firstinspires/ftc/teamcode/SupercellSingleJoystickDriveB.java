@@ -13,8 +13,8 @@ import com.qualcomm.robotcore.util.Range;
  * Created by Alex on 4/4/2017.
  */
 
-@TeleOp(name = "Supercell Single Joystick", group = "Supercell")
-public class SupercellSingleJoystickDrive extends OpMode {
+@TeleOp(name = "Supercell Single Joystick B", group = "Supercell")
+public class SupercellSingleJoystickDriveB extends OpMode {
 
     /**
      * Indicating robot components
@@ -48,80 +48,29 @@ public class SupercellSingleJoystickDrive extends OpMode {
 
     public void loop() {
 
-        /** For the Drive Train **/
-        /* -------------------------------------------------------------------------------------- */
-        /** ORIGINAL DRIVE
-         double speedModifier = gamepad1.right_trigger > 0 ? 0.25 : gamepad1.right_bumper ? 1 : 0.6;
-         // Modifies the power (below) depending on the right trigger and bumper
-
-         double leftPower = gamepad1.left_stick_y * speedModifier;     // Both set power according to
-         double rightPower = gamepad1.right_stick_y * speedModifier;   // the joysticks on controller 1
-
-         leftPower = Range.clip(leftPower, -1, 1);
-         rightPower = Range.clip(rightPower, -1, 1);
-
-         motorL.setPower(leftPower);                             // Sets the motor power equal to
-         motorR.setPower(rightPower);                            // each's respective power **/
-
         double joystickX = gamepad1.left_stick_x;
         double joystickY = gamepad1.left_stick_y;
 
-        boolean joystickYPositive = true;
-        double upperAngle = 0;
-        // Statements
-        if (joystickY > 0) {
-            upperAngle = Math.toDegrees(Math.atan(joystickX / joystickY));
-            // Q1 is positive, Q4 is negative
-        } else if (joystickY < 0) {
-            upperAngle = -(Math.toDegrees(Math.atan(joystickX / joystickY)));
-            // Q2 is negative, Q3 is positive
-            joystickYPositive = false;
-        } else {
-            upperAngle = 0;
-        }
+        double vectorMagnitude = joystickY < 0 ? -1 * Math.hypot(joystickX, joystickY) : joystickY > 0 ? Math.hypot(joystickX, joystickY) : 0;  // The power of the motors
 
-        double speedModifier = 1 - (Math.abs(upperAngle) / 45);
-        double vectorMagnitude = Math.hypot(joystickX, joystickY);  // The power of the motors
+        double angle = joystickX > 0 && joystickY > 0 ? Math.PI/2 - Math.atan(joystickY/joystickX) : joystickX < 0 && joystickY > 0 ? -1 * (Math.atan(joystickY/joystickX) - Math.PI/2) : joystickX < 0 && joystickY < 0 ? -1 * (Math.atan(joystickY/joystickX) - Math.PI) : joystickX > 0 && joystickY < 0 ? (2 * Math.PI - Math.atan(joystickY/joystickX)) : joystickX > 0 && joystickY == 0 ? 90 : joystickX < 0 && joystickY == 0 ? -90 : 0;
+//                                               first quadrant return postivie value           second quadrant return negative                                                     third quadrant return negative                                                          fourth quadrant return positive                                                       x axis return 90                      negative x axis return -90            origin return 0
+        double anglePower = angle/(2 * Math.PI);
 
-        double leftPower = 0;
-        double rightPower = 0;
-        // Determining which side
-        if (upperAngle > 0 && upperAngle < 90) {
-            if (joystickYPositive = true) {
-                leftPower = vectorMagnitude;
-                rightPower = speedModifier;
-            } else if (joystickYPositive = false) {
-                leftPower = -vectorMagnitude;
-                rightPower = -speedModifier;
-            }
-        } else if (upperAngle < 0 && upperAngle > -90) {
-            if (joystickYPositive = true) {
-                leftPower = speedModifier;
-                rightPower = vectorMagnitude;
-            } else if (joystickYPositive = false) {
-                leftPower = -speedModifier;
-                rightPower = -vectorMagnitude;
-            }
-        } else {
-            leftPower = 0;
-            rightPower = 0;
-        }
+        double leftPower = (vectorMagnitude - anglePower) / 2;
+        double rightPower = (vectorMagnitude + anglePower) / 2;
 
         leftPower = Range.clip(leftPower, -1, 1);
         rightPower = Range.clip(rightPower, -1, 1);
 
         motorL.setPower(leftPower);                             // Sets the motor power equal to
         motorR.setPower(rightPower);                            // each's respective power
-        // Example scenario: x = 0, y = 1 -- robot should move forward
-        // Example scenario: x = -1, y = 0 -- robot should rotate, motorR forward and motorL backwards
-
         /* -------------------------------------------------------------------------------------- */
 
         /** Add telemetry here **/
         /* -------------------------------------------------------------------------------------- */
-        telemetry.addData("Angle", upperAngle);
+        telemetry.addData("Angle", angle);
         telemetry.addData("Motor Power", vectorMagnitude);
-        telemetry.addData("Speed Modifier", speedModifier);
 
         telemetry.addData("Left Motor Power", leftPower);       // Adds telemetry
         telemetry.addData("Right Motor Power", rightPower);
