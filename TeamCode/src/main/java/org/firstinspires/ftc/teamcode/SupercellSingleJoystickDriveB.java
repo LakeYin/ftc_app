@@ -49,18 +49,18 @@ public class SupercellSingleJoystickDriveB extends OpMode {
     public void loop() {
 
         double joystickX = gamepad1.left_stick_x;
-        double joystickY = gamepad1.left_stick_y;
+        double joystickY = - gamepad1.left_stick_y; // naturally: up = -1, down = 1
 
-        double vectorMagnitude = joystickY < 0 ? -1 * Math.hypot(joystickX, joystickY) : joystickY > 0 ? Math.hypot(joystickX, joystickY) : 0;  // The power of the motors
+        double vectorMagnitude = joystickY;  // The power of the motors
 
-        double angle = joystickX > 0 && joystickY > 0 ? Math.PI/2 - Math.atan(joystickY/joystickX) : joystickX < 0 && joystickY > 0 ? -1 * (Math.atan(joystickY/joystickX) - Math.PI/2) : joystickX < 0 && joystickY < 0 ? -1 * (Math.atan(joystickY/joystickX) - Math.PI*3/2) : joystickX > 0 && joystickY < 0 ? Math.atan(joystickY/joystickX)- Math.PI * 3 / 2 : joystickX > 0 && joystickY == 0 ? 90 : joystickX < 0 && joystickY == 0 ? -90 : 0;
-//                                               first quadrant return positive value           second quadrant return negative                                                     third quadrant return negative                                                          fourth quadrant return positive                                                       x axis return 90                      negative x axis return -90            origin return 0
+        double angle = joystickX > 0 && joystickY >= 0 ? Math.PI/2 - Math.atan(joystickY/joystickX) : joystickX < 0 && joystickY >= 0 ? -1 * (Math.atan(joystickY/joystickX) - Math.PI/2) : joystickX < 0 && joystickY < 0 ? -1 * (Math.atan(joystickY/joystickX) - Math.PI*3/2) : joystickX > 0 && joystickY < 0 ? Math.atan(joystickY/joystickX)- Math.PI * 3 / 2 :  0;
+//                                               first quadrant return positive value           second quadrant return negative                                                     third quadrant return negative                                                          fourth quadrant return positive                                                        origin return 0
         angle = Range.clip(angle, -90, 90);
 
         double anglePower = angle/(2 * Math.PI);
 
-        double leftPower = vectorMagnitude - 0.25 + anglePower;
-        double rightPower = vectorMagnitude + 0.25 - anglePower;
+        double leftPower = (vectorMagnitude + anglePower)/2;
+        double rightPower = (vectorMagnitude - anglePower)/2;
 
         leftPower = Range.clip(leftPower, -1, 1);
         rightPower = Range.clip(rightPower, -1, 1);
@@ -73,6 +73,9 @@ public class SupercellSingleJoystickDriveB extends OpMode {
         /* -------------------------------------------------------------------------------------- */
         telemetry.addData("Angle", angle);
         telemetry.addData("Motor Power", vectorMagnitude);
+
+        telemetry.addData("X", joystickX);
+        telemetry.addData("Y", joystickY);
 
         telemetry.addData("Left Motor Power", leftPower);       // Adds telemetry
         telemetry.addData("Right Motor Power", rightPower);
