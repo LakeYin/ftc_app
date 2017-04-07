@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
 /**
- * Created by joshuakrinsky on 4/5/17.
+ * Created by joshua krinsky on 4/5/17.
  */
 import android.app.Activity;
 import android.graphics.Color;
 import android.view.View;
 
+import com.qualcomm.hardware.hitechnic.HiTechnicNxtGyroSensor;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -24,7 +25,7 @@ public class gyroTester extends LinearOpMode {
 
     private DcMotorController MC_M;
     private DcMotor motorR, motorL;
-
+    HiTechnicNxtGyroSensor mrGyro;
     private DeviceInterfaceModule DIM;
     private GyroSensor sensorGyro;
     int zAccumulated;
@@ -35,7 +36,6 @@ public class gyroTester extends LinearOpMode {
         sensorGyro = hardwareMap.gyroSensor.get("gyro");              // Maps the gyro sensor
         motorL = hardwareMap.dcMotor.get("motorL");             // Maps the Left Motor
         motorR = hardwareMap.dcMotor.get("motorR");             // Maps the Right Motor
-
         motorR.setDirection(DcMotorSimple.Direction.REVERSE);   // Reverses Left Motor (so that the
         // robot can go forward)
         motorL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);    // Initially sets the motors to run
@@ -44,9 +44,7 @@ public class gyroTester extends LinearOpMode {
         double turnSpeed = .15;
         int target = 0;
 
-        ModernRoboticsI2cGyro mrGyro;
-
-            mrGyro = (ModernRoboticsI2cGyro) sensorGyro;
+        mrGyro = (HiTechnicNxtGyroSensor) sensorGyro;
 
 
 
@@ -62,7 +60,7 @@ public class gyroTester extends LinearOpMode {
             while(opModeIsActive()) {
 
 
-                zAccumulated = mrGyro.getIntegratedZValue();
+                zAccumulated = mrGyro.rawZ();
 
                 while (Math.abs(zAccumulated - target) > 3) {
 
@@ -82,15 +80,17 @@ public class gyroTester extends LinearOpMode {
 
                 waitOneFullHardwareCycle();
 
-                zAccumulated = mrGyro.getIntegratedZValue();
+                zAccumulated = mrGyro.rawZ();
 
                 telemetry.addData("1. Accumulation", zAccumulated);
+                    telemetry.update();
                 waitOneFullHardwareCycle();
 
             }
                 motorL.setPower(0);
                 motorR.setPower(0);
                 telemetry.addData("1. Accumulation", zAccumulated);
+                telemetry.update();
         }
 
 
