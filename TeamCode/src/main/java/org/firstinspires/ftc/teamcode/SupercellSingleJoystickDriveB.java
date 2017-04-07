@@ -37,7 +37,7 @@ public class SupercellSingleJoystickDriveB extends OpMode {
         motorL = hardwareMap.dcMotor.get("motorL");             // Maps the Left Motor
         motorR = hardwareMap.dcMotor.get("motorR");             // Maps the Right Motor
 
-        motorR.setDirection(DcMotorSimple.Direction.REVERSE);   // Reverses Left Motor (so that the
+        motorL.setDirection(DcMotorSimple.Direction.REVERSE);   // Reverses Left Motor (so that the
         // robot can go forward)
 
         motorL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);    // Initially sets the motors to run
@@ -53,8 +53,11 @@ public class SupercellSingleJoystickDriveB extends OpMode {
 
         double vectorMagnitude = joystickY;  // The power of the motors
 
-        double angle = joystickX > 0 && joystickY >= 0 ? Math.PI/2 - Math.atan(joystickY/joystickX) : joystickX < 0 && joystickY >= 0 ? -1 * (Math.atan(joystickY/joystickX) - Math.PI/2) : joystickX < 0 && joystickY < 0 ? -1 * (Math.atan(joystickY/joystickX) - Math.PI*3/2) : joystickX > 0 && joystickY < 0 ? Math.atan(joystickY/joystickX)- Math.PI * 3 / 2 :  0;
-//                                               first quadrant return positive value           second quadrant return negative                                                     third quadrant return negative                                                          fourth quadrant return positive                                                        origin return 0
+        double angle = joystickX > 0 && joystickY >= 0 ? Math.PI/2 - Math.atan(joystickY/joystickX) : //first quadrant
+                       joystickX < 0 && joystickY >= 0 ? -1 * (Math.atan(joystickY/joystickX) - Math.PI/2) : //second quadrant
+                       joystickX < 0 && joystickY < 0 ? -1 * (Math.atan(joystickY/joystickX) - Math.PI*3/2) :  //third quadrant
+                       joystickX > 0 && joystickY < 0 ? Math.atan(joystickY/joystickX)- Math.PI * 3 / 2 :  //fourth quadrant
+                               0; //origin
         angle = Range.clip(angle, -90, 90);
 
         double anglePower = angle/(2 * Math.PI);
@@ -71,7 +74,7 @@ public class SupercellSingleJoystickDriveB extends OpMode {
 
         /** Add telemetry here **/
         /* -------------------------------------------------------------------------------------- */
-        telemetry.addData("Angle", angle);
+        telemetry.addData("Angle", angle / (2 * Math.PI) * 360 + " degrees");
         telemetry.addData("Motor Power", vectorMagnitude);
 
         telemetry.addData("X", joystickX);
