@@ -26,30 +26,27 @@ public class gyroTester extends LinearOpMode {
     private DcMotor motorR, motorL;
 
     private DeviceInterfaceModule DIM;
+    private GyroSensor sensorGyro;
     int zAccumulated;
 
     public void runOpMode() throws InterruptedException {
 
         MC_M = hardwareMap.dcMotorController.get("MC_M");       // Maps the Motor Controller
-
+        sensorGyro = hardwareMap.gyroSensor.get("gyro");              // Maps the gyro sensor
         motorL = hardwareMap.dcMotor.get("motorL");             // Maps the Left Motor
         motorR = hardwareMap.dcMotor.get("motorR");             // Maps the Right Motor
 
         motorR.setDirection(DcMotorSimple.Direction.REVERSE);   // Reverses Left Motor (so that the
         // robot can go forward)
-
         motorL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);    // Initially sets the motors to run
         motorR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         double turnSpeed = .15;
         int target = 0;
 
-            GyroSensor gyro;
-            ModernRoboticsI2cGyro mrGyro;
+        ModernRoboticsI2cGyro mrGyro;
 
-            gyro = hardwareMap.gyroSensor.get("gyro");
-
-            mrGyro = (ModernRoboticsI2cGyro) gyro;
+            mrGyro = (ModernRoboticsI2cGyro) sensorGyro;
 
 
 
