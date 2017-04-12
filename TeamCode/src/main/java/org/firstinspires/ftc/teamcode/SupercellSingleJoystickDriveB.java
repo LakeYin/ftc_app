@@ -51,19 +51,20 @@ public class SupercellSingleJoystickDriveB extends OpMode {
         double joystickX = gamepad1.left_stick_x;
         double joystickY = - gamepad1.left_stick_y; // naturally: up = -1, down = 1
 
-        double vectorMagnitude = joystickY;  // The power of the motors
+        double vectorMagnitude = joystickY > 0 ? Math.hypot(joystickX, joystickY): joystickY < 0 ? -1* Math.hypot(joystickX, joystickY): 0;  // The power of the motors
 
         double angle = joystickX > 0 && joystickY >= 0 ? Math.PI/2 - Math.atan(joystickY/joystickX) : //first quadrant
                        joystickX < 0 && joystickY >= 0 ? -1 * (Math.atan(joystickY/joystickX) - Math.PI/2) : //second quadrant
                        joystickX < 0 && joystickY < 0 ? -1 * (Math.atan(joystickY/joystickX) - Math.PI*3/2) :  //third quadrant
                        joystickX > 0 && joystickY < 0 ? Math.atan(joystickY/joystickX)- Math.PI * 3 / 2 :  //fourth quadrant
                                0; //origin
-        angle = Range.clip(angle, -90, 90);
 
-        double anglePower = angle/(2 * Math.PI);
+        angle = Range.clip(angle, -Math.PI/2, Math.PI/2);
 
-        double leftPower = (vectorMagnitude + anglePower)/2;
-        double rightPower = (vectorMagnitude - anglePower)/2;
+        double anglePower = Math.pow(angle/(2 * Math.PI), 1/3);
+
+        double leftPower = joystickY > 0 ? (vectorMagnitude + anglePower)/2 : joystickY < 0 ? (vectorMagnitude - anglePower)/2 : joystickY == 0 ? joystickX * anglePower: 0 ;
+        double rightPower = joystickY > 0 ? (vectorMagnitude - anglePower)/2 : joystickY < 0 ? (vectorMagnitude + anglePower)/2 : joystickY == 0 ? joystickX * -anglePower: 0;
 
         leftPower = Range.clip(leftPower, -1, 1);
         rightPower = Range.clip(rightPower, -1, 1);

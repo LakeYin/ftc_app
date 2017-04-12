@@ -16,24 +16,20 @@ public class OmOmBot extends OpMode{
      * Indicating robot components
      **/
     /* -------------------------------------------------------------------------------------- */
-    private DcMotor motorR, motorL, motorF, motorB;
+    private DcMotor motorsSide, motorsForward;
 
     public void init(){
         /* -------------------------------------------------------------------------------------- */
 
-        motorL = hardwareMap.dcMotor.get("motorL");             // Maps the Left Motor
-        motorR = hardwareMap.dcMotor.get("motorR");             // Maps the Right Motor
-        motorF = hardwareMap.dcMotor.get("motorF");
-        motorB = hardwareMap.dcMotor.get("motorB");
+        motorsSide = hardwareMap.dcMotor.get("motorT&B");             // Maps the Top and Bottom Motors
+        motorsForward = hardwareMap.dcMotor.get("motorL&R");             // Maps the Left and Right Motors
 
-        motorR.setDirection(DcMotorSimple.Direction.REVERSE);   // Reverses Left Motor (so that the
-        // robot can go forward)
-        motorF.setDirection(DcMotorSimple.Direction.REVERSE);
+//        motorsSide.setDirection(DcMotorSimple.Direction.REVERSE);   // Reverses Left Motor (so that the
+//        // robot can go forward)
+//        motorsForward.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        motorL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);    // Initially sets the motors to run
-        motorR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);    // without encoders, but can be
-        motorF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motorB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motorsForward.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);    // Initially sets the motors to run
+        motorsSide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);    // without encoders, but can be
     }
 
     public void loop(){
@@ -43,10 +39,8 @@ public class OmOmBot extends OpMode{
         sidePower = Range.clip(sidePower, -1, 1);
         forwardPower = Range.clip(forwardPower, -1, 1);
 
-        motorF.setPower(sidePower*constant);
-        motorB.setPower(sidePower*constant);
-        motorL.setPower(forwardPower*constant);
-        motorR.setPower(forwardPower*constant);
+        motorsSide.setPower(sidePower*constant);
+        motorsForward.setPower(forwardPower*constant);
 
         telemetry.addData("sidePower", sidePower);
         telemetry.addData("forwardPower", forwardPower);
