@@ -25,7 +25,7 @@ public class gyroTester extends LinearOpMode {
 
     private DcMotorController MC_M;
     private DcMotor motorR, motorL;
-    HiTechnicNxtGyroSensor mrGyro;
+    HiTechnicNxtGyroSensor hiTechGyro;
     private DeviceInterfaceModule DIM;
     private GyroSensor sensorGyro;
     int zAccumulated;
@@ -44,23 +44,24 @@ public class gyroTester extends LinearOpMode {
         double turnSpeed = .15;
         int target = 0;
 
-        mrGyro = (HiTechnicNxtGyroSensor) sensorGyro;
+
+        hiTechGyro= (HiTechnicNxtGyroSensor) sensorGyro;
 
 
 
             sleep(1000);
-            mrGyro.calibrate(); //calibrates the gyro sensor for use and world domination
+        hiTechGyro.calibrate(); //calibrates the gyro sensor for use and world domination
 
             waitForStart();
 
-            while (mrGyro.isCalibrating()) { //causes the program to halt while callibration
+            while (hiTechGyro.isCalibrating()) { //causes the program to halt while callibration
                 // commenses over the rising horizon
             }
 
             while(opModeIsActive()) {
 
 
-                zAccumulated = mrGyro.rawZ();
+                zAccumulated = hiTechGyro.rawZ();
 
                 while (Math.abs(zAccumulated - target) > 3) {
 
@@ -78,13 +79,13 @@ public class gyroTester extends LinearOpMode {
 
 
 
-                waitOneFullHardwareCycle();
+                //waitOneFullHardwareCycle();
 
-                zAccumulated = mrGyro.rawZ();
+                zAccumulated = hiTechGyro.rawZ();
 
                 telemetry.addData("1. Accumulation", zAccumulated);
                     telemetry.update();
-                waitOneFullHardwareCycle();
+                //waitOneFullHardwareCycle();
 
             }
                 motorL.setPower(0);
