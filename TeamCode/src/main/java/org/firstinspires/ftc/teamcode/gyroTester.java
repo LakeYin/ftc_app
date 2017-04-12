@@ -28,7 +28,7 @@ public class gyroTester extends LinearOpMode {
     HiTechnicNxtGyroSensor hiTechGyro;
     private DeviceInterfaceModule DIM;
     private GyroSensor sensorGyro;
-    int zAccumulated;
+    int xAccumulated;
 
     public void runOpMode() throws InterruptedException {
 
@@ -45,14 +45,14 @@ public class gyroTester extends LinearOpMode {
         int target = 0;
 
 
-        hiTechGyro= (HiTechnicNxtGyroSensor) sensorGyro;
+        hiTechGyro = (HiTechnicNxtGyroSensor) sensorGyro;
 
 
 
-            sleep(1000);
+        sleep(1000);
         hiTechGyro.calibrate(); //calibrates the gyro sensor for use and world domination
 
-            waitForStart();
+        waitForStart();
 
             while (hiTechGyro.isCalibrating()) { //causes the program to halt while callibration
                 // commenses over the rising horizon
@@ -61,17 +61,17 @@ public class gyroTester extends LinearOpMode {
             while(opModeIsActive()) {
 
 
-                zAccumulated = hiTechGyro.rawZ();
+                xAccumulated = hiTechGyro.rawX();
 
-                while (Math.abs(zAccumulated - target) > 3) {
+                while (Math.abs(xAccumulated - target) > 3) {
 
 
-                    if (zAccumulated > 0) {
+                    if (xAccumulated > 0) {
                         motorL.setPower(turnSpeed);
                         motorR.setPower(-turnSpeed);
                     }
 
-                    if (zAccumulated < 0) {
+                    if (xAccumulated < 0) {
                         motorL.setPower(-turnSpeed);
                         motorR.setPower(turnSpeed);
 
@@ -81,16 +81,16 @@ public class gyroTester extends LinearOpMode {
 
                 //waitOneFullHardwareCycle();
 
-                zAccumulated = hiTechGyro.rawZ();
+                xAccumulated = hiTechGyro.rawZ();
 
-                telemetry.addData("1. Accumulation", zAccumulated);
+                telemetry.addData("1. Accumulation", xAccumulated);
                     telemetry.update();
                 //waitOneFullHardwareCycle();
 
             }
                 motorL.setPower(0);
                 motorR.setPower(0);
-                telemetry.addData("1. Accumulation", zAccumulated);
+                telemetry.addData("1. Accumulation", xAccumulated);
                 telemetry.update();
         }
 
