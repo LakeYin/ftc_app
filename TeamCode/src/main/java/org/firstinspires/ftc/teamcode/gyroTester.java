@@ -28,7 +28,7 @@ public class gyroTester extends LinearOpMode {
     HiTechnicNxtGyroSensor hiTechGyro;
     private DeviceInterfaceModule DIM;
     private GyroSensor sensorGyro;
-    int xAccumulated;
+    int xAccumulated=0;
 
     public void runOpMode() throws InterruptedException {
 
@@ -51,6 +51,10 @@ public class gyroTester extends LinearOpMode {
 
         sleep(1000);
         hiTechGyro.calibrate(); //calibrates the gyro sensor for use and world domination
+
+        telemetry.addData("is calibrated", xAccumulated);
+        telemetry.update();
+
 
         waitForStart();
 
@@ -81,7 +85,7 @@ public class gyroTester extends LinearOpMode {
 
                 //waitOneFullHardwareCycle();
 
-                xAccumulated = hiTechGyro.rawZ();
+                xAccumulated = hiTechGyro.rawX();
 
                 telemetry.addData("1. Accumulation", xAccumulated);
                     telemetry.update();
