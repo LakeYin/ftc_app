@@ -51,10 +51,7 @@ public class gyroTester extends LinearOpMode {
 
         sleep(1000);
         hiTechGyro.calibrate(); //calibrates the gyro sensor for use and world domination
-
-        telemetry.addData("is calibrated", xAccumulated);
-        telemetry.update();
-
+        
 
         waitForStart();
 
@@ -62,8 +59,11 @@ public class gyroTester extends LinearOpMode {
                 // commenses over the rising horizon
             }
 
+
             while(opModeIsActive()) {
 
+                telemetry.addData("is calibrated", xAccumulated);
+                telemetry.update();
 
                 xAccumulated = hiTechGyro.rawX();
 
