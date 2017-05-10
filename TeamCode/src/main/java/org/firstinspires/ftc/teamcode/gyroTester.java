@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.view.View;
 
 import com.qualcomm.hardware.hitechnic.HiTechnicNxtGyroSensor;
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -42,7 +41,7 @@ public class gyroTester extends LinearOpMode {
         motorR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         double turnSpeed = .15;
-        int target = 0;
+        double rotationFraction = 0;
 
 
         hiTechGyro = (HiTechnicNxtGyroSensor) sensorGyro;
@@ -51,7 +50,7 @@ public class gyroTester extends LinearOpMode {
 
         sleep(1000);
         hiTechGyro.calibrate(); //calibrates the gyro sensor for use and world domination
-        
+
 
         waitForStart();
 
@@ -62,20 +61,21 @@ public class gyroTester extends LinearOpMode {
 
             while(opModeIsActive()) {
 
-                telemetry.addData("is calibrated", xAccumulated);
+                telemetry.addData("is calibrated", rotationFraction);
                 telemetry.update();
 
-                xAccumulated = hiTechGyro.rawX();
 
-                while (Math.abs(xAccumulated - target) > 3) {
+                rotationFraction = hiTechGyro.getRotationFraction();
+
+                while (Math.abs(rotationFraction) > 0) { // rotation conditional
 
 
-                    if (xAccumulated > 0) {
+                    if (rotationFraction > 0) {  //turn one way if too far above zero
                         motorL.setPower(turnSpeed);
                         motorR.setPower(-turnSpeed);
                     }
 
-                    if (xAccumulated < 0) {
+                    if (rotationFraction < 0) {   //turn the other if too far below
                         motorL.setPower(-turnSpeed);
                         motorR.setPower(turnSpeed);
 
@@ -85,24 +85,20 @@ public class gyroTester extends LinearOpMode {
 
                 //waitOneFullHardwareCycle();
 
-                xAccumulated = hiTechGyro.rawX();
+                rotationFraction = hiTechGyro.getRotationFraction();
 
-                telemetry.addData("1. Accumulation", xAccumulated);
-                    telemetry.update();
+                telemetry.addData("1. fraction", rotationFraction);
+                    telemetry.update(); // update fraction
                 //waitOneFullHardwareCycle();
 
             }
-                motorL.setPower(0);
-                motorR.setPower(0);
-                telemetry.addData("1. Accumulation", xAccumulated);
-                telemetry.update();
+                motorL.setPower(0);//stop power
+                motorR.setPower(0); //stop power
+                telemetry.addData("1. fraction", rotationFraction); //fraction is zero
+                telemetry.update(); //update fraction
         }
 
 
-
-
-
     }
-
 
 }
