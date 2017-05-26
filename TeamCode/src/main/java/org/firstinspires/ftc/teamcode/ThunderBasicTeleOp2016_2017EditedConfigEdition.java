@@ -16,11 +16,11 @@ import com.qualcomm.robotcore.util.Range;
 @TeleOp(name="Thunder 2016-2017 TeleOp", group="TeleOp")
 public class ThunderBasicTeleOp2016_2017EditedConfigEdition extends OpMode {
 
-    private DcMotorController motorControllerL;    // left motor controllers
+   /* private DcMotorController motorControllerL;    // left motor controllers
     private DcMotorController motorControllerR;    // right motor controllers
     private DcMotorController motorControllerA1;   // Scoring motor controller
     private DcMotorController motorControllerA2;   // Scoring motor controller
-    private ServoController servoController;
+    private ServoController servoController; */
 
     private DcMotor motorFrontL;
     private DcMotor motorFrontR;
@@ -28,7 +28,7 @@ public class ThunderBasicTeleOp2016_2017EditedConfigEdition extends OpMode {
     private DcMotor motorBackR;
     private DcMotor sweeperMotor;
     private DcMotor motorLauncher;
-    private DcMotor motorStrafe;
+    //private DcMotor motorStrafe;
 
     private Servo servo;
 
@@ -38,11 +38,11 @@ public class ThunderBasicTeleOp2016_2017EditedConfigEdition extends OpMode {
     @Override
     public void init() {
         /* Initializing and mapping electronics*/
-        motorControllerL = hardwareMap.dcMotorController.get("MC_L");
+       /* motorControllerL = hardwareMap.dcMotorController.get("MC_L");
         motorControllerR = hardwareMap.dcMotorController.get("MC_R");
         motorControllerA1 = hardwareMap.dcMotorController.get("MC_A1");
         motorControllerA2 = hardwareMap.dcMotorController.get("MC_A2");
-        servoController = hardwareMap.servoController.get("SC");
+        servoController = hardwareMap.servoController.get("SC"); */
 
 
         motorFrontL = hardwareMap.dcMotor.get("motorFrontL");        //P0 is actually the right
@@ -55,7 +55,7 @@ public class ThunderBasicTeleOp2016_2017EditedConfigEdition extends OpMode {
         motorLauncher = hardwareMap.dcMotor.get("motorLauncher"); //P0
         sweeperMotor = hardwareMap.dcMotor.get("motorSweeper"); //P1
 
-        motorStrafe = hardwareMap.dcMotor.get("motorStrafe");//P0 A2
+//        motorStrafe = hardwareMap.dcMotor.get("motorStrafe");//P0 A2
 
         /*Setting channel modes*/
         motorFrontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -66,7 +66,7 @@ public class ThunderBasicTeleOp2016_2017EditedConfigEdition extends OpMode {
         motorLauncher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         sweeperMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        motorStrafe.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        motorStrafe.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         motorFrontL.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBackL.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -116,7 +116,7 @@ public class ThunderBasicTeleOp2016_2017EditedConfigEdition extends OpMode {
         sweeperMotor.setPower(sweeperPower);
         motorLauncher.setPower(launcherPower);
 
-        motorStrafe.setPower(strafePower);
+//        motorStrafe.setPower(strafePower);
 
         servo.setPosition(servoposition);
 

@@ -13,8 +13,8 @@ import com.qualcomm.robotcore.util.Range;
  * Created by Alex on 4/4/2017.
  */
 
-@TeleOp(name = "Supercell Single Joystick B", group = "Supercell")
-public class SupercellSingleJoystickDriveB extends OpMode {
+@TeleOp(name = "Supercell Single Double Angle", group = "Supercell")
+public class SupercellSingleJoystickDoubleAngle extends OpMode {
 
     /**
      * Indicating robot components
@@ -53,18 +53,15 @@ public class SupercellSingleJoystickDriveB extends OpMode {
 
         double vectorMagnitude = joystickY > 0 ? Math.hypot(joystickX, joystickY): joystickY < 0 ? -1* Math.hypot(joystickX, joystickY): 0;  // The power of the motors
 
-        double angle = joystickX > 0 && joystickY >= 0 ? Math.PI/2 - Math.atan(joystickY/joystickX) : //first quadrant
-                       joystickX < 0 && joystickY >= 0 ? -1 * (Math.atan(joystickY/joystickX) - Math.PI/2) : //second quadrant
-                       joystickX < 0 && joystickY < 0 ? -1 * (Math.atan(joystickY/joystickX) - Math.PI*3/2) :  //third quadrant
-                       joystickX > 0 && joystickY < 0 ? Math.atan(joystickY/joystickX)- Math.PI * 3 / 2 :  //fourth quadrant
-                               0; //origin
+        double angleR = Math.atan(joystickY/joystickX);
 
-        angle = Range.clip(angle, -Math.PI/2, Math.PI/2);
+        double angleL = joystickY > 0 ? Math.PI - angleR : joystickY < 0 ? -1 * Math.PI - angleR: 0;
 
-        double anglePower = angle/(2 * Math.PI);
+        angleR = Range.clip(angleR, -Math.PI * 2, Math.PI * 2);
+        angleL = Range.clip(angleL, -Math.PI * 2, Math.PI * 2);
 
-        double leftPower = joystickY > 0 ? (vectorMagnitude * anglePower + anglePower/vectorMagnitude)/3 : joystickY < 0 ? (vectorMagnitude * anglePower - anglePower/vectorMagnitude)/3 : joystickY == 0 ? joystickX * anglePower: 0 ;
-        double rightPower = joystickY > 0 ? (vectorMagnitude * anglePower - anglePower/vectorMagnitude)/3 : joystickY < 0 ? (vectorMagnitude * anglePower + anglePower/vectorMagnitude)/3 : joystickY == 0 ? joystickX * -anglePower: 0;
+        double leftPower = Math.pow((angleL / (2 * Math.PI)) * vectorMagnitude, 1/3 );
+        double rightPower = Math.pow((angleR / (2 * Math.PI)) * vectorMagnitude, 1/3 );
 
         leftPower = Range.clip(leftPower, -1, 1);
         rightPower = Range.clip(rightPower, -1, 1);
@@ -75,8 +72,7 @@ public class SupercellSingleJoystickDriveB extends OpMode {
 
         /** Add telemetry here **/
         /* -------------------------------------------------------------------------------------- */
-        telemetry.addData("Angle", angle / (2 * Math.PI) * 360 + " degrees");
-        telemetry.addData("Angle Power", anglePower);
+        telemetry.addData("Angle", angleR / (2 * Math.PI) * 360 + " degrees");
         telemetry.addData("Magnitude", vectorMagnitude);
         telemetry.addData("Motor Power", vectorMagnitude);
         telemetry.addData("X", joystickX);
