@@ -151,7 +151,7 @@ public class ThunderBasicTeleOp2016_2017EditedConfigEdition extends OpMode {
         //telemetry.addData("Right Motor Power:", rightpower);
         telemetry.addData("Sweeper Power ", sweeperPower);
         telemetry.addData("Launcher Power ", launcherPower);
-        telemetry.addData("Strafe Power ", strafePower);
+//        telemetry.addData("Strafe Power ", strafePower);
         telemetry.addData("Servo Position ", servoposition);
         telemetry.addData("Launcher Position ", motorLauncher.getCurrentPosition());
     }
