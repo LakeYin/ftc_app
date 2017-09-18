@@ -21,10 +21,9 @@ import com.qualcomm.robotcore.hardware.I2cDeviceSynchImpl;
 
 /**
  * Created by Alex on 9/18/2017.
- * <p>
- * <p>
+ *  *
  * NOTE:
- * <p>
+ *
  * This is intended to be the master autonomous file. Place all methods that you write into this
  * file so they can be inherited by other autonomous files. By using this approach, we can increase
  * the readability of autonomous files and have a database of various methods so they do not have
@@ -42,6 +41,20 @@ public class AutonomousMethodMaster extends LinearOpMode {
     private DcMotor motorBackL;                         // Back Left Motor
     private DcMotor motorBackR;                         // Back Right Motor 
     /** ---------------------------------------------------------------------------------------- **/
+
+    /** For Encoders and specific turn values **/
+    /* ------------------------------------------------------------------------------------------ */
+    double ticksPerRev = 1120;             // This is the specific value for AndyMark motors
+    double ticksPerRevTetrix = 1440;       // The specific value for Tetrix, since only one encoded Tetrix motor (launcher arm)
+    double ticksPer360Turn = 4500;         // The amount of ticks for a 360 degree turn
+    double tickTurnRatio = ticksPer360Turn / 360;
+    double inchToMm = 25.4;             // For conversion between the vectors
+
+    double wheelDiameter = 4.0;         // Diameter of the current omniwheels in inches
+    double ticksPerInch = (ticksPerRev / (wheelDiameter * 3.14159265));
+
+    double encoderResetSpeed = 0.25;        // Motor speed for when the robot resets launcher
+    /* ------------------------------------------------------------------------------------------ */
 
 
     public void runOpMode() throws InterruptedException {
@@ -143,6 +156,14 @@ public class AutonomousMethodMaster extends LinearOpMode {
         telemetry.addData(string1, string2);
         telemetry.update();
     }
+
+    public void stopMotion() {
+        /** Stops all drive motor motion **/
+        motorFrontL.setPower(0);
+        motorFrontR.setPower(0);
+        motorBackL.setPower(0);
+        motorBackR.setPower(0);
+    }
     /** ----------------------------------------- **/
 
 
@@ -193,62 +214,11 @@ public class AutonomousMethodMaster extends LinearOpMode {
 //            motorLauncher.setDirection(DcMotorSimple.Direction.REVERSE);
         }
     }
-    public void encoderDrive(double speed,
-                             double leftInches, double rightInches,
-                             double timeoutS) {
-        int newLeftTarget;
-        int newRightTarget;
 
-        // Ensure that the opmode is still active
-        if (opModeIsActive()) {
 
-            // Determine new target position, and pass to motor controller
-            newLeftTarget = robot.leftDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
-            newRightTarget = robot.rightDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
-            robot.leftDrive.setTargetPosition(newLeftTarget);
-            robot.rightDrive.setTargetPosition(newRightTarget);
-
-            // Turn On RUN_TO_POSITION
-            robot.leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            // reset the timeout time and start motion.
-            runtime.reset();
-            robot.leftDrive.setPower(Math.abs(speed));
-            robot.rightDrive.setPower(Math.abs(speed));
-
-            // keep looping while we are still active, and there is time left, and both motors are running.
-            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-            // its target position, the motion will stop.  This is "safer" in the event that the robot will
-            // always end the motion as soon as possible.
-            // However, if you require that BOTH motors have finished their moves before the robot continues
-            // onto the next step, use (isBusy() || isBusy()) in the loop test.
-            while (opModeIsActive() &&
-                    (runtime.seconds() < timeoutS) &&
-                    (robot.leftDrive.isBusy() && robot.rightDrive.isBusy())) {
-
-                // Display it for the driver.
-                telemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
-                telemetry.addData("Path2",  "Running at %7d :%7d",
-                        robot.leftDrive.getCurrentPosition(),
-                        robot.rightDrive.getCurrentPosition());
-                telemetry.update();
-            }
-
-            // Stop all motion;
-            robot.leftDrive.setPower(0);
-            robot.rightDrive.setPower(0);
-
-            // Turn off RUN_TO_POSITION
-            robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-            //  sleep(250);   // optional pause after each move
-        }
-    }
     public void encoderMove(double power, double leftInches, double rightInches) {
         /** This method makes the motors move a certain distance **/
-        resetEncoders();
+//        resetEncoders();
 
         // Sets the power range
         power = Range.clip(power, -1, 1);
