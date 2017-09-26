@@ -39,7 +39,6 @@ public class AutonomousMethodMaster extends LinearOpMode {
     private DcMotor motorL;                       // Left Side Motor
     private DcMotor motorR;                       // Right Side Motor
     /** ---------------------------------------------------------------------------------------- **/
-
     /** For Encoders and specific turn values **/
     /* ------------------------------------------------------------------------------------------ */
     double ticksPerRev = 1120;             // This is the specific value for AndyMark motors
@@ -71,9 +70,6 @@ public class AutonomousMethodMaster extends LinearOpMode {
         telemetry.update();
 
         runToPositionEncoders();
-
-        /* Your code beneath this */
-
 
     }
 
@@ -156,47 +152,49 @@ public class AutonomousMethodMaster extends LinearOpMode {
         /** Initializing and mapping electronics **/
         if (mode == 0) {
             /* Motors and servos (w/ controllers) */
-//            motorControllerL = hardwareMap.dcMotorController.get("MC_L");
-//            motorControllerR = hardwareMap.dcMotorController.get("MC_R");
-//            motorControllerA1 = hardwareMap.dcMotorController.get("MC_A1");
-//            motorControllerA2 = hardwareMap.dcMotorController.get("MC_A2");
-//            servoController = hardwareMap.servoController.get("SC");
+            // motorControllerL = hardwareMap.dcMotorController.get("MC_L");
+            // motorControllerR = hardwareMap.dcMotorController.get("MC_R");
+            // motorControllerA1 = hardwareMap.dcMotorController.get("MC_A1");
+            // motorControllerA2 = hardwareMap.dcMotorController.get("MC_A2");
+            // servoController = hardwareMap.servoController.get("SC");
 
             motorL = hardwareMap.dcMotor.get("motorL");        //P0 is actually the right
             motorR = hardwareMap.dcMotor.get("motorR");        //P1 is actually the left
 
-//            servo = hardwareMap.servo.get("servo");
+            // servo = hardwareMap.servo.get("servo");
 
-//            motorLauncher = hardwareMap.dcMotor.get("motorLauncher");   //P0
-//            sweeperMotor = hardwareMap.dcMotor.get("motorSweeper");     //P1
+            // motorLauncher = hardwareMap.dcMotor.get("motorLauncher");   //P0
+            // sweeperMotor = hardwareMap.dcMotor.get("motorSweeper");     //P1
 
-//            motorStrafe = hardwareMap.dcMotor.get("motorStrafe");       //P0 A2
+            // motorStrafe = hardwareMap.dcMotor.get("motorStrafe");       //P0 A2
 
 
 
             /* Sensors */
-//            colorBeacon = hardwareMap.colorSensor.get("colorBeacon");
+            // colorBeacon = hardwareMap.colorSensor.get("colorBeacon");
 
 
 
             /*Setting channel modes*/
             runUsingEncoders();
 
-//            motorLauncher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//            sweeperMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            // motorLauncher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            // sweeperMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-//            motorStrafe.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            // motorStrafe.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+            // Since the motors face different directions, one is going to go in an opposite direction to the other.
+            // This is intended to correct that problem and will be adjusted later as we do testing and the true directions are recorded
             motorL.setDirection(DcMotorSimple.Direction.REVERSE);
 
-//            motorLauncher.setDirection(DcMotorSimple.Direction.REVERSE);
+            // motorLauncher.setDirection(DcMotorSimple.Direction.REVERSE);
         }
     }
 
 
     public void encoderMove(double power, double leftInches, double rightInches) {
         /** This method makes the motors move a certain distance **/
-//        resetEncoders();
+        // resetEncoders();
 
         // Sets the power range
         power = Range.clip(power, -1, 1);
