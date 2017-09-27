@@ -1,5 +1,5 @@
 /* 
- * V 2.0 - 
+ * V 2.0 -
  * Add fuctionality of changing the power given to motors based on state of the right bumper
  * pressed makes gear ratio .7 while non pressed makes gear ratio .3
  * 
