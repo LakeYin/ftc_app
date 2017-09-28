@@ -43,7 +43,7 @@ public class AutonomousMethodMaster extends LinearOpMode {
     /* ------------------------------------------------------------------------------------------ */
     double ticksPerRev = 1120;             // This is the specific value for AndyMark motors
     double ticksPerRevTetrix = 1440;       // The specific value for Tetrix, since only one encoded Tetrix motor (launcher arm)
-    double ticksPer360Turn = 4500;         // The amount of ticks for a 360 degree turn for AnyMarks
+    double ticksPer360Turn = 4500;         // The amount of ticks for a 360 degree turn
     double tickTurnRatio = ticksPer360Turn / 360;
     double inchToMm = 25.4;             // For conversion between the vectors
 
