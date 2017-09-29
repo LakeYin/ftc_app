@@ -1,4 +1,4 @@
-/* 
+/*
  * V 2.0 - 
  * Add fuctionality of changing the power given to motors based on state of the right bumper
  * pressed makes gear ratio .7 while non pressed makes gear ratio .3
@@ -59,9 +59,16 @@ public class BasicTeleop extends OpMode
          * and sets the power of the motors as the position multiplied by a constant
          * to influence the potency of the motors.
          */
+        boolean gear_ratio_is_07 = true;
         double rightPower, leftPower;
-        double gearRatio = gamepad1.right_bumper ? 0.7 : 0.2;
-        // If right_bumper is down, the gearRatio is 0.7. Otherwise, the gearRatio is 0.3
+        double gearRatio;
+
+        if(gamepad1.right_bumper)
+        {
+            gear_ratio_is_07 = !(gear_ratio_is_07);
+        }
+        gearRatio = gear_ratio_is_07 ? 0.7 : 0.2;
+        // If right_bumper toggles gear ratio, the default gearRatio is 0.7. Otherwise, the gearRatio is 0.2
         
         rightPower = gearRatio * gamepad1.right_stick_y;
         leftPower = gearRatio * gamepad1.left_stick_y;
