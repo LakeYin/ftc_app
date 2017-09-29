@@ -14,13 +14,13 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
 
 /**
  * Created by user on 9/22/2017.
  */
 
-@Disabled
 @TeleOp(name="BasicTeleop", group = "Basic")
 public class BasicTeleop extends OpMode
 {
@@ -67,7 +67,7 @@ public class BasicTeleop extends OpMode
         leftPower = gearRatio * gamepad1.left_stick_y;
         
         leftPower = Range.clip(leftPower, -1, 1);        //gamepad controllers have a value of 1 when you push it to its maximum foward
-        rightPower = Range.clip(rightPower, -1, 1);    //limiting the range of each power, min first then max
+        rightPower = Range.clip(rightPower, -1, 1);      //limiting the range of each power, min first then max
         
         motorR.setPower(rightPower);
         motorL.setPower(leftPower);
