@@ -27,7 +27,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 /**
  * Created by joshuakrinsky on 9/29/17.
  */
-@Autonomous(name="Encoder", group="Automous")
+@Autonomous(name="Encoder", group="Autonomous")
 @Disabled
 public class BasicAutoEncoders extends AutonomousMethodMaster{
     private DcMotor motorL;                       // Left Side Motor
