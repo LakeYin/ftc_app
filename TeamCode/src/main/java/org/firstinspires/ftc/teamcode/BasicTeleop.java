@@ -63,8 +63,8 @@ public class BasicTeleop extends OpMode
         double gearRatio = gamepad1.right_bumper ? 0.7 : 0.2;
         // If right_bumper is down, the gearRatio is 0.7. Otherwise, the gearRatio is 0.3
         
-        rightPower = gearRatio * gamepad1.left_stick_y;
-        leftPower = gearRatio * gamepad1.right_stick_y;
+        rightPower = gearRatio * gamepad1.right_stick_y;
+        leftPower = gearRatio * gamepad1.left_stick_y;
         
         leftPower = Range.clip(leftPower, -1, 1);        //gamepad controllers have a value of 1 when you push it to its maximum foward
         rightPower = Range.clip(rightPower, -1, 1);    //limiting the range of each power, min first then max
