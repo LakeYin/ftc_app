@@ -21,7 +21,6 @@ import com.qualcomm.robotcore.util.Range;
  * Created by user on 9/22/2017.
  */
 
-@Disabled
 @TeleOp(name="BasicTeleop", group = "Basic")
 public class BasicTeleop extends OpMode
 {
