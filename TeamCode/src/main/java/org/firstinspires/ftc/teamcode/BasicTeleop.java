@@ -60,6 +60,7 @@ public class BasicTeleop extends OpMode
          * to influence the potency of the motors.
          */
         boolean gear_ratio_is_07 = true;
+        boolean flip_front = false;
         double rightPower, leftPower;
         double gearRatio;
 
@@ -69,12 +70,23 @@ public class BasicTeleop extends OpMode
         }
         gearRatio = gear_ratio_is_07 ? 0.7 : 0.2;
         // If right_bumper toggles gear ratio, the default gearRatio is 0.7. Otherwise, the gearRatio is 0.2
+
+        if(gamepad1.left_bumper) // toggles front
+        {
+            flip_front = !(flip_front);
+        }
         
         rightPower = gearRatio * gamepad1.right_stick_y;
         leftPower = gearRatio * gamepad1.left_stick_y;
         
         leftPower = Range.clip(leftPower, -1, 1);        //gamepad controllers have a value of 1 when you push it to its maximum foward
         rightPower = Range.clip(rightPower, -1, 1);      //limiting the range of each power, min first then max
+
+        if(flip_front)
+        {
+            leftPower *= -1;
+            rightPower *= -1;
+        }
         
         motorR.setPower(rightPower);
         motorL.setPower(leftPower);
