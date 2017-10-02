@@ -54,47 +54,76 @@ public class BasicTeleop extends OpMode
     }
 
     public void loop()
-    {   /*
-         * Gets position of the joysticks on controller1
-         * and sets the power of the motors as the position multiplied by a constant
-         * to influence the potency of the motors.
-         */
-        boolean gear_ratio_is_07 = true;
-        boolean flip_front = false;
+    {
+        /** Declaring variables that are used **/
+        /* -------------------------------------------------------------------------------------- */
+        // Variables for controlling movement
         double rightPower, leftPower;
         double gearRatio;
 
-        if(gamepad1.right_bumper)
+        // Other variables
+        boolean gear_ratio_is_07 = true;
+        boolean flip_front = false;
+        /* -------------------------------------------------------------------------------------- */
+
+
+        /** Changing driving mode section
+         *   When the left_bumper is pressed, the robot will switch
+         *   When the right_bumper is pressed, the robot will decrease its software gear ratio and
+         *   consequently move slower. This allows for more precise movements.
+         *   **/
+        /* -------------------------------------------------------------------------------------- */
+        // If right_bumper toggles gear ratio, the default gearRatio is 0.7. Otherwise, the gearRatio is 0.2
+        if (gamepad1.right_bumper)
         {
             gear_ratio_is_07 = !(gear_ratio_is_07);
         }
         gearRatio = gear_ratio_is_07 ? 0.7 : 0.2;
-        // If right_bumper toggles gear ratio, the default gearRatio is 0.7. Otherwise, the gearRatio is 0.2
 
-        if(gamepad1.left_bumper) // toggles front
+        // toggles front
+        if (gamepad1.left_bumper)
         {
             flip_front = !(flip_front);
         }
-        
+        /* -------------------------------------------------------------------------------------- */
+
+
+        /**
+         * Gets position of the joysticks on controller1
+         * and sets the power of the motors as the position multiplied by a constant
+         * to influence the potency of the motors.
+         */
+        /* -------------------------------------------------------------------------------------- */
+        // Allows gear ratio to affect the motor power
         rightPower = gearRatio * gamepad1.right_stick_y;
         leftPower = gearRatio * gamepad1.left_stick_y;
-        
-        leftPower = Range.clip(leftPower, -1, 1);        //gamepad controllers have a value of 1 when you push it to its maximum foward
-        rightPower = Range.clip(rightPower, -1, 1);      //limiting the range of each power, min first then max
 
-        if(flip_front)
+        // Since motor power is between -1 and 1 inclusive, range should be clipped if too extreme
+        leftPower = Range.clip(leftPower, -1, 1);
+        rightPower = Range.clip(rightPower, -1, 1);
+
+        // If flip_front is true, then flip motor direction
+        if (flip_front)
         {
             leftPower *= -1;
             rightPower *= -1;
         }
-        
+
+        // Set motor power, move accordingly
         motorR.setPower(rightPower);
         motorL.setPower(leftPower);
-          
+        /* -------------------------------------------------------------------------------------- */
+
+
+        /** Telemetry for debugging and convenience **/
+        /* -------------------------------------------------------------------------------------- */
         telemetry.addData("Gear Ratio ", gearRatio);
         telemetry.addData("Right Power ", rightPower);
         telemetry.addData("Left Power ", leftPower);
-        
+        telemetry.addData("Front Flipped ", flip_front);
+
+        telemetry.update();
+        /* -------------------------------------------------------------------------------------- */
         
     }
 }
