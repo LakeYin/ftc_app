@@ -127,28 +127,26 @@ public class ThunderNavigation {
         //just license key we got free online
         parameters.vuforiaLicenseKey = "AQRacK7/////AAAAGea1bsBsYEJvq6S3KuXK4PYTz4IZmGA7SV88bdM7l26beSEWkZTUb8H352Bo/ZMC6krwmfEuXiK7d7qdFkeBt8BaD0TZAYBMwHoBkb7IBgMuDF4fnx2KiQPOvwBdsIYSIFjiJgGlSj8pKZI+M5qiLb3DG3Ty884EmsqWQY0gjd6RNhtSR+6oiXazLhezm9msyHWZtX5hQFd9XoG5npm4HoGaZNdB3g5YCAQNHipjTm3Vkf71rG/Fffif8UTCI1frmKYtb4RvqiixDSPrD6OG6YmbsPOYUt2RZ6sSTreMzVL76CNfBTzmpo2V0E6KKP2y9N19hAum3GZu3G/1GEB5D+ckL/CXk4JM66sJw3PGucCs";
 
-        //set camer direction
+        //set camera direction
         parameters.cameraDirection = CAMERA_DIRECTION;
         parameters.useExtendedTracking = false; //this is just if we want to track past the targets but i think it's just a waste of energy for our robot
-        VuforiaLocalizer vuforia = ClassFactory.createVuforiaLocalizer(parameters); //make a vuforia localizer
+        VuforiaLocalizer vuforia = ClassFactory.createVuforiaLocalizer(parameters); //make a vuforia localizer (basically initiates phone)
 
-        //basically gets the targets, WE ARE GOING TO NEED TO REPLACE THESE WITH THE NEW ONES
-        targets = vuforia.loadTrackablesFromAsset("FTC_2016-17");
-        targets.get(0).setName("Blue Near");
-        targets.get(1).setName("Red Far");
-        targets.get(2).setName("Blue Far");
-        targets.get(3).setName("Red Near");
+        //basically gets the targets
+        //kinda strange tho that there's only one, will have to look into this
+        targets = vuforia.loadTrackablesFromAsset("RelicVuMark");
+        targets.get(0).setName("RelicRecovery");
 
         //Basically put all the targets as one instance rather than making the code go through multiple instances
         java.util.List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
         allTrackables.addAll(targets);
 
         // create a matrix of the field with the images
-        //I think this is for red only?
+        //I think this is for red only? said so in the video
         OpenGLMatrix targetOrientation = OpenGLMatrix
                 .translation(0, 150, 0) //put the center of the image 6" above the origin of the field
                 .multiplied(Orientation.getRotationMatrix(
-                        AxesReference.EXTRINSIC, AxesOrder.XYZ,
+                        AxesReference.EXTRINSIC, AxesOrder.XYZ, //type of rotation (Extrinsic = coordinate system doesn't rotate, intrisic = coordinate system does rotate along with the object's rotation). Axes order (what the angles will be)
                         AngleUnit.DEGREES, 90, -90, 0)); // rotate images so they aren't flat and are basically facing our right side.
 
         //we're going to need to get these values and measure them out
@@ -163,7 +161,7 @@ public class ThunderNavigation {
                         AxesReference.EXTRINSIC, AxesOrder.XYZ,
                         AngleUnit.DEGREES, 0, 0, 0));
 
-        // Set the all the targets to have the same location and camera orientation
+        // Set all the targets to have the same location and set the camera orientation and location
         for (VuforiaTrackable trackable : allTrackables)
         {
             trackable.setLocation(targetOrientation); //set the location of the targets
@@ -207,14 +205,14 @@ public class ThunderNavigation {
                 robotX = trans.get(0);
                 robotZ = trans.get(2);
 
-                //This math seems a little advanced for me so I'm just going to leave out my own definition for this since I have no knowledge of the subject at hand
-                // Robot bearing (in +vc CCW cartesian system) is defined by the standard Matrix z rotation
+                // Robot bearing is defined by the standard Matrix z rotation
+                //basically the bearing = the rotation angle
                 robotBearing = rot.thirdAngle;
 
-                // Target range calculated from pythag theorem
+                // Target range calculated from pythagorean theorem
                 targetRange = Math.hypot(robotX, robotZ);
 
-                // target bearing is based on angle formed between the X axis to the target range line
+                // target bearing is based on angle formed between the X axis and the target range line
                 targetBearing = Math.toDegrees(-Math.asin(robotZ / targetRange));
 
                 // Target relative bearing is the target bearing relative to the direction the robot is pointing.
