@@ -1,5 +1,5 @@
-/* 
- * V 2.0 -
+/*
+ * V 2.0 - 
  * Add fuctionality of changing the power given to motors based on state of the right bumper
  * pressed makes gear ratio .7 while non pressed makes gear ratio .3
  * 
@@ -21,7 +21,6 @@ import com.qualcomm.robotcore.util.Range;
  * Created by user on 9/22/2017.
  */
 
-@Disabled
 @TeleOp(name="BasicTeleop", group = "Basic")
 public class BasicTeleop extends OpMode
 {
@@ -43,12 +42,12 @@ public class BasicTeleop extends OpMode
         motorL = hardwareMap.dcMotor.get("motorL");
         /* ---------------------------------------- */
 
-        // Encoder stuff
+        // Encoder stuff - Run Without Encoders is depreciated
         /* ---------------------------------------- */
-        motorR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODERS);
-        motorL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODERS);
+        //motorR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODERS);
+        //motorL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODERS);
 
-        motorR.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorR.setDirection(DcMotor.Direction.REVERSE);
         //motorL.setDirection(DcMotorSimple.Direction.REVERSE);
         /* ---------------------------------------- */
 
@@ -60,15 +59,34 @@ public class BasicTeleop extends OpMode
          * and sets the power of the motors as the position multiplied by a constant
          * to influence the potency of the motors.
          */
+        boolean gear_ratio_is_07 = true;
+        boolean flip_front = false;
         double rightPower, leftPower;
-        double gearRatio = gamepad1.right_bumper ? 0.7 : 0.2;
-        // If right_bumper is down, the gearRatio is 0.7. Otherwise, the gearRatio is 0.3
+        double gearRatio;
+
+        if(gamepad1.right_bumper)
+        {
+            gear_ratio_is_07 = !(gear_ratio_is_07);
+        }
+        gearRatio = gear_ratio_is_07 ? 0.7 : 0.2;
+        // If right_bumper toggles gear ratio, the default gearRatio is 0.7. Otherwise, the gearRatio is 0.2
+
+        if(gamepad1.left_bumper) // toggles front
+        {
+            flip_front = !(flip_front);
+        }
         
-        rightPower = gearRatio * gamepad1.left_stick_y;
-        leftPower = gearRatio * gamepad1.right_stick_y;
+        rightPower = gearRatio * gamepad1.right_stick_y;
+        leftPower = gearRatio * gamepad1.left_stick_y;
         
         leftPower = Range.clip(leftPower, -1, 1);        //gamepad controllers have a value of 1 when you push it to its maximum foward
         rightPower = Range.clip(rightPower, -1, 1);      //limiting the range of each power, min first then max
+
+        if(flip_front)
+        {
+            leftPower *= -1;
+            rightPower *= -1;
+        }
         
         motorR.setPower(rightPower);
         motorL.setPower(leftPower);
@@ -80,3 +98,4 @@ public class BasicTeleop extends OpMode
         
     }
 }
+
