@@ -48,9 +48,9 @@ public class ThunderNavigation {
     //Some data we want to keep track of as we run the OpMode
     private boolean targetFound;
     private String targetName;
-    private double robotX; //X displacement from target
-    private double robotZ; //Y displacement from target
-    private double robotBearing; //robot rotation around the Y axis CCW = + like Yaw basically
+    private double robotX; //X displacement from target; right is positive
+    private double robotZ; //Z displacement from target; z is negative and closer to z would be 0
+    private double robotBearing; //robot rotation around the Z axis CCW = + like Yaw basically
     private double targetRange; //how far target is mm
     private double targetBearing; //direction of target from center ignoring the robot's orientation
     private double relativeBearing; //Bearing change needed to be achieved (positive means robot must turn CCW to face target)
@@ -86,7 +86,7 @@ public class ThunderNavigation {
                 /* Found an instance of the template. In the actual game, you will probably
                  * loop until this condition occurs, then move on to act accordingly depending
                  * on which VuMark was visible. */
-            myOpMode.telemetry.addData("VuMark", "%s visible", vuMark);
+            myOpMode.telemetry.addData("VuMark", "%s is visible", vuMark);
 
                 /* For fun, we also exhibit the navigational pose. In the Relic Recovery game,
                  * it is perhaps unlikely that you will actually need to act on this pose information, but
@@ -101,9 +101,9 @@ public class ThunderNavigation {
                 Orientation rot = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
 
                 // Extract the X, Y, and Z components of the offset of the target relative to the robot
-                double tX = trans.get(0);
+                double tX = -1* trans.get(0);
                 double tY = trans.get(1);
-                double tZ = trans.get(2);
+                double tZ = -1* trans.get(2);
 
                 // Extract the rotational components of the target relative to the robot
                 double rX = rot.firstAngle;
@@ -141,7 +141,7 @@ public class ThunderNavigation {
         double Yaw  = (relativeBearing * YAW_GAIN);
 
         // Priority #2  Drive laterally based on distance from X axis (same as z value)
-        double Lateral  =(robotZ * LATERAL_GAIN);
+        double Lateral  = (robotZ * LATERAL_GAIN);
 
         // Priority #3 Drive forward based on the angle to the target standoff distance
         double Axial  = (-(robotX + targetrange) * AXIAL_GAIN);
@@ -181,10 +181,6 @@ public class ThunderNavigation {
         targets = vuforia.loadTrackablesFromAsset("RelicVuMark");
         targets.get(0).setName("RelicRecovery");
 
-            //Basically put all the targets as one instance rather than making the code go through multiple instances
-        java.util.List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
-        allTrackables.addAll(targets);
-
         // create a matrix of the field with the images
         //I think this is for red only? said so in the video
         OpenGLMatrix targetOrientation = OpenGLMatrix
@@ -204,13 +200,6 @@ public class ThunderNavigation {
                 .multiplied(Orientation.getRotationMatrix(
                         AxesReference.EXTRINSIC, AxesOrder.XYZ,
                         AngleUnit.DEGREES, 0, 0, 0));
-
-        // Set all the targets to have the same location and set the camera orientation and location
-        for (VuforiaTrackable trackable : allTrackables)
-        {
-            trackable.setLocation(targetOrientation); //set the location of the targets
-            ((VuforiaTrackableDefaultListener)trackable.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection); //basically set the phone as the one recieving data and sending it to our program
-        }
     }
 
     //checks to find a target
@@ -246,8 +235,8 @@ public class ThunderNavigation {
                 Orientation rot = Orientation.getOrientation(location, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
 
                 // Robot position in matrix x = 0, y = 1, z = 2
-                robotX = trans.get(0);
-                robotZ = trans.get(2);
+                robotX = -1* trans.get(0);
+                robotZ = -1* trans.get(2);
 
                 // Robot bearing is defined by the standard Matrix z rotation
                 //basically the bearing = the rotation angle

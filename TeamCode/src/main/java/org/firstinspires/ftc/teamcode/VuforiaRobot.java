@@ -41,11 +41,11 @@ public class VuforiaRobot extends LinearOpMode {
 
             //made so that it starts tracking when you press the left bumper, otherwise manual drive which I wanted to test to see if it works (single joystick?)
             telemetry.addData(">", "Press Left Bumper to track target");
-            if(nav.areTargetsVisible() && gamepad1.left_bumper){
-                nav.setDriving(TARGET_DISTANCE); //sets the target
+            if(!nav.areTargetsVisible() && gamepad1.left_bumper){
+                robot.manualDrive();
             }
             else{
-                robot.manualDrive();
+                nav.setDriving(TARGET_DISTANCE); //sets the target
             }
 
             //update nav telem
