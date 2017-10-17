@@ -105,8 +105,11 @@ public class ThunderBot {
 
         /*This adds telemetry for the positions and for the power
           Note: I think % in telemetry gets the variable mentioned after the quotations respectively
-                The .2f represents how many decimal places you want to be printed (in this case 2)
-                Not really sure what the +5 does yet tho
+          http://www.java-samples.com/showtutorial.php?tutorialid=745
+                The 5 means that you want to denote 5 spaces in the print
+                The .2f represents how many decimal places you want to be printed (in this case 2 out of the already limited 5 spaces)
+                f = decmials (probably represents float), g = sig figs, s = characters in string, d = integer, c = character
+                + = right justified, - = left justified, no sign = +
          */
         myOpMode.telemetry.addData("Axes ", "A[%+5.2f], L[%+5.2f], Y[%+5.2f]", Axial, Lateral, Yaw);
         myOpMode.telemetry.addData("Power ", "L[%+5.2f], R[%+5.2f]", left, right);
