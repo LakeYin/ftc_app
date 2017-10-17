@@ -105,7 +105,8 @@ public class ThunderBot {
 
         /*This adds telemetry for the positions and for the power
           Note: I think % in telemetry gets the variable mentioned after the quotations respectively
-                Not really sure what the +5.2f is though
+                The .2f represents how many decimal places you want to be printed (in this case 2)
+                Not really sure what the +5 does yet tho
          */
         myOpMode.telemetry.addData("Axes ", "A[%+5.2f], L[%+5.2f], Y[%+5.2f]", Axial, Lateral, Yaw);
         myOpMode.telemetry.addData("Power ", "L[%+5.2f], R[%+5.2f]", left, right);
