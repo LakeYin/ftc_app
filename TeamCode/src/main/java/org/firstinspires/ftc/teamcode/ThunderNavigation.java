@@ -70,7 +70,7 @@ public class ThunderNavigation {
     }
 
     public void addNavTelemetry() {
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();                             // OR... Use this line to improve performance
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();           // OR... Use this line to improve performance
 
         VuforiaLocalizer vuforia = ClassFactory.createVuforiaLocalizer(parameters); //make a vuforia localizer (basically initiates phone)
 
@@ -134,8 +134,8 @@ public class ThunderNavigation {
     public boolean setDriving(double targetrange) {
         boolean closeEnough;
 
-        //The math here I don't really get but whatever, we can analyze this together later if we want to really truely understand it
-        //He mentions that you mutlipy the error by the gain, and its not PID but proportional if that helps
+        //The math here I don't really get but whatever, we can analyze this together later if we want to really truly understand it
+        //He mentions that you multiply the error by the gain, and its not PID but proportional if that helps
         //My take on it is that it takes a proportion of the error and fixes it, and then takes a proportion of that error and fixes it, etc.
         // Priority #1 Rotate to always be pointing at the target (for best target retention).
         double Yaw  = (relativeBearing * YAW_GAIN);

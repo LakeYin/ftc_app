@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 /**
@@ -28,6 +29,7 @@ public class BasicTeleop extends OpMode
     /* ---------------------------------------- */
     private DcMotorController motorControllerDrive;
     private DcMotor motorR, motorL;
+    private Servo squeeze; // also, this goes in port one of the servo controller
     /* ---------------------------------------- */
 
 
@@ -51,7 +53,11 @@ public class BasicTeleop extends OpMode
         //motorL.setDirection(DcMotorSimple.Direction.REVERSE);
         /* ---------------------------------------- */
 
+        squeeze = hardwareMap.servo.get("squeeze");
+
     }
+
+    double squeezePosition = 1;
 
     public void loop()
     {   /*
@@ -90,10 +96,26 @@ public class BasicTeleop extends OpMode
         
         motorR.setPower(rightPower);
         motorL.setPower(leftPower);
+
+        /*if(gamepad2.right_bumper) // 83.3 is the number of degrees from 0 to snuggly fit the glyph
+        {
+            squeezePosition += 0.0001;
+        }
+        if(gamepad2.left_bumper)
+        {
+            squeezePosition -= 0.0001;
+        }*/
+
+        //squeezePosition = -gamepad2.right_trigger + 1; // defaults to open
+        squeezePosition = gamepad2.right_trigger; // defaults to closed
+
+        squeezePosition = Range.clip(squeezePosition, 82/180, 1);
+        squeeze.setPosition(squeezePosition);
           
         telemetry.addData("Gear Ratio ", gearRatio);
         telemetry.addData("Right Power ", rightPower);
         telemetry.addData("Left Power ", leftPower);
+        telemetry.addData("Squeeze Position * 180", squeezePosition * 180);
         
         
     }

@@ -77,6 +77,7 @@ public class VuforiaRobot extends AutonomousMethodMaster {
 
             telemetry.update();
         }
+        
 
         //where all the good stuff happens
         while (opModeIsActive()){
