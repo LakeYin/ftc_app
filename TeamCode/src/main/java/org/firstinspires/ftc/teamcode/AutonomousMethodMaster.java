@@ -264,7 +264,68 @@ public class AutonomousMethodMaster extends LinearOpMode {
 
         relicTrackables.activate();
     }
-
-
     /** ----------------------------------------- **/
+        /*
+    * colour Sensor code set up Josh K.
+    * */
+    /** ----------------------------------------- **/
+
+
+    public void runColorMode() {
+
+        float hsvValues[] = {0F, 0F, 0F};
+
+
+        //holds HSV values within an array
+        final float values[] = hsvValues;
+
+        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
+        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
+
+        // get a reference to our ColorSensor object.
+        colorSensor = hardwareMap.get(ColorSensor.class, "sensorColor");
+
+        // bLedOn represents the state of the LED.
+        boolean bLedOn = true;
+
+        // get a reference to our ColorSensor object.
+        colorSensor = hardwareMap.get(ColorSensor.class, "sensor_color");
+
+        // wait for the start button to be pressed.
+        waitForStart();
+
+
+        while (opModeIsActive()) {
+
+
+            // convert the RGB values to HSV values.
+            Color.RGBToHSV(colorSensor.red() * 8, colorSensor.green() * 8, colorSensor.blue() * 8, hsvValues);
+
+            // send the info back to driver station using telemetry function.
+            telemetry.addData("LED", bLedOn ? "On" : "Off");
+            telemetry.addData("Clear", colorSensor.alpha());
+            telemetry.addData("Red  ", colorSensor.red());
+            telemetry.addData("Green", colorSensor.green());
+            telemetry.addData("Blue ", colorSensor.blue());
+            telemetry.addData("Hue", hsvValues[0]);
+
+            // change the background color to match the color detected by the RGB sensor.
+            // pass a reference to the hue, saturation, and value array as an argument
+            // to the HSVToColor method.
+            relativeLayout.post(new Runnable() {
+                public void run() {
+                    relativeLayout.setBackgroundColor(Color.HSVToColor(0xff, values));
+                }
+            });
+
+            telemetry.update();
+        }
+
+        // Set the panel back to the default color
+        relativeLayout.post(new Runnable() {
+            public void run() {
+                relativeLayout.setBackgroundColor(Color.WHITE);
+            }
+        });
+    }
 }
