@@ -286,7 +286,7 @@ public class AutonomousMethodMaster extends LinearOpMode {
         colorSensor = hardwareMap.get(ColorSensor.class, "sensorColor");
 
         // bLedOn represents the state of the LED.
-        boolean bLedOn = true;
+        boolean bLedOn = false;
 
         // get a reference to our ColorSensor object.
         colorSensor = hardwareMap.get(ColorSensor.class, "sensor_color");
