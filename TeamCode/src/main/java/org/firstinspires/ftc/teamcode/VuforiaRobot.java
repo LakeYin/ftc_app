@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -27,7 +28,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
  * Here's the OpMode, purposely have not much here. Refernced from https://www.youtube.com/watch?v=AxKrJEtfuaI
  */
 @TeleOp(name="Vuforia with Robot Class", group="Vuforia")
-public class VuforiaRobot extends AutonomousMethodMaster {
+public class VuforiaRobot extends LinearOpMode{
 
     // setting up the encoder stuff
     private DcMotor motorL;                       // Left Side Motor
@@ -59,14 +60,20 @@ public class VuforiaRobot extends AutonomousMethodMaster {
     @Override
     public void runOpMode(){
         // set up all of the vuforia
-        VuforiaSetup();
+        robot.initRobot(this);
+        nav.initVuforia(this, robot);
 
-        //resets encoders and tells the motors to run with them
-        encoderMode(3);
-        encoderMode(1);
+        telemetry.addData(">", "Checkpoint");
+        telemetry.update();
+
+        telemetry.addData(">", "Checkpoint2");
+        telemetry.update();
 
         //start the tracking my friends
         nav.startTracking();
+
+        telemetry.addData(">", "Checkpoint3");
+        telemetry.update();
 
         //basically tells us to start it when not started
         while (!isStarted()){
@@ -77,13 +84,15 @@ public class VuforiaRobot extends AutonomousMethodMaster {
 
             telemetry.update();
         }
-        
+
+        telemetry.addLine("Before good stuff");
+        telemetry.update();
 
         //where all the good stuff happens
         while (opModeIsActive()){
 
             //made so that it starts tracking when you press the left bumper, otherwise manual drive which I wanted to test to see if it works (single joystick?)
-            telemetry.addData(">", "Press Left Bumper to track target");
+            telemetry.addData(">", "Press Left Bumper to manual drive target");
             if(!nav.areTargetsVisible() && gamepad1.left_bumper){
                 robot.manualDrive();
             }
