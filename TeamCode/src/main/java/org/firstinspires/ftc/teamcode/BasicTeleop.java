@@ -92,7 +92,7 @@ public class BasicTeleop extends OpMode
         {
             leftPower *= -1;
             rightPower *= -1;
-        }
+        } 
         
         motorR.setPower(rightPower);
         motorL.setPower(leftPower);
