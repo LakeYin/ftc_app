@@ -91,7 +91,7 @@ public class BasicTeleop extends OpMode
         {
             leftPower *= -1;
             rightPower *= -1;
-        }
+        } 
         
         motorR.setPower(rightPower);
         motorL.setPower(leftPower);
@@ -104,6 +104,22 @@ public class BasicTeleop extends OpMode
         {
             squeezePosition -= 0.0001;
         }*/
+        
+        //while loops should make the clamp gradually open and close
+        final double DEGREE_CHANGER =.0001;
+        while(gamepad2.right_bumper)
+        {
+            squeezePosition += DEGREE_CHANGER;
+            sleep(10);
+        }
+        while(gamepad2.left_bumper)
+        {
+            squeezePosition += (DEGREE_CHANGER*-1); 
+            sleep(10);
+        } 
+        
+        
+        
 
         //squeezePosition = -gamepad2.right_trigger + 1; // defaults to open
         squeezePosition = gamepad2.right_trigger; // defaults to closed
