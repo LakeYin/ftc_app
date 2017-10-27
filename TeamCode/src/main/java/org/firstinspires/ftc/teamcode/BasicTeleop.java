@@ -32,7 +32,6 @@ public class BasicTeleop extends OpMode
     private Servo squeeze; // also, this goes in port one of the servo controller
     /* ---------------------------------------- */
 
-
     @Override
     public void init()
     {   //Assign values to hardware components here (match them to phone configuration)
@@ -50,7 +49,7 @@ public class BasicTeleop extends OpMode
         //motorL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODERS);
 
         motorR.setDirection(DcMotor.Direction.REVERSE);
-        //motorL.setDirection(DcMotorSimple.Direction.REVERSE);
+        motorL.setDirection(DcMotorSimple.Direction.REVERSE);
         /* ---------------------------------------- */
 
         squeeze = hardwareMap.servo.get("squeeze");

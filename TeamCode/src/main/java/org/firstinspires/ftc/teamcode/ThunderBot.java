@@ -56,7 +56,7 @@ public class ThunderBot {
 
         //Direction of motors: Forward = CCW
         motorL.setDirection(DcMotor.Direction.REVERSE);
-        motorR.setDirection(DcMotor.Direction.FORWARD);
+        motorR.setDirection(DcMotor.Direction.REVERSE);
 
         //Set it so the motors use encoders
         setMode(DcMotor.RunMode.RUN_USING_ENCODER);

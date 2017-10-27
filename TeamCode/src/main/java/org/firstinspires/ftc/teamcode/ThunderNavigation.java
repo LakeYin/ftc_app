@@ -29,7 +29,6 @@ import static com.sun.tools.javac.util.Constants.format;
 
 public class ThunderNavigation {
     //constants we want to never change
-    private static final int MAX_TARGETS = 4;
     private static final double ON_AXIS = 10; //used to check to see if it's within "x"mm of target's center line/on the x coord of 0
     private static final double CLOSE_ENOUGH = 20; //used to check to see if it's within "x"mm of target to stop moving
 
@@ -101,9 +100,9 @@ public class ThunderNavigation {
                 Orientation rot = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
 
                 // Extract the X, Y, and Z components of the offset of the target relative to the robot
-                double tX = -1* trans.get(0);
+                double tX = -1 * trans.get(0);
                 double tY = trans.get(1);
-                double tZ = -1* trans.get(2);
+                double tZ = -1 * trans.get(2);
 
                 // Extract the rotational components of the target relative to the robot
                 double rX = rot.firstAngle;
@@ -204,14 +203,6 @@ public class ThunderNavigation {
 
     //checks to find a target
     public boolean areTargetsVisible()  {
-
-        int targetTestID = 0;
-
-        // Check each target in turn, but stop looking when the first target is found.
-        while ((targetTestID < MAX_TARGETS) && !targetIsVisible(targetTestID)) {
-            targetTestID++ ;
-        }
-
         return (targetFound);
     }
 
