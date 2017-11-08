@@ -10,6 +10,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
@@ -110,12 +111,13 @@ public class BasicTeleop extends OpMode
         while(gamepad2.right_bumper)
         {
             squeezePosition += DEGREE_CHANGER;
-            sleep(10);
+            AutonomousMethodMaster.sleepNew(10);
         }
         while(gamepad2.left_bumper)
         {
-            squeezePosition += (DEGREE_CHANGER*-1); 
-            sleep(10);
+            squeezePosition += (DEGREE_CHANGER*-1);
+            AutonomousMethodMaster.sleepNew(10);
+
         } 
         
         
@@ -131,7 +133,6 @@ public class BasicTeleop extends OpMode
         telemetry.addData("Right Power ", rightPower);
         telemetry.addData("Left Power ", leftPower);
         telemetry.addData("Squeeze Position * 180", squeezePosition * 180);
-        
         
     }
 }

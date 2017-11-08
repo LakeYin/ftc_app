@@ -264,13 +264,30 @@ public class AutonomousMethodMaster extends LinearOpMode {
 
         relicTrackables.activate();
     }
+
+    public static void sleepNew(long sleepTime)
+    {
+        long wakeupTime = System.currentTimeMillis() + sleepTime;
+
+        while (sleepTime > 0)
+        {
+            try
+            {
+                Thread.sleep(sleepTime);
+            }
+            catch (InterruptedException e)
+            {
+                sleepTime = wakeupTime - System.currentTimeMillis();
+            }
+        }
+    }
     /** ----------------------------------------- **/
         /*
     * colour Sensor code set up Josh K.
     * */
     /** ----------------------------------------- **/
 
-
+/*
     public void runColorMode() {
 
         float hsvValues[] = {0F, 0F, 0F};
@@ -328,4 +345,5 @@ public class AutonomousMethodMaster extends LinearOpMode {
             }
         });
     }
+    */
 }

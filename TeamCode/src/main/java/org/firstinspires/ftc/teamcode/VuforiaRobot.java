@@ -28,7 +28,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
  * Here's the OpMode, purposely have not much here. Refernced from https://www.youtube.com/watch?v=AxKrJEtfuaI
  */
 @TeleOp(name="Vuforia with Robot Class", group="Vuforia")
-public class VuforiaRobot extends LinearOpMode{
+public class VuforiaRobot extends AutonomousMethodMaster{
 
     // setting up the encoder stuff
     private DcMotor motorL;                       // Left Side Motor
@@ -60,6 +60,8 @@ public class VuforiaRobot extends LinearOpMode{
     @Override
     public void runOpMode(){
         // set up all of the vuforia
+
+        VuforiaSetup();
         robot.initRobot(this);
         nav.initVuforia(this, robot);
 
