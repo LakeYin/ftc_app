@@ -239,7 +239,7 @@ public class AutonomousMethodMaster extends LinearOpMode {
     }
 
     VuforiaLocalizer vuforia;
-    
+
     public void VuforiaSetup(){
         // set up all of the vuforia
         // tells vuforia to use the camera
