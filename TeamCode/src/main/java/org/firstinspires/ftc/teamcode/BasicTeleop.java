@@ -31,6 +31,7 @@ public class BasicTeleop extends OpMode
     private DcMotorController motorControllerDrive;
     private DcMotor motorR, motorL;
     private Servo squeeze; // also, this goes in port one of the servo controller
+    private DcMotor motor_lift;
     /* ---------------------------------------- */
 
     @Override
@@ -49,12 +50,12 @@ public class BasicTeleop extends OpMode
         //motorR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODERS);
         //motorL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODERS);
 
-        motorR.setDirection(DcMotor.Direction.REVERSE);
+        //motorR.setDirection(DcMotor.Direction.REVERSE);
         motorL.setDirection(DcMotorSimple.Direction.REVERSE);
         /* ---------------------------------------- */
 
         squeeze = hardwareMap.servo.get("squeeze");
-
+        motor_lift = hardwareMap.dcMotor.get("lift");
     }
 
     double squeezePosition = 1;
@@ -77,7 +78,7 @@ public class BasicTeleop extends OpMode
         gearRatio = gear_ratio_is_07 ? 0.7 : 0.2;
         // If right_bumper toggles gear ratio, the default gearRatio is 0.7. Otherwise, the gearRatio is 0.2
 
-        if(gamepad1.left_bumper) // toggles front
+        if(gamepad1.left_bumper) // toggles front, kinda unnecessary though
         {
             flip_front = !(flip_front);
         }
@@ -97,42 +98,64 @@ public class BasicTeleop extends OpMode
         motorR.setPower(rightPower);
         motorL.setPower(leftPower);
 
-        /*if(gamepad2.right_bumper) // 83.3 is the number of degrees from 0 to snuggly fit the glyph
+        /*final double DEGREE_CHANGER = 0.0001;
+
+        if(gamepad2.right_bumper) // 83.3 is the number of degrees from 0 to snuggly fit the glyph
         {
-            squeezePosition += 0.0001;
+            squeezePosition += DEGREE_CHANGER;
         }
         if(gamepad2.left_bumper)
         {
-            squeezePosition -= 0.0001;
+            squeezePosition -= DEGREE_CHANGER;
         }*/
+
+        final double FIT_GLYPH = 82 / 180; // will (probably) always have glyph squeezed
+
         
         //while loops should make the clamp gradually open and close
-        final double DEGREE_CHANGER =.0001;
-        while(gamepad2.right_bumper)
+        /*while(gamepad2.right_bumper)
         {
             squeezePosition += DEGREE_CHANGER;
+            squeezePosition = Range.clip(squeezePosition, FIT_GLYPH, 1);
+            squeeze.setPosition(squeezePosition);
             AutonomousMethodMaster.sleepNew(10);
         }
         while(gamepad2.left_bumper)
         {
             squeezePosition += (DEGREE_CHANGER*-1);
+            squeezePosition = Range.clip(squeezePosition, FIT_GLYPH, 1);
+            squeeze.setPosition(squeezePosition);
             AutonomousMethodMaster.sleepNew(10);
+        }*/
 
-        } 
+
         
-        
-        
+        double lift_power;
+
+        lift_power = gamepad2.right_stick_y;
+        if(lift_power < 0)
+        {
+            lift_power *= lift_power;
+        }
+        else
+        {
+            lift_power *= lift_power;
+            lift_power *= -1;
+        }
+
+        motor_lift.setPower(lift_power);
 
         //squeezePosition = -gamepad2.right_trigger + 1; // defaults to open
         squeezePosition = gamepad2.right_trigger; // defaults to closed
 
-        squeezePosition = Range.clip(squeezePosition, 82/180, 1);
+        squeezePosition = Range.clip(squeezePosition, FIT_GLYPH, 1);
         squeeze.setPosition(squeezePosition);
           
         telemetry.addData("Gear Ratio ", gearRatio);
         telemetry.addData("Right Power ", rightPower);
         telemetry.addData("Left Power ", leftPower);
         telemetry.addData("Squeeze Position * 180", squeezePosition * 180);
+        telemetry.addData("Lift Power ", lift_power);
         
     }
 }

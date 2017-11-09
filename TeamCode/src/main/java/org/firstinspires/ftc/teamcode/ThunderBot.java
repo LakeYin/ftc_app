@@ -25,7 +25,7 @@ import static com.sun.tools.javac.util.Constants.format;
  * What this essentially does is create our robot's "blueprints" of how we want it's basic code to look like.
     The video referenced z as up and y as forward and back; idk if it's because their phone is flat down with the cameras facing the ceiling and floor
     or if vuforia is actually like that, we will need some testing
-    Therefore, paratheses next to coordinates will represent the coords that fit their description
+    Therefore, parentheses next to coordinates will represent the coords that fit their description
     and the coords outside the parentheses will represent the coords I think should be correct
  */
 

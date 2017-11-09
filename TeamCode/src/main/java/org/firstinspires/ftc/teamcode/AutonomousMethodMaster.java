@@ -341,7 +341,8 @@ public class AutonomousMethodMaster extends LinearOpMode {
         // Set the panel back to the default color
         relativeLayout.post(new Runnable() {
             public void run() {
-                relativeLayout.setBackgroundColor(Color.WHITE);
+                relativeLayou+
+                .setBackgroundColor(Color.WHITE);
             }
         });
     }
