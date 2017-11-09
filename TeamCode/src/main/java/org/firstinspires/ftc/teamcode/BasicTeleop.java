@@ -129,7 +129,7 @@ public class BasicTeleop extends OpMode
         }*/
 
 
-        
+        // dealing with the motor controlling the lift
         double lift_power;
 
         lift_power = gamepad2.right_stick_y;
