@@ -149,7 +149,7 @@ public class BasicTeleop extends OpMode
         {
             lift_power *= lift_power;
             // If the lift_power is too small, set it to 0.1
-            if (lift_power < 0.1)
+            if (lift_power < 0.1 && lift_power != 0)
             {
                 lift_power = 0.1;
             }
@@ -158,7 +158,7 @@ public class BasicTeleop extends OpMode
         {
             lift_power *= lift_power;
             // If the lift_power is too small, set it to 0.1
-            if (lift_power < 0.1)
+            if (lift_power < 0.1 && lift_power != 0)
             {
                 lift_power = 0.1;
             }
