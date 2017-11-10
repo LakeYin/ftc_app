@@ -50,8 +50,9 @@ public class BasicTeleop extends OpMode
         //motorR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODERS);
         //motorL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODERS);
 
-        //motorR.setDirection(DcMotor.Direction.REVERSE);
-        motorL.setDirection(DcMotorSimple.Direction.REVERSE);
+        // Flipped the motors (11/10/17)
+        motorR.setDirection(DcMotor.Direction.REVERSE);
+        //motorL.setDirection(DcMotorSimple.Direction.REVERSE);
         /* ---------------------------------------- */
 
         squeeze = hardwareMap.servo.get("squeeze");
@@ -85,16 +86,27 @@ public class BasicTeleop extends OpMode
         
         rightPower = gearRatio * gamepad1.right_stick_y;
         leftPower = gearRatio * gamepad1.left_stick_y;
-        
+
+        /* If the value of the power is lower than the threshold, the robot will set its power to
+         the threshold */
+        double threshold = 0.1;
+        leftPower = (leftPower > 0 && leftPower < threshold) ? threshold : leftPower;
+        leftPower = (leftPower < 0 && leftPower > -threshold) ? -threshold : leftPower;
+        rightPower = (rightPower > 0 && rightPower < threshold) ? threshold : rightPower;
+        rightPower = (rightPower < 0 && rightPower > -threshold) ? -threshold : rightPower;
+
+        // Clips the power
         leftPower = Range.clip(leftPower, -1, 1);        //gamepad controllers have a value of 1 when you push it to its maximum foward
         rightPower = Range.clip(rightPower, -1, 1);      //limiting the range of each power, min first then max
 
+        // For flipping the robot's front
         if(flip_front)
         {
             leftPower *= -1;
             rightPower *= -1;
         } 
-        
+
+        // Set the robot's power
         motorR.setPower(rightPower);
         motorL.setPower(leftPower);
 
@@ -136,10 +148,20 @@ public class BasicTeleop extends OpMode
         if(lift_power < 0)
         {
             lift_power *= lift_power;
+            // If the lift_power is too small, set it to 0.1
+            if (lift_power < 0.1)
+            {
+                lift_power = 0.1;
+            }
         }
         else
         {
             lift_power *= lift_power;
+            // If the lift_power is too small, set it to 0.1
+            if (lift_power < 0.1)
+            {
+                lift_power = 0.1;
+            }
             lift_power *= -1;
         }
 
