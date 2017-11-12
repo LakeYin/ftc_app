@@ -24,7 +24,7 @@ public class AutnomousMethodBranch extends AutonomousMethodMaster {
         telemetry.addData("Started Robot", "Now");
         telemetry.update();
 
-        runToPositionEncoders();
+        encoderMode(1);
 
         encoderMove(1, 24, 24); //move forward 24 inches at power of 1
     }

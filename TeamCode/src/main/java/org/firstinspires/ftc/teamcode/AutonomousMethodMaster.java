@@ -43,19 +43,20 @@ public class AutonomousMethodMaster extends LinearOpMode {
     /** ---------------------------------------------------------------------------------------- **/
     private DcMotor motorL;                       // Left Side Motor
     private DcMotor motorR;                       // Right Side Motor
+    private DcMotorController motorControllerDrive;
+    private Servo squeeze;
+    private DcMotor motor_lift;
     /** ---------------------------------------------------------------------------------------- **/
     /** For Encoders and specific turn values **/
     /* ------------------------------------------------------------------------------------------ */
-    double ticksPerRev = 1120;             // This is the specific value for AndyMark motors
+    double ticksPerRevAndy = 1120;             // This is the specific value for AndyMark motors
     double ticksPerRevTetrix = 1440;       // The specific value for Tetrix, since only one encoded Tetrix motor (launcher arm)
-    double ticksPer360Turn = 4500;         // The amount of ticks for a 360 degree turn
+    double ticksPer360Turn = 4600;         // The amount of ticks for a robot 360 degree turn (AndyMarks)
     double tickTurnRatio = ticksPer360Turn / 360;
     double inchToMm = 25.4;             // For conversion between the vectors
 
     double wheelDiameter = 4.0;         // Diameter of the current omniwheels in inches
-    double ticksPerInch = (ticksPerRev / (wheelDiameter * 3.14159265));
-
-    double encoderResetSpeed = 0.25;        // Motor speed for when the robot resets launcher
+    double ticksPerInch = (ticksPerRevAndy / (wheelDiameter * 3.14159265));
     /* ------------------------------------------------------------------------------------------ */
 
 
@@ -74,7 +75,7 @@ public class AutonomousMethodMaster extends LinearOpMode {
         telemetry.addData("Started Robot", "Now");
         telemetry.update();
 
-        runToPositionEncoders();
+        encoderMode(1);
 
     }
 
@@ -116,25 +117,6 @@ public class AutonomousMethodMaster extends LinearOpMode {
         }
     }
 
-    public void resetEncoders() throws InterruptedException {
-        /** Resets the encoder values on each of the drive motors **/
-        motorL.setMode(DcMotor.RunMode.RESET_ENCODERS);
-        motorR.setMode(DcMotor.RunMode.RESET_ENCODERS);
-//        waitOneFullHardwareCycle();
-    }
-
-    public void runToPositionEncoders() {
-        /** Sets the encoded motors to RUN_TO_POSITION **/
-        motorL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    }
-
-    public void runUsingEncoders() {
-        /** Sets the encoders to RUN_USING_ENCODERS **/
-        motorL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
-
     public void addTelemetryData(String string1, String string2) {
         telemetry.addData(string1, string2);
         telemetry.update();
@@ -152,54 +134,37 @@ public class AutonomousMethodMaster extends LinearOpMode {
      * These methods are used to set up the robot
      **/
     /** ----------------------------------------- **/
-    public void initElectronics(int mode) throws InterruptedException {
+    public void initElectronics(int mode){
         // To make the initialization of electronics much easier and nicer to read
         /** Initializing and mapping electronics **/
         if (mode == 0) {
-            /* Motors and servos (w/ controllers) */
-            // motorControllerL = hardwareMap.dcMotorController.get("MC_L");
-            // motorControllerR = hardwareMap.dcMotorController.get("MC_R");
-            // motorControllerA1 = hardwareMap.dcMotorController.get("MC_A1");
-            // motorControllerA2 = hardwareMap.dcMotorController.get("MC_A2");
-            // servoController = hardwareMap.servoController.get("SC");
+            //Assign values to hardware components here (match them to phone configuration)
+            // Motor and motor controller hardware declaration
+        /* ---------------------------------------- */
+            motorControllerDrive = hardwareMap.dcMotorController.get("MC_D");
 
-            motorL = hardwareMap.dcMotor.get("motorL");        //P0 is actually the right
-            motorR = hardwareMap.dcMotor.get("motorR");        //P1 is actually the left
+            motorR = hardwareMap.dcMotor.get("motorR");
+            motorL = hardwareMap.dcMotor.get("motorL");
+        /* ---------------------------------------- */
 
-            // servo = hardwareMap.servo.get("servo");
+            // Encoder stuff - Run Without Encoders is depreciated
+        /* ---------------------------------------- */
+            encoderMode(1);
 
-            // motorLauncher = hardwareMap.dcMotor.get("motorLauncher");   //P0
-            // sweeperMotor = hardwareMap.dcMotor.get("motorSweeper");     //P1
+            // Flipped the motors (11/10/17)
+            motorR.setDirection(DcMotor.Direction.REVERSE);
+            //motorL.setDirection(DcMotorSimple.Direction.REVERSE);
+        /* ---------------------------------------- */
 
-            // motorStrafe = hardwareMap.dcMotor.get("motorStrafe");       //P0 A2
-
-
-
-            /* Sensors */
-            // colorBeacon = hardwareMap.colorSensor.get("colorBeacon");
-
-
-
-            /*Setting channel modes*/
-            runUsingEncoders();
-
-            // motorLauncher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            // sweeperMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-            // motorStrafe.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-            // Since the motors face different directions, one is going to go in an opposite direction to the other.
-            // This is intended to correct that problem and will be adjusted later as we do testing and the true directions are recorded
-            motorL.setDirection(DcMotorSimple.Direction.REVERSE);
-
-            // motorLauncher.setDirection(DcMotorSimple.Direction.REVERSE);
+            squeeze = hardwareMap.servo.get("squeeze");
+            motor_lift = hardwareMap.dcMotor.get("lift");
         }
     }
 
 
     public void encoderMove(double power, double leftInches, double rightInches) {
         /** This method makes the motors move a certain distance **/
-        // resetEncoders();
+        encoderMode(3);
 
         // Sets the power range
         power = Range.clip(power, -1, 1);
@@ -208,7 +173,7 @@ public class AutonomousMethodMaster extends LinearOpMode {
         motorL.setTargetPosition((int)(leftInches * -ticksPerInch));
         motorR.setTargetPosition((int)(rightInches * -ticksPerInch));
 
-        runToPositionEncoders();
+        encoderMode(0);
 
         // Sets the motors' position
         motorL.setPower(power);
@@ -234,8 +199,61 @@ public class AutonomousMethodMaster extends LinearOpMode {
         stopMotion();
 
         // Resets to run using encoders mode
-        runUsingEncoders();
+        encoderMode(1);
 
+    }
+
+
+    public void encoderRotateDegrees(int direction, double power, int robotDegrees) {
+
+        /** This method, given an input amount of degrees, makes the robot turn
+         *  the amount of degrees specified around ITS center of rotation **/
+        encoderMode(3);
+
+        // Sets the power range
+        power = Range.clip(power, -1, 1);
+        power = Math.abs(power);
+
+        // Setting variables
+        double robotTurn = robotDegrees * tickTurnRatio;
+
+        // Setting the target positions
+        if (direction == 1){ //counterclockwise (left)
+            motorL.setTargetPosition((int)(robotTurn));
+            motorR.setTargetPosition((int)(-robotTurn));
+        }
+        else{ //clockwise (right)
+            motorL.setTargetPosition((int)(-robotTurn));
+            motorR.setTargetPosition((int)(robotTurn));
+        }
+
+        encoderMode(0);
+
+        // Sets the motors' positions
+        motorL.setPower(power);
+        motorR.setPower(power);
+
+        // While loop for updating telemetry
+        while(motorL.isBusy() && motorR.isBusy() && opModeIsActive()){
+
+            // Updates the position of the motors
+            double LPos = motorL.getCurrentPosition();
+            double RPos = motorR.getCurrentPosition();
+
+            // Adds telemetry of the drive motors
+            telemetry.addData("MotorL Pos", LPos);
+            telemetry.addData("MotorR Pos", RPos);
+
+            // Updates the telemetry
+            telemetry.update();
+
+        }
+
+        // Stops the motors
+        stopMotion();
+
+        // Resets to run using encoders mode
+        encoderMode(1);
     }
 
     VuforiaLocalizer vuforia;

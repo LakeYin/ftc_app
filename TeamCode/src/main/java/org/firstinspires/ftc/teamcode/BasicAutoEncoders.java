@@ -25,42 +25,19 @@ import com.qualcomm.robotcore.hardware.I2cDeviceSynchImpl;
 import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 /**
- * Created by joshuakrinsky on 9/29/17.
+ * Created by Justin Zhu
  */
-@Autonomous(name="Encoder", group="Autonomous")
-@Disabled
+@Autonomous(name="Basic Encoders Turn Left", group="Autonomous")
 public class BasicAutoEncoders extends AutonomousMethodMaster{
-    private DcMotor motorL;                       // Left Side Motor
-    private DcMotor motorR;                       // Right Side Motor
-
-    HardwarePushbot robot   = new HardwarePushbot();   // Use a Pushbot's hardware
-    private ElapsedTime runtime = new ElapsedTime();
-
-    static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
-    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
-    static final double     WHEEL_DIAMETER_INCHES   = 3.875 ;     // For figuring circumference
-    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-            (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double     DRIVE_SPEED             = 0.6;
-    static final double     TURN_SPEED              = 0.5;
-
-    @Override
     public void runOpMode() {
 
-        motorL = hardwareMap.dcMotor.get("motorL");        //P0 is actually the right
-        motorR = hardwareMap.dcMotor.get("motorR");        //P1 is actually the left
-
-        encoderMode(3);
-        encoderMode(1);
+        initElectronics(0);
 
         waitForStart();
 
-        encoderMove(10,  10, 5.0);  // S1: Forward 47 Inches with 5 Sec timeout
-        encoderMove(12, -12, 4.0);  // S2: Turn Right 12 Inches with 4 Sec timeout
-        encoderMove( -10, -10, 4.0);  // S3: Reverse 24 Inches with 4 Sec timeout
-
-        sleep(1000);
-
-
+        encoderMove(0.2,  18, 18);  // move forward 12 in
+        encoderRotateDegrees(1, 0.2, 90); //rotate ccw 90 degrees
+        encoderMove(0.2, 6, 6); //move forward 6 in
+        stopMotion(); //should be parked by now
     }
 }
