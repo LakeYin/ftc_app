@@ -35,9 +35,9 @@ public class BasicAutoEncoders extends AutonomousMethodMaster{
 
         waitForStart();
 
-        encoderMove(0.2,  18, 18);  // move forward 12 in
+        encoderMove(0.2,  28, 28);  // move forward 12 in
         encoderRotateDegrees(1, 0.2, 90); //rotate ccw 90 degrees
-        encoderMove(0.2, 6, 6); //move forward 6 in
+        encoderMove(0.2, 8, 8); //move forward 6 in
         stopMotion(); //should be parked by now
     }
 }
