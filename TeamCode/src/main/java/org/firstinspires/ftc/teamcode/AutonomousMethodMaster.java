@@ -24,6 +24,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
+import java.lang.Math;
+
 /**
  * Created by Alex on 9/18/2017.
  *  *
@@ -47,16 +49,18 @@ public class AutonomousMethodMaster extends LinearOpMode {
     private Servo squeeze;
     private DcMotor motor_lift;
     /** ---------------------------------------------------------------------------------------- **/
+
     /** For Encoders and specific turn values **/
     /* ------------------------------------------------------------------------------------------ */
-    double ticksPerRevAndy = 1120;             // This is the specific value for AndyMark motors
-    double ticksPerRevTetrix = 1440;       // The specific value for Tetrix, since only one encoded Tetrix motor (launcher arm)
-    double ticksPer360Turn = 4600;         // The amount of ticks for a robot 360 degree turn (AndyMarks)
-    double tickTurnRatio = ticksPer360Turn / 360;
-    double inchToMm = 25.4;             // For conversion between the vectors
+    double ticksPerRevNeverest40 = 1120;            // This is the specific value for NeveRest 40s
+    double ticksPerRevNeverest20 = 560;             // The specific value for NeveRest 20s
+    double ticksPerRevTetrix = 1440;                // The specific value for Tetrix, since only one encoded Tetrix motor (launcher arm)
+    double ticksPer360Turn = 4600;                  // The amount of ticks for a robot 360 degree turn (AndyMark NeveRest 40s)
+    double tickTurnRatio = ticksPer360Turn / 360;   // The ratio for multiplication
+    double inchToMm = 25.4;                         // For conversion between the vectors
 
-    double wheelDiameter = 4.0;         // Diameter of the current omniwheels in inches
-    double ticksPerInch = (ticksPerRevAndy / (wheelDiameter * 3.14159265));
+    double wheelDiameter = 4.0;                     // Diameter of the current omniwheels in inches
+    double ticksPerInchNeverest40 = (ticksPerRevNeverest40 / (wheelDiameter * Math.PI));        // The number of encoder ticks per inch (specific to NeveRest 40s
     /* ------------------------------------------------------------------------------------------ */
 
 
@@ -81,6 +85,13 @@ public class AutonomousMethodMaster extends LinearOpMode {
 
     /**
      * These methods control the encoder modes of the motor
+     *
+     * Mode Numbers:
+     *  0 = RUN_TO_POSITION
+     *  1 = RUN_USING_ENCODER
+     *  2 = RUN_WITHOUT_ENCODER
+     *  3 = STOP_AND_RESET_ENCODERS
+     *  4 = RESET_ENCODERS
      **/
     /** ----------------------------------------- **/
     public void encoderMode(int mode) {
@@ -164,15 +175,17 @@ public class AutonomousMethodMaster extends LinearOpMode {
 
     public void encoderMove(double power, double leftInches, double rightInches) {
         /** This method makes the motors move a certain distance **/
+        // Set the encoder mode to 3 (STOP_AND_RESET_ENCODERS)
         encoderMode(3);
 
         // Sets the power range
         power = Range.clip(power, -1, 1);
 
         // Setting the target positions
-        motorL.setTargetPosition((int)(leftInches * -ticksPerInch));
-        motorR.setTargetPosition((int)(rightInches * -ticksPerInch));
+        motorL.setTargetPosition((int)(leftInches * -ticksPerInchNeverest40));
+        motorR.setTargetPosition((int)(rightInches * -ticksPerInchNeverest40));
 
+        // Set encoder mode to RUN_TO_POSITION
         encoderMode(0);
 
         // Sets the motors' position
@@ -218,11 +231,13 @@ public class AutonomousMethodMaster extends LinearOpMode {
         double robotTurn = robotDegrees * tickTurnRatio;
 
         // Setting the target positions
-        if (direction == 1){ //counterclockwise (left)
+        if (direction == 1)
+        { //counterclockwise (left)
             motorL.setTargetPosition((int)(robotTurn));
             motorR.setTargetPosition((int)(-robotTurn));
         }
-        else{ //clockwise (right)
+        else
+        { //clockwise (right)
             motorL.setTargetPosition((int)(-robotTurn));
             motorR.setTargetPosition((int)(robotTurn));
         }
@@ -234,8 +249,8 @@ public class AutonomousMethodMaster extends LinearOpMode {
         motorR.setPower(power);
 
         // While loop for updating telemetry
-        while(motorL.isBusy() && motorR.isBusy() && opModeIsActive()){
-
+        while(motorL.isBusy() && motorR.isBusy() && opModeIsActive())
+        {
             // Updates the position of the motors
             double LPos = motorL.getCurrentPosition();
             double RPos = motorR.getCurrentPosition();
