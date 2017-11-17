@@ -167,11 +167,19 @@ public class BasicTeleop extends OpMode
 
         motor_lift.setPower(lift_power);
 
-        //squeezePosition = -gamepad2.right_trigger + 1; // defaults to open
-        squeezePosition = gamepad2.right_trigger; // defaults to closed
+        //squeezePosition = -gamepad2.right_trigger + 1;   // defaults to open
+        squeezePosition = gamepad2.right_trigger;          // defaults to closed
+        boolean locked = false;                            // whether or not the right bumper has been pressed. Defaults to false.
 
-        squeezePosition = Range.clip(squeezePosition, FIT_GLYPH, 1);
-        squeeze.setPosition(squeezePosition);
+        if(gamepad2.right_bumper){
+            locked = !(locked);                            // toggles the squeeze boolean
+        }
+
+        if(!locked) {                                      // doesn't update position (locks the position) if the bumper hasn't been pressed
+            squeezePosition = Range.clip(squeezePosition, FIT_GLYPH, 1);
+            squeeze.setPosition(squeezePosition);
+        }
+
           
         telemetry.addData("Gear Ratio ", gearRatio);
         telemetry.addData("Right Power ", rightPower);
