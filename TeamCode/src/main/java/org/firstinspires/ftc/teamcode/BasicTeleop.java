@@ -29,7 +29,7 @@ public class BasicTeleop extends OpMode
     // Initialize the components of the robot
     /* ---------------------------------------- */
     private DcMotorController motorControllerDrive;
-    private DcMotor motorR, motorL;
+    private DcMotor motorFR, motorBR, motorFL, motorBL;
     private Servo squeeze; // also, this goes in port one of the servo controller
     private DcMotor motor_lift;
     /* ---------------------------------------- */
@@ -41,17 +41,19 @@ public class BasicTeleop extends OpMode
         /* ---------------------------------------- */
         motorControllerDrive = hardwareMap.dcMotorController.get("MC_D");
 
-        motorR = hardwareMap.dcMotor.get("motorR");
-        motorL = hardwareMap.dcMotor.get("motorL");
+        motorFL = hardwareMap.dcMotor.get("motorFL");
+        motorFR = hardwareMap.dcMotor.get("motorFR");
+        motorBL = hardwareMap.dcMotor.get("motorBL");
+        motorBR = hardwareMap.dcMotor.get("motorBR");
         /* ---------------------------------------- */
-
         // Encoder stuff - Run Without Encoders is depreciated
         /* ---------------------------------------- */
         //motorR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODERS);
         //motorL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODERS);
 
         // Flipped the motors (11/10/17)
-        motorR.setDirection(DcMotor.Direction.REVERSE);
+        motorFR.setDirection(DcMotor.Direction.REVERSE);
+        motorBR.setDirection(DcMotor.Direction.REVERSE);
         //motorL.setDirection(DcMotorSimple.Direction.REVERSE);
         /* ---------------------------------------- */
 
@@ -107,8 +109,10 @@ public class BasicTeleop extends OpMode
         } 
 
         // Set the robot's power
-        motorR.setPower(rightPower); // back motors need to be reversed because of the gears
-        motorL.setPower(leftPower);
+        motorFR.setPower(rightPower);
+        motorBR.setPower(-rightPower); // back motors need to be reversed because of the gears
+        motorFL.setPower(leftPower);
+        motorBL.setPower(-leftPower);  // back motors need to be reversed because of the gears
 
         /*final double DEGREE_CHANGER = 0.0001;
 
