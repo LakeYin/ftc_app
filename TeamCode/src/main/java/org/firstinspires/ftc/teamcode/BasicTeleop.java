@@ -107,7 +107,7 @@ public class BasicTeleop extends OpMode
         } 
 
         // Set the robot's power
-        motorR.setPower(rightPower);
+        motorR.setPower(rightPower); // back motors need to be reversed because of the gears
         motorL.setPower(leftPower);
 
         /*final double DEGREE_CHANGER = 0.0001;
