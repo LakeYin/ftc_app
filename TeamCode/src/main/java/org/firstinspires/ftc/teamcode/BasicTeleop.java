@@ -171,7 +171,7 @@ public class BasicTeleop extends OpMode
         squeezePosition = gamepad2.right_trigger;          // defaults to closed
         boolean locked = false;                            // whether or not the right bumper has been pressed. Defaults to false.
 
-        if(gamepad2.right_bumper){
+        if(gamepad2.right_bumper && gamepad2.right_trigger > 0){ //ensures that we don't accidentally lock it open, which could be confusing to the drivers
             locked = !(locked);                            // toggles the squeeze boolean
         }
 
