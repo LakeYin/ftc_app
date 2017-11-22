@@ -43,7 +43,7 @@ public class oct extends OpMode {
     }
 
     double x, y, z, LF, RF, LB, RB;
-    double slope, power; 
+    double slope, power;
     double temporary;
 
     double speed = 1.0;
