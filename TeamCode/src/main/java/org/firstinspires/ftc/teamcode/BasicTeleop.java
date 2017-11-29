@@ -122,7 +122,7 @@ public class BasicTeleop extends OpMode
         motorFL.setPower(leftPower);
         motorBL.setPower(-leftPower); */ // back motors need to be reversed because of the gears
 
-        /*final double DEGREE_CHANGER = 0.0001;
+        final double DEGREE_CHANGER = 0.0001;
 
         if(gamepad2.right_bumper) // 83.3 is the number of degrees from 0 to snuggly fit the glyph
         {
@@ -131,7 +131,7 @@ public class BasicTeleop extends OpMode
         if(gamepad2.left_bumper)
         {
             squeezePosition -= DEGREE_CHANGER;
-        }*/
+        }
 
         final double FIT_GLYPH = 82 / 180; // will (probably) always have glyph squeezed
 
