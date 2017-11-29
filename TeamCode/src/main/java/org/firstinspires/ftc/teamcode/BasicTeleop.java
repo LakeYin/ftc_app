@@ -60,6 +60,12 @@ public class BasicTeleop extends OpMode
         squeeze = hardwareMap.servo.get("squeeze");
         motor_lift = hardwareMap.dcMotor.get("lift");
     }
+    double x, y, r;
+    double slope, power;
+    double temporary;
+
+    double speed = 1.0;
+    double change_speed = 0, prev = 0;
 
     double squeezePosition = 1;
 
