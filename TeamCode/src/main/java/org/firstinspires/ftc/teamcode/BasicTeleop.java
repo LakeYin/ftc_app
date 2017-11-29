@@ -79,6 +79,9 @@ public class BasicTeleop extends OpMode
         boolean flip_front = false;
         double gearRatio;
 
+        double frontRight, frontLeft, backRight, backLeft;
+        boolean swap_front_back;
+
         if(gamepad1.right_bumper)
         {
             gear_ratio_is_07 = !(gear_ratio_is_07);
@@ -198,10 +201,7 @@ public class BasicTeleop extends OpMode
 
 
         // Lightning's teleop from last year
-        x = gamepad1.left_stick_x ;
-       
-        double frontRight, frontLeft, backRight, backLeft;
-        boolean swap_front_back;
+        x = gamepad1.left_stick_x;
 
         y = -gamepad1.left_stick_y;//only y is inversed
 
@@ -398,8 +398,6 @@ public class BasicTeleop extends OpMode
             backLeft = frontRight = -power;
         }
 
-        r *= -1;
-
         if(swap_front_back)
         {
             frontLeft *= -1;
@@ -410,10 +408,10 @@ public class BasicTeleop extends OpMode
             r*= -1;
         }
 
-        frontLeft = ((frontLeft) + z) * 0.707;
-        frontRight = ((frontRight) - z) * 0.707;
-        backLeft = ((backLeft) + z) * 0.707;
-        backRight = ((backRight) - z) * 0.707;
+        frontLeft = ((frontLeft) + r) * 0.707;
+        frontRight = ((frontRight) - r) * 0.707;
+        backLeft = ((backLeft) + r) * 0.707;
+        backRight = ((backRight) - r) * 0.707;
 
         frontLeft = Range.clip(frontLeft, -1, 1);
         frontRight = Range.clip(frontRight, -1, 1);
