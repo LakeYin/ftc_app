@@ -33,8 +33,10 @@ public class ThunderBot {
 
     private LinearOpMode myOpMode; //the autonomous OpMode this robot will be running
 
-    private DcMotor motorL = null; //the left motor the robot will be using
-    private DcMotor motorR = null; //the right motor the robot will be using
+    private DcMotor frontLeft;                       // Front Left Motor
+    private DcMotor backLeft;                       // Back Left Motor
+    private DcMotor frontRight;                      // Front Right Motor
+    private DcMotor backRight;                      // Back Right Motor
 
     //These are the robot's target positions which currently are 0 because it's starting
     //tbh, what the coordinates are should'nt really matter here, what matters is axial = forward, lateral = right, yaw = side-rotation
@@ -51,12 +53,16 @@ public class ThunderBot {
         myOpMode = opMode;
 
         //What the hardwareMap will store from the names found on the phone's config
-        motorR = myOpMode.hardwareMap.dcMotor.get("motorR");
-        motorL = myOpMode.hardwareMap.dcMotor.get("motorL");
+        frontLeft = myOpMode.hardwareMap.dcMotor.get("frontLeft");
+        frontRight = myOpMode.hardwareMap.dcMotor.get("frontRight");
+        backLeft = myOpMode.hardwareMap.dcMotor.get("backLeft");
+        backRight = myOpMode.hardwareMap.dcMotor.get("backRight");
 
         //Direction of motors: Forward = CCW
-        motorL.setDirection(DcMotor.Direction.REVERSE);
-        motorR.setDirection(DcMotor.Direction.REVERSE);
+        frontLeft.setDirection(DcMotor.Direction.REVERSE);
+        frontRight.setDirection(DcMotor.Direction.REVERSE);
+        backLeft.setDirection(DcMotor.Direction.REVERSE);
+        backRight.setDirection(DcMotor.Direction.REVERSE);
 
         //Set it so the motors use encoders
         setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -100,8 +106,10 @@ public class ThunderBot {
         }
 
         //finally sets power
-        motorL.setPower(left);
-        motorR.setPower(right);
+        frontLeft.setPower(left);
+        backLeft.setPower(left);
+        frontRight.setPower(right);
+        backRight.setPower(right);
 
         /*This adds telemetry for the positions and for the power
           Note: I think % in telemetry gets the variable mentioned after the quotations respectively
@@ -117,6 +125,21 @@ public class ThunderBot {
 
     }
 
+    public void strafeBot()
+    {
+        double move_right = Lateral;
+
+        move_right = Range.clip(move_right, -1, 1);
+
+        frontRight.setPower(-move_right);
+        backLeft.setPower(-move_right);
+
+        frontLeft.setPower(move_right);
+        backRight.setPower(move_right);
+
+        myOpMode.telemetry.addData("Axes ", "A[%+5.2f], L[%+5.2f], Y[%+5.2f]", Axial, Lateral, Yaw);
+    }
+
     //Make sure the axial, lateral, and yaw are not too large and stay in range
     public void setAxial(double axial){
         Axial = Range.clip(axial, -1, 1);
@@ -130,8 +153,10 @@ public class ThunderBot {
 
     //This method makes setting the motor modes simpler
     public void setMode(DcMotor.RunMode mode){
-        motorL.setMode(mode);
-        motorR.setMode(mode);
+        frontLeft.setMode(mode);
+        frontRight.setMode(mode);
+        backRight.setMode(mode);
+        backLeft.setMode(mode);
     }
 
     //checks for the type of vumark identified
