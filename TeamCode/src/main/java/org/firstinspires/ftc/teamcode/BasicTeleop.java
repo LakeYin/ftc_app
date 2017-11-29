@@ -422,10 +422,10 @@ public class BasicTeleop extends OpMode
 
 
         //set power here
-        motor_FR.setPower(frontRight);
-        motor_FL.setPower(frontLeft);
-        motor_BR.setPower(backRight);
-        motor_BL.setPower(backLeft);
+        motorFR.setPower(frontRight);
+        motorFL.setPower(frontLeft);
+        motorBR.setPower(backRight);
+        motorBL.setPower(backLeft);
         
     }
 }
