@@ -298,6 +298,7 @@ public class AutonomousMethodMaster extends LinearOpMode {
         relicTrackables.activate();
     }
 
+    // added a new sleep method because the default one isn't working
     public static void sleepNew(long sleepTime)
     {
         long wakeupTime = System.currentTimeMillis() + sleepTime;
