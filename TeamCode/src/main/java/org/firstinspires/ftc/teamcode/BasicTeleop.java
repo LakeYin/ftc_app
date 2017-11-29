@@ -96,7 +96,7 @@ public class BasicTeleop extends OpMode
 
         /* If the value of the power is lower than the threshold, the robot will set its power to
          the threshold */
-        double threshold = 0.1;
+        /*double threshold = 0.1;
         leftPower = (leftPower > 0 && leftPower < threshold) ? threshold : leftPower;
         leftPower = (leftPower < 0 && leftPower > -threshold) ? -threshold : leftPower;
         rightPower = (rightPower > 0 && rightPower < threshold) ? threshold : rightPower;
@@ -111,7 +111,7 @@ public class BasicTeleop extends OpMode
         {
             leftPower *= -1;
             rightPower *= -1;
-        } 
+        } */
 
         // Set the robot's power
        /* motorFR.setPower(rightPower);
@@ -191,8 +191,8 @@ public class BasicTeleop extends OpMode
 
           
         telemetry.addData("Gear Ratio ", gearRatio);
-        telemetry.addData("Right Power ", rightPower);
-        telemetry.addData("Left Power ", leftPower);
+        //telemetry.addData("Right Power ", rightPower);
+        //telemetry.addData("Left Power ", leftPower);
         telemetry.addData("Squeeze Position * 180", squeezePosition * 180);
         telemetry.addData("Lift Power ", lift_power);
 
@@ -201,6 +201,7 @@ public class BasicTeleop extends OpMode
         x = gamepad1.left_stick_x ;
        
         double frontRight, frontLeft, backRight, backLeft;
+        boolean swap_front_back;
 
         y = -gamepad1.left_stick_y;//only y is inversed
 
