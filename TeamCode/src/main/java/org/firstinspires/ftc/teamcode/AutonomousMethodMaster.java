@@ -43,8 +43,10 @@ public class AutonomousMethodMaster extends LinearOpMode {
 
     /** Declaring the motor variables **/
     /** ---------------------------------------------------------------------------------------- **/
-    private DcMotor motorL;                       // Left Side Motor
-    private DcMotor motorR;                       // Right Side Motor
+    private DcMotor frontLeft;                       // Front Left Motor
+    private DcMotor backLeft;                       // Back Left Motor
+    private DcMotor frontRight;                      // Front Right Motor
+    private DcMotor backRight;                      // Back Right Motor
     private DcMotorController motorControllerDrive;
     private Servo squeeze;
     private DcMotor motor_lift;
@@ -107,24 +109,34 @@ public class AutonomousMethodMaster extends LinearOpMode {
          *  **/
         if (mode == 0) {
             /** Sets the encoded motors to RUN_TO_POSITION **/
-            motorL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            motorR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         } else if (mode == 1) {
             /** Sets the encoders to RUN_USING_ENCODERS **/
-            motorL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motorR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         } else if (mode == 2) {
             /** Sets the encoders to RUN_WITHOUT_ENCODERS **/
-            motorL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            motorR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         } else if (mode == 3) {
             /** Stops and resets the encoder values on each of the drive motors **/
-            motorL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            motorR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         } else if (mode == 4) {
             /** Resets the encoder values on each of the drive motors **/
-            motorL.setMode(DcMotor.RunMode.RESET_ENCODERS);
-            motorR.setMode(DcMotor.RunMode.RESET_ENCODERS);
+            frontLeft.setMode(DcMotor.RunMode.RESET_ENCODERS);
+            backLeft.setMode(DcMotor.RunMode.RESET_ENCODERS);
+            frontRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
+            backRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
         }
     }
 
@@ -135,8 +147,10 @@ public class AutonomousMethodMaster extends LinearOpMode {
 
     public void stopMotion() {
         /** Stops all drive motor motion **/
-        motorL.setPower(0);
-        motorR.setPower(0);
+        frontLeft.setPower(0);
+        backLeft.setPower(0);
+        frontRight.setPower(0);
+        backRight.setPower(0);
     }
     /** ----------------------------------------- **/
 
@@ -154,8 +168,10 @@ public class AutonomousMethodMaster extends LinearOpMode {
         /* ---------------------------------------- */
             motorControllerDrive = hardwareMap.dcMotorController.get("MC_D");
 
-            motorR = hardwareMap.dcMotor.get("motorR");
-            motorL = hardwareMap.dcMotor.get("motorL");
+            frontLeft = hardwareMap.dcMotor.get("frontLeft");
+            backLeft = hardwareMap.dcMotor.get("backLeft");
+            frontRight = hardwareMap.dcMotor.get("frontRight");
+            backRight = hardwareMap.dcMotor.get("backRight");
         /* ---------------------------------------- */
 
             // Encoder stuff - Run Without Encoders is depreciated
@@ -163,7 +179,8 @@ public class AutonomousMethodMaster extends LinearOpMode {
             encoderMode(1);
 
             // Flipped the motors (11/10/17)
-            motorR.setDirection(DcMotor.Direction.REVERSE);
+            frontRight.setDirection(DcMotor.Direction.REVERSE);
+            backRight.setDirection(DcMotor.Direction.REVERSE);
             //motorL.setDirection(DcMotorSimple.Direction.REVERSE);
         /* ---------------------------------------- */
 
@@ -182,26 +199,30 @@ public class AutonomousMethodMaster extends LinearOpMode {
         power = Range.clip(power, -1, 1);
 
         // Setting the target positions
-        motorL.setTargetPosition((int)(leftInches * -ticksPerInchNeverest40));
-        motorR.setTargetPosition((int)(rightInches * -ticksPerInchNeverest40));
+        frontLeft.setTargetPosition((int)(leftInches * -ticksPerInchNeverest40));
+        backLeft.setTargetPosition((int)(leftInches * -ticksPerInchNeverest40));
+        frontRight.setTargetPosition((int)(rightInches * -ticksPerInchNeverest40));
+        backRight.setTargetPosition((int)(rightInches * -ticksPerInchNeverest40));
 
         // Set encoder mode to RUN_TO_POSITION
         encoderMode(0);
 
         // Sets the motors' position
-        motorL.setPower(power);
-        motorR.setPower(power);
+        frontLeft.setPower(power);
+        backLeft.setPower(power);
+        frontRight.setPower(power);
+        backRight.setPower(power);
 
         // While loop for updating telemetry
-        while(motorL.isBusy() && motorR.isBusy() && opModeIsActive()){
+        while(frontLeft.isBusy() && frontRight.isBusy() && opModeIsActive()){
 
             // Updates the position of the motors
-            double LPos = motorL.getCurrentPosition();
-            double RPos = motorR.getCurrentPosition();
+            double LPos = frontLeft.getCurrentPosition();
+            double RPos = frontRight.getCurrentPosition();
 
             // Adds telemetry of the drive motors
-            telemetry.addData("MotorL Pos", LPos);
-            telemetry.addData("MotorR Pos", RPos);
+            telemetry.addData("frontLeft Pos", LPos);
+            telemetry.addData("frontRight Pos", RPos);
 
             // Updates the telemetry
             telemetry.update();
@@ -233,31 +254,37 @@ public class AutonomousMethodMaster extends LinearOpMode {
         // Setting the target positions
         if (direction == 1)
         { //counterclockwise (left)
-            motorL.setTargetPosition((int)(robotTurn));
-            motorR.setTargetPosition((int)(-robotTurn));
+            frontLeft.setTargetPosition((int)(robotTurn));
+            backLeft.setTargetPosition((int)(robotTurn));
+            frontRight.setTargetPosition((int)(-robotTurn));
+            backRight.setTargetPosition((int)(-robotTurn));
         }
         else
         { //clockwise (right)
-            motorL.setTargetPosition((int)(-robotTurn));
-            motorR.setTargetPosition((int)(robotTurn));
+            frontLeft.setTargetPosition((int)(-robotTurn));
+            backLeft.setTargetPosition((int)(-robotTurn));
+            frontRight.setTargetPosition((int)(robotTurn));
+            backRight.setTargetPosition((int)(robotTurn));
         }
 
         encoderMode(0);
 
         // Sets the motors' positions
-        motorL.setPower(power);
-        motorR.setPower(power);
+        frontLeft.setPower(power);
+        backLeft.setPower(power);
+        frontRight.setPower(power);
+        backRight.setPower(power);
 
         // While loop for updating telemetry
-        while(motorL.isBusy() && motorR.isBusy() && opModeIsActive())
+        while(frontLeft.isBusy() && frontRight.isBusy() && opModeIsActive())
         {
             // Updates the position of the motors
-            double LPos = motorL.getCurrentPosition();
-            double RPos = motorR.getCurrentPosition();
+            double LPos = frontLeft.getCurrentPosition();
+            double RPos = frontRight.getCurrentPosition();
 
             // Adds telemetry of the drive motors
-            telemetry.addData("MotorL Pos", LPos);
-            telemetry.addData("MotorR Pos", RPos);
+            telemetry.addData("frontLeft Pos", LPos);
+            telemetry.addData("frontRight Pos", RPos);
 
             // Updates the telemetry
             telemetry.update();
