@@ -68,6 +68,8 @@ public class BasicTeleop extends OpMode
     double change_speed = 0, prev = 0;
 
     double squeezePosition = 1;
+    double frontRight, frontLeft, backRight, backLeft;
+    boolean swap_front_back;
 
     public void loop()
     {   /*
@@ -78,9 +80,6 @@ public class BasicTeleop extends OpMode
         boolean gear_ratio_is_07 = true;
         boolean flip_front = false;
         double gearRatio;
-
-        double frontRight, frontLeft, backRight, backLeft;
-        boolean swap_front_back;
 
         if(gamepad1.right_bumper)
         {
@@ -268,7 +267,7 @@ public class BasicTeleop extends OpMode
 
 //        x = x * x * x;
 //        y = y * y * y;
-//        r= r* r* z;
+//        r = r * r * z;
 
         power = Math.sqrt(x * x + y * y);
 
@@ -405,7 +404,7 @@ public class BasicTeleop extends OpMode
             backLeft *= -1;
             backRight *= -1;
 
-            r*= -1;
+            r *= -1;
         }
 
         frontLeft = ((frontLeft) + r) * 0.707;
