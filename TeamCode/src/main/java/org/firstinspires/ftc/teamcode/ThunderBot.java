@@ -158,6 +158,4 @@ public class ThunderBot {
         backRight.setMode(mode);
         backLeft.setMode(mode);
     }
-
-    //checks for the type of vumark identified
 }
