@@ -71,7 +71,6 @@ public class BasicTeleop extends OpMode
          */
         boolean gear_ratio_is_07 = true;
         boolean flip_front = false;
-        double rightPower, leftPower;
         double gearRatio;
 
         if(gamepad1.right_bumper)
@@ -86,8 +85,8 @@ public class BasicTeleop extends OpMode
             flip_front = !(flip_front);
         }
         
-        rightPower = gearRatio * gamepad1.right_stick_y;
-        leftPower = gearRatio * gamepad1.left_stick_y;
+        /*rightPower = gearRatio * gamepad1.right_stick_y;
+        leftPower = gearRatio * gamepad1.left_stick_y;*/
 
         /* If the value of the power is lower than the threshold, the robot will set its power to
          the threshold */
@@ -98,8 +97,8 @@ public class BasicTeleop extends OpMode
         rightPower = (rightPower < 0 && rightPower > -threshold) ? -threshold : rightPower;
 
         // Clips the power
-        leftPower = Range.clip(leftPower, -1, 1);        //gamepad controllers have a value of 1 when you push it to its maximum foward
-        rightPower = Range.clip(rightPower, -1, 1);      //limiting the range of each power, min first then max
+        //leftPower = Range.clip(leftPower, -1, 1);        //gamepad controllers have a value of 1 when you push it to its maximum foward
+        //rightPower = Range.clip(rightPower, -1, 1);      //limiting the range of each power, min first then max
 
         // For flipping the robot's front
         if(flip_front)
@@ -109,10 +108,10 @@ public class BasicTeleop extends OpMode
         } 
 
         // Set the robot's power
-        motorFR.setPower(rightPower);
+       /* motorFR.setPower(rightPower);
         motorBR.setPower(-rightPower); // back motors need to be reversed because of the gears
         motorFL.setPower(leftPower);
-        motorBL.setPower(-leftPower);  // back motors need to be reversed because of the gears
+        motorBL.setPower(-leftPower); */ // back motors need to be reversed because of the gears
 
         /*final double DEGREE_CHANGER = 0.0001;
 
@@ -129,7 +128,7 @@ public class BasicTeleop extends OpMode
 
         
         //while loops should make the clamp gradually open and close
-        /*while(gamepad2.right_bumper)
+        while(gamepad2.right_bumper)
         {
             squeezePosition += DEGREE_CHANGER;
             squeezePosition = Range.clip(squeezePosition, FIT_GLYPH, 1);
@@ -142,7 +141,7 @@ public class BasicTeleop extends OpMode
             squeezePosition = Range.clip(squeezePosition, FIT_GLYPH, 1);
             squeeze.setPosition(squeezePosition);
             AutonomousMethodMaster.sleepNew(10);
-        }*/
+        }
 
 
         // dealing with the motor controlling the lift
@@ -193,17 +192,17 @@ public class BasicTeleop extends OpMode
 
 
         // Lightning's teleop from last year
-        /*x = gamepad1.left_stick_x ;
+        x = gamepad1.left_stick_x ;
+       
+        double frontRight, frontLeft, backRight, backLeft;
 
         y = -gamepad1.left_stick_y;//only y is inversed
 
-        z = gamepad1.right_stick_x;
+        z = gamepad1.right_stick_x; //handles the robot turning
 
         x = Range.clip(x, -1, 1);
         y = Range.clip(y, -1, 1);
         z = Range.clip(z, -1, 1);
-
-        servoposition = Range.clip(servoposition, 0, 1);
 
         if(gamepad1.dpad_right && speed < 1)
         {
@@ -349,12 +348,10 @@ public class BasicTeleop extends OpMode
                 }
             }
         }
-
-
         if(zone == 0)// right
         {
-            LF = RB = power;
-            LB = RF = -power;
+            frontLeft = backRight = power;
+            backLeft = frontRight = -power;
         }
         if(zone == 4)// left
         {
@@ -419,11 +416,10 @@ public class BasicTeleop extends OpMode
 
 
         //set power here
-        FR.setPower(RF);
-        FL.setPower(LF);
-        BR.setPower(RB);
-        BL.setPower(LB);*/
+        motor_FR.setPower(RF);
+        motor_FL.setPower(LF);
+        motor_BR.setPower(RB);
+        motor_BL.setPower(LB);
         
     }
 }
-
