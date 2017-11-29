@@ -204,11 +204,11 @@ public class BasicTeleop extends OpMode
 
         y = -gamepad1.left_stick_y;//only y is inversed
 
-        z = gamepad1.right_stick_x; //handles the robot turning
+        r = gamepad1.right_stick_x; //handles the robot turning
 
         x = Range.clip(x, -1, 1);
         y = Range.clip(y, -1, 1);
-        z = Range.clip(z, -1, 1);
+        r = Range.clip(r, -1, 1);
 
         if(gamepad1.dpad_right && speed < 1)
         {
@@ -250,7 +250,7 @@ public class BasicTeleop extends OpMode
 
         telemetry.addData("x", x);
         telemetry.addData("y", y);
-        telemetry.addData("z", z);
+        telemetry.addData("r", r);
         telemetry.update();
 
         telemetry.addData("Speed", speed);
@@ -258,16 +258,16 @@ public class BasicTeleop extends OpMode
 
         x *= speed;
         y *= speed;
-        z *= speed;
+        r *= speed;
 
         telemetry.addData("x", x);
         telemetry.addData("y", y);
-        telemetry.addData("z", z);
+        telemetry.addData("r", r);
         telemetry.update();
 
 //        x = x * x * x;
 //        y = y * y * y;
-//        z = z * z * z;
+//        r= r* r* z;
 
         power = Math.sqrt(x * x + y * y);
 
@@ -361,71 +361,71 @@ public class BasicTeleop extends OpMode
         }
         if(zone == 4)// left
         {
-            LF = RB = -power;
-            LB = RF = power;
+            frontLeft = backRight = -power;
+            backLeft = frontRight = power;
         }
         if(zone == 2)// up
         {
-            LF = RB = power;
-            LB = RF = power;
+            frontLeft = backRight = power;
+            backLeft = frontRight = power;
         }
         if(zone == 6)// down
         {
-            LF = RB = -power;
-            LB = RF = -power;
+            frontLeft = backRight = -power;
+            backLeft = frontRight = -power;
         }
 
 
         if(zone == 1)// up-right
         {
-            LF = RB = power;
-            LB = RF = 0;
+            frontLeft = backRight = power;
+            backLeft = frontRight = 0;
         }
         if(zone == 3)// up-left
         {
-            LF = RB = 0;
-            LB = RF = power;
+            frontLeft = backRight = 0;
+            backLeft = frontRight = power;
         }
         if(zone == 5)// down-left
         {
-            LF = RB = -power;
-            LB = RF = 0;
+            frontLeft = backRight = -power;
+            backLeft = frontRight = 0;
         }
         if(zone == 7)// down-right
         {
-            LF = RB = 0;
-            LB = RF = -power;
+            frontLeft = backRight = 0;
+            backLeft = frontRight = -power;
         }
 
-        z *= -1;
+        r *= -1;
 
         if(swap_front_back)
         {
-            LF *= -1;
-            RF *= -1;
-            LB *= -1;
-            RB *= -1;
+            frontLeft *= -1;
+            frontRight *= -1;
+            backLeft *= -1;
+            backRight *= -1;
 
-            z *= -1;
+            r*= -1;
         }
 
-        LF = ((LF) + z) * 0.707;
-        RF = ((RF) - z) * 0.707;
-        LB = ((LB) + z) * 0.707;
-        RB = ((RB) - z) * 0.707;
+        frontLeft = ((frontLeft) + z) * 0.707;
+        frontRight = ((frontRight) - z) * 0.707;
+        backLeft = ((backLeft) + z) * 0.707;
+        backRight = ((backRight) - z) * 0.707;
 
-        LF = Range.clip(LF, -1, 1);
-        RF = Range.clip(RF, -1, 1);
-        LB = Range.clip(LB, -1, 1);
-        RB = Range.clip(RB, -1, 1);
+        frontLeft = Range.clip(frontLeft, -1, 1);
+        frontRight = Range.clip(frontRight, -1, 1);
+        backLeft = Range.clip(backLeft, -1, 1);
+        backRight = Range.clip(backRight, -1, 1);
 
 
 
         //set power here
-        motor_FR.setPower(RF);
-        motor_FL.setPower(LF);
-        motor_BR.setPower(RB);
-        motor_BL.setPower(LB);
+        motor_FR.setPower(frontRight);
+        motor_FL.setPower(frontLeft);
+        motor_BR.setPower(backRight);
+        motor_BL.setPower(backLeft);
         
     }
 }
