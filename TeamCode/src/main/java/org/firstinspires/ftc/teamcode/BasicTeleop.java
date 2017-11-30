@@ -159,7 +159,7 @@ public class BasicTeleop extends OpMode
         }
         */
 
-        // when you press the right bumper on the second gamepad, it starts the meat grinder. the left bumper makes it go the opposite direction
+        // press the right bumper on the second gamepad to toggle the meat grinder
         if(gamepad2.right_bumper && toggleServo)
         {
             leftServo += servoSpeed;
