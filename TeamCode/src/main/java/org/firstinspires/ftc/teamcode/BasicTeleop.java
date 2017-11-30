@@ -30,7 +30,7 @@ public class BasicTeleop extends OpMode
     /* ---------------------------------------- */
     private DcMotorController motorControllerDrive;
     private DcMotor motorFR, motorBR, motorFL, motorBL;
-    private Servo squeeze; // also, this goes in port one of the servo controller
+    private Servo servoL, servoR; // also, this goes in port one of the servo controller
     private DcMotor motor_lift;
     /* ---------------------------------------- */
 
@@ -57,7 +57,8 @@ public class BasicTeleop extends OpMode
         //motorL.setDirection(DcMotorSimple.Direction.REVERSE);
         /* ---------------------------------------- */
 
-        squeeze = hardwareMap.servo.get("squeeze");
+        servoL = hardwareMap.servo.get("servoL");
+        servoR = hardwareMap.servo.get("servoR");
         motor_lift = hardwareMap.dcMotor.get("lift");
     }
     double x, y, r;
@@ -67,9 +68,12 @@ public class BasicTeleop extends OpMode
     double speed = 1.0;
     double change_speed = 0, prev = 0;
 
-    double squeezePosition = 1;
+    double leftServo = 0;
+    double rightServo = 0;
+    double servoSpeed = 0.5;
     double frontRight, frontLeft, backRight, backLeft;
     boolean swap_front_back;
+    boolean toggleServo = true;
 
     public void loop()
     {   /*
@@ -121,6 +125,7 @@ public class BasicTeleop extends OpMode
         motorFL.setPower(leftPower);
         motorBL.setPower(-leftPower); */ // back motors need to be reversed because of the gears
 
+        /*
         final double DEGREE_CHANGER = 0.0001;
 
         if(gamepad2.right_bumper) // 83.3 is the number of degrees from 0 to snuggly fit the glyph
@@ -133,9 +138,11 @@ public class BasicTeleop extends OpMode
         }
 
         final double FIT_GLYPH = 82 / 180; // will (probably) always have glyph squeezed
+        */
 
         
         //while loops should make the clamp gradually open and close
+        /*
         while(gamepad2.right_bumper)
         {
             squeezePosition += DEGREE_CHANGER;
@@ -150,7 +157,27 @@ public class BasicTeleop extends OpMode
             squeeze.setPosition(squeezePosition);
             AutonomousMethodMaster.sleepNew(10);
         }
+        */
 
+        // when you press the right bumper on the second gamepad, it starts the meat grinder. the left bumper makes it go the opposite direction
+        if(gamepad2.right_bumper && toggleServo)
+        {
+            leftServo += servoSpeed;
+            rightServo += -servoSpeed;
+            toggleServo = false;
+        }
+        if(gamepad2.right_bumper && (toggleServo == false))
+        {
+            leftServo += -servoSpeed;
+            rightServo += servoSpeed;
+            toggleServo = true;
+        }
+
+        leftServo = Range.clip(leftServo, -0.5, 0.5);
+        rightServo = Range.clip(rightServo, -0.5, 0.5);
+
+        servoL.setPosition(leftServo);
+        servoR.setPosition(rightServo);
 
         // dealing with the motor controlling the lift
         double lift_power;
@@ -177,7 +204,7 @@ public class BasicTeleop extends OpMode
         }
 
         motor_lift.setPower(lift_power);
-
+        /*
         //squeezePosition = -gamepad2.right_trigger + 1;   // defaults to open
         squeezePosition = gamepad2.right_trigger;          // defaults to closed
         boolean locked = false;                            // whether or not the right bumper has been pressed. Defaults to false.
@@ -190,12 +217,26 @@ public class BasicTeleop extends OpMode
             squeezePosition = Range.clip(squeezePosition, FIT_GLYPH, 1);
             squeeze.setPosition(squeezePosition);
         }
+        */
+        //squeezePosition = -gamepad2.right_trigger + 1;   // defaults to open
+        /*
+        squeezePosition = gamepad2.right_trigger;          // defaults to closed
+        boolean locked = false;                            // whether or not the right bumper has been pressed. Defaults to false.
 
+        if(gamepad2.right_bumper && gamepad2.right_trigger > 0){ //ensures that we don't accidentally lock it open, which could be confusing to the drivers
+            locked = !(locked);                            // toggles the squeeze boolean
+        }
+
+        if(!locked) {                                      // doesn't update position (locks the position) if the bumper hasn't been pressed
+            squeezePosition = Range.clip(squeezePosition, FIT_GLYPH, 1);
+            squeeze.setPosition(squeezePosition);
+        }
+        */
           
         telemetry.addData("Gear Ratio ", gearRatio);
         //telemetry.addData("Right Power ", rightPower);
         //telemetry.addData("Left Power ", leftPower);
-        telemetry.addData("Squeeze Position * 180", squeezePosition * 180);
+        telemetry.addData("Servo Power", servoSpeed);
         telemetry.addData("Lift Power ", lift_power);
 
 
