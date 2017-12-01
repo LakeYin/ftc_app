@@ -159,18 +159,22 @@ public class BasicTeleop extends OpMode
         }
         */
 
-        // press the right bumper on the second gamepad to toggle the meat grinder
-        if(gamepad2.right_bumper && toggleServo)
+        //left bumper -> sucks it in
+        while(gamepad2.left_bumper)
         {
-            leftServo += servoSpeed;
-            rightServo += -servoSpeed;
-            toggleServo = false;
+            leftServo = servoSpeed;
+            rightServo = -servoSpeed;
         }
-        if(gamepad2.right_bumper && (toggleServo == false))
+       //right bumper -> blows it out
+        while(gamepad2.right_bumper)
         {
-            leftServo += -servoSpeed;
-            rightServo += servoSpeed;
-            toggleServo = true;
+            leftServo = -servoSpeed;
+            rightServo = servoSpeed;
+        }
+        if(!gamepad2.right_bumper && !gamepad2.left_bumper)
+        {
+            leftServo = 0;
+            rightServo = 0;
         }
 
         leftServo = Range.clip(leftServo, -0.5, 0.5);
