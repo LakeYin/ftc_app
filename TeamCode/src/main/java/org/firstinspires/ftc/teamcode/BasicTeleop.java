@@ -160,13 +160,13 @@ public class BasicTeleop extends OpMode
         */
 
         //left bumper -> sucks it in
-        while(gamepad2.left_bumper)
+        if(gamepad2.left_bumper)
         {
             leftServo = servoSpeed;
             rightServo = -servoSpeed;
         }
        //right bumper -> blows it out
-        while(gamepad2.right_bumper)
+        if(gamepad2.right_bumper)
         {
             leftServo = -servoSpeed;
             rightServo = servoSpeed;
