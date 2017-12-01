@@ -4,7 +4,7 @@ package org.firstinspires.ftc.teamcode;
  * Created by justin on 12/1/17.
  */
 
-public class DraftAutoVuforiaL1 extends AutonomousMethodMaster{
+public class DraftAutoVuforiaB1 extends AutonomousMethodMaster{
 
     public void runOpMode()
     {
