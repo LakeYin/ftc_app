@@ -239,15 +239,48 @@ public class AutonomousMethodMaster extends LinearOpMode {
 
     public void encoderStrafeRight(double power, double rightInches)
     {
-        double move_right = power;
 
-        move_right = Range.clip(move_right, -1, 1);
+        // Set the encoder mode to 3 (STOP_AND_RESET_ENCODERS)
+        encoderMode(3);
 
-        frontRight.setPower(-move_right);
-        backLeft.setPower(-move_right);
+        // Sets the power range
+        power = Range.clip(power, -1, 1);
 
-        frontLeft.setPower(move_right);
-        backRight.setPower(move_right);
+        // Setting the target positions
+        frontLeft.setTargetPosition((int)(rightInches * -ticksPerInchNeverest40));
+        backLeft.setTargetPosition((int)(rightInches * ticksPerInchNeverest40));
+        frontRight.setTargetPosition((int)(rightInches * ticksPerInchNeverest40));
+        backRight.setTargetPosition((int)(rightInches * -ticksPerInchNeverest40));
+
+        // Set encoder mode to RUN_TO_POSITION
+        encoderMode(0);
+
+        frontRight.setPower(power);
+        backLeft.setPower(power);
+        frontLeft.setPower(power);
+        backRight.setPower(power);
+
+        // While loop for updating telemetry
+        while(frontLeft.isBusy() && frontRight.isBusy() && opModeIsActive()){
+
+            // Updates the position of the motors
+            double LPos = frontLeft.getCurrentPosition();
+            double RPos = frontRight.getCurrentPosition();
+
+            // Adds telemetry of the drive motors
+            telemetry.addData("frontLeft Pos", LPos);
+            telemetry.addData("frontRight Pos", RPos);
+
+            // Updates the telemetry
+            telemetry.update();
+
+        }
+
+        // Stops the motors
+        stopMotion();
+
+        // Resets to run using encoders mode
+        encoderMode(1);
     }
 
 
