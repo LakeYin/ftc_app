@@ -237,6 +237,19 @@ public class AutonomousMethodMaster extends LinearOpMode {
 
     }
 
+    public void encoderStrafeRight(double power, double rightInches)
+    {
+        double move_right = power;
+
+        move_right = Range.clip(move_right, -1, 1);
+
+        frontRight.setPower(-move_right);
+        backLeft.setPower(-move_right);
+
+        frontLeft.setPower(move_right);
+        backRight.setPower(move_right);
+    }
+
 
     public void encoderRotateDegrees(int direction, double power, int robotDegrees) {
 
