@@ -76,6 +76,7 @@ public class BasicTeleop extends OpMode
     double frontRight, frontLeft, backRight, backLeft;
     boolean swap_front_back;
     boolean toggleServo = true;
+    double liftPower;
 
     public void loop()
     {   /*
@@ -199,7 +200,8 @@ public class BasicTeleop extends OpMode
 
         servoLift.setPosition(liftServo);
 
-        
+        liftPower = gamepad2.left_stick_y;
+        motorLift.setPower(liftPower,-1,1); 
 
         // dealing with the motor controlling the lift
         /*
