@@ -201,7 +201,8 @@ public class BasicTeleop extends OpMode
         servoLift.setPosition(liftServo);
 
         liftPower = gamepad2.left_stick_y;
-        motorLift.setPower(liftPower,-1,1); 
+        liftPower = Range.clip(liftPower, -1, 1);
+        motorLift.setPower(liftPower);
 
         // dealing with the motor controlling the lift
         /*
