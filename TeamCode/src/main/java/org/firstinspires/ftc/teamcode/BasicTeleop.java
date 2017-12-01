@@ -29,9 +29,8 @@ public class BasicTeleop extends OpMode
     // Initialize the components of the robot
     /* ---------------------------------------- */
     private DcMotorController motorControllerDrive;
-    private DcMotor motorFR, motorBR, motorFL, motorBL;
-    private Servo servoL, servoR; // also, this goes in port one of the servo controller
-    private DcMotor motor_lift;
+    private DcMotor motorFR, motorBR, motorFL, motorBL, motorLift;
+    private Servo servoL, servoR, servoLift; // also, this goes in port one of the servo controller
     /* ---------------------------------------- */
 
     @Override
@@ -59,7 +58,8 @@ public class BasicTeleop extends OpMode
 
         servoL = hardwareMap.servo.get("servoL");
         servoR = hardwareMap.servo.get("servoR");
-        motor_lift = hardwareMap.dcMotor.get("lift");
+        servoLift = hardwareMap.servo.get("servoLift");
+        motorLift = hardwareMap.dcMotor.get("motorlift");
     }
     double x, y, r;
     double slope, power;
@@ -68,9 +68,11 @@ public class BasicTeleop extends OpMode
     double speed = 1.0;
     double change_speed = 0, prev = 0;
 
-    double leftServo = 0;
-    double rightServo = 0;
-    double servoSpeed = 0.5;
+    double leftFlywheel = 0;
+    double rightFlywheel = 0;
+    double liftServo = 0;
+    double flywheel = 0.5;
+    double liftAngle = 0.1;
     double frontRight, frontLeft, backRight, backLeft;
     boolean swap_front_back;
     boolean toggleServo = true;
@@ -162,28 +164,45 @@ public class BasicTeleop extends OpMode
         //left bumper -> sucks it in
         while(gamepad2.left_bumper)
         {
-            leftServo = servoSpeed;
-            rightServo = -servoSpeed;
+            leftFlywheel = flywheel;
+            rightFlywheel = -flywheel;
         }
        //right bumper -> blows it out
         while(gamepad2.right_bumper)
         {
-            leftServo = -servoSpeed;
-            rightServo = servoSpeed;
+            leftFlywheel = -flywheel;
+            rightFlywheel = flywheel;
         }
         if(!gamepad2.right_bumper && !gamepad2.left_bumper)
         {
-            leftServo = 0;
-            rightServo = 0;
+            leftFlywheel = 0;
+            rightFlywheel = 0;
         }
 
-        leftServo = Range.clip(leftServo, -0.5, 0.5);
-        rightServo = Range.clip(rightServo, -0.5, 0.5);
+        leftFlywheel = Range.clip(leftFlywheel, -0.5, 0.5);
+        rightFlywheel = Range.clip(rightFlywheel, -0.5, 0.5);
 
-        servoL.setPosition(leftServo);
-        servoR.setPosition(rightServo);
+        servoL.setPosition(leftFlywheel);
+        servoR.setPosition(rightFlywheel);
+
+        while(gamepad2.dpad_right)
+        {
+            liftServo = liftAngle;
+        }
+
+        while(gamepad2.dpad_left)
+        {
+            liftServo = 0;
+        }
+
+        liftServo = Range.clip(liftServo, 0.0, 0.5);
+
+        servoLift.setPosition(liftServo);
+
+        
 
         // dealing with the motor controlling the lift
+        /*
         double lift_power;
 
         lift_power = gamepad2.right_stick_y;
@@ -207,7 +226,9 @@ public class BasicTeleop extends OpMode
             lift_power *= -1;
         }
 
+
         motor_lift.setPower(lift_power);
+        */
         /*
         //squeezePosition = -gamepad2.right_trigger + 1;   // defaults to open
         squeezePosition = gamepad2.right_trigger;          // defaults to closed
@@ -240,8 +261,8 @@ public class BasicTeleop extends OpMode
         telemetry.addData("Gear Ratio ", gearRatio);
         //telemetry.addData("Right Power ", rightPower);
         //telemetry.addData("Left Power ", leftPower);
-        telemetry.addData("Servo Power", servoSpeed);
-        telemetry.addData("Lift Power ", lift_power);
+        telemetry.addData("Servo Power", flywheel);
+        telemetry.addData("Lift Angle", liftAngle);
 
 
         // Lightning's teleop from last year
