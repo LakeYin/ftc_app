@@ -30,7 +30,7 @@ public class BasicTeleop extends OpMode
     /* ---------------------------------------- */
     private DcMotorController motorControllerDrive;
     private DcMotor motorFR, motorBR, motorFL, motorBL, motorLift;
-    private Servo servoL, servoR, servoLift; // also, this goes in port one of the servo controller
+    private Servo servoL, servoR, servoLift1, servoLift2; // also, this goes in port one of the servo controller
     /* ---------------------------------------- */
 
     @Override
@@ -58,7 +58,8 @@ public class BasicTeleop extends OpMode
 
         servoL = hardwareMap.servo.get("servoL");
         servoR = hardwareMap.servo.get("servoR");
-        servoLift = hardwareMap.servo.get("servoLift");
+        servoLift1 = hardwareMap.servo.get("servoLift1");
+        servoLift2 = hardwareMap.servo.get("servoLift2");
         motorLift = hardwareMap.dcMotor.get("motorlift");
     }
     double x, y, r;
@@ -198,7 +199,8 @@ public class BasicTeleop extends OpMode
 
         liftServo = Range.clip(liftServo, 0.0, 0.5);
 
-        servoLift.setPosition(liftServo);
+        servoLift1.setPosition(liftServo);
+        servoLift2.setPosition(liftServo);
 
         liftPower = gamepad2.left_stick_y;
         liftPower = Range.clip(liftPower, -1, 1);
