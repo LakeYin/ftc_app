@@ -267,11 +267,23 @@ public class BasicTeleop extends OpMode
         telemetry.addData("Servo Power", flywheel);
         telemetry.addData("Lift Angle", liftAngle);
 
-
         // Lightning's teleop from last year
-        x = gamepad1.left_stick_x;
+        if(gamepad1.dpad_right){
+            x = 1;
+        }
+        if(gamepad1.dpad_left){
+            x = -1;
+        }
 
-        y = -gamepad1.left_stick_y;//only y is inversed
+        //only y is inversed
+        if(gamepad1.dpad_up){
+            y = -1;
+        }
+        if(gamepad1.dpad_down){
+            y = 1;
+        }
+
+
 
         r = gamepad1.right_stick_x; //handles the robot turning
 
@@ -340,6 +352,7 @@ public class BasicTeleop extends OpMode
 
         power = Math.sqrt(x * x + y * y);
 
+        /*
         if(gamepad1.dpad_down)
         {
             if(swap_front_back)
@@ -351,6 +364,7 @@ public class BasicTeleop extends OpMode
                 swap_front_back = true;
             }
         }
+        */
 
         int zone = -1;// 0 is right, 1 is up-right, 2 is up, 3 is up-left,
         // 4 is left, 5 is down-left, 6 is down, 7 is down-right
@@ -423,6 +437,9 @@ public class BasicTeleop extends OpMode
                 }
             }
         }
+
+        //this is irrelevant because we are seperating dpad from the joysticks
+        /*
         if(zone == 0)// right
         {
             frontLeft = backRight = power;
@@ -442,6 +459,22 @@ public class BasicTeleop extends OpMode
         {
             frontLeft = backRight = -power;
             backLeft = frontRight = -power;
+        }
+        */
+
+        //the two joysticks moving up and down provide tank controls
+        if(gamepad1.left_stick_y == 1){
+            frontLeft = backLeft = power;
+        }
+        if(gamepad1.left_stick_y == 0){
+            frontLeft = backLeft = -power;
+        }
+
+        if(gamepad1.right_stick_y == 1){
+            frontRight = backRight = power;
+        }
+        if(gamepad1.left_stick_y == 0){
+            frontRight = backRight = -power;
         }
 
 
@@ -466,6 +499,7 @@ public class BasicTeleop extends OpMode
             backLeft = frontRight = -power;
         }
 
+        /*
         if(swap_front_back)
         {
             frontLeft *= -1;
@@ -475,6 +509,7 @@ public class BasicTeleop extends OpMode
 
             r *= -1;
         }
+        */
 
         frontLeft = ((frontLeft) + r) * 0.707;
         frontRight = ((frontRight) - r) * 0.707;
