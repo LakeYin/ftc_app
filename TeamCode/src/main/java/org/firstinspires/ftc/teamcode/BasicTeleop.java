@@ -60,7 +60,7 @@ public class BasicTeleop extends OpMode
         servoR = hardwareMap.servo.get("servoR");
         servoLift1 = hardwareMap.servo.get("servoLift1"); // these are the two servos that move the thing on the lift
         servoLift2 = hardwareMap.servo.get("servoLift2");
-        motorLift = hardwareMap.dcMotor.get("motorlift"); // this is the motor that moves the life
+        motorLift = hardwareMap.dcMotor.get("motorLift"); // this is the motor that moves the lift
     }
     double x, y, r;
     double slope, power;
