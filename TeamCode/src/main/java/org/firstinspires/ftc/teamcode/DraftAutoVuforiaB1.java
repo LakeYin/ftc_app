@@ -16,6 +16,8 @@ public class DraftAutoVuforiaB1 extends AutonomousMethodMaster{
         encoderStrafeRight(1, 24);
 
         int move_inches = 0;
+
+
         // identify which vumark
 
         encoderStrafeRight(1, move_inches);
