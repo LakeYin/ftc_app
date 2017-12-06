@@ -35,12 +35,12 @@ public class BasicTeleop extends OpMode
 
     @Override
     public void init()
-    {   //Assign values to hardware components here (match them to phone configuration)
+    {   // Assign values to hardware components here (match them to phone configuration)
         // Motor and motor controller hardware declaration
         /* ---------------------------------------- */
         motorControllerDrive = hardwareMap.dcMotorController.get("MC_D");
 
-        motorFL = hardwareMap.dcMotor.get("motorFL");
+        motorFL = hardwareMap.dcMotor.get("motorFL"); //these are the 4 motors that move the robot
         motorFR = hardwareMap.dcMotor.get("motorFR");
         motorBL = hardwareMap.dcMotor.get("motorBL");
         motorBR = hardwareMap.dcMotor.get("motorBR");
@@ -56,11 +56,11 @@ public class BasicTeleop extends OpMode
         //motorL.setDirection(DcMotorSimple.Direction.REVERSE);
         /* ---------------------------------------- */
 
-        servoL = hardwareMap.servo.get("servoL");
+        servoL = hardwareMap.servo.get("servoL"); // these are the two flywheel motor/servos
         servoR = hardwareMap.servo.get("servoR");
-        servoLift1 = hardwareMap.servo.get("servoLift1");
+        servoLift1 = hardwareMap.servo.get("servoLift1"); // these are the two servos that move the thing on the lift
         servoLift2 = hardwareMap.servo.get("servoLift2");
-        motorLift = hardwareMap.dcMotor.get("motorlift");
+        motorLift = hardwareMap.dcMotor.get("motorlift"); // this is the motor that moves the life
     }
     double x, y, r;
     double slope, power;
@@ -163,13 +163,13 @@ public class BasicTeleop extends OpMode
         }
         */
 
-        //left bumper -> sucks it in
+        // left bumper -> flywheels suck it in
         if(gamepad2.left_bumper)
         {
             leftFlywheel = flywheel;
             rightFlywheel = -flywheel;
         }
-       //right bumper -> blows it out
+       // right bumper -> blows it out
         if(gamepad2.right_bumper)
         {
             leftFlywheel = -flywheel;
@@ -187,6 +187,7 @@ public class BasicTeleop extends OpMode
         servoL.setPosition(leftFlywheel);
         servoR.setPosition(rightFlywheel);
 
+        // this stuff moves the servos on the lift
         while(gamepad2.dpad_right)
         {
             liftServo = liftAngle;
@@ -202,6 +203,7 @@ public class BasicTeleop extends OpMode
         servoLift1.setPosition(liftServo);
         servoLift2.setPosition(liftServo);
 
+        // moves the lift motor
         liftPower = gamepad2.left_stick_y;
         liftPower = Range.clip(liftPower, -1, 1);
         motorLift.setPower(liftPower);
@@ -270,6 +272,7 @@ public class BasicTeleop extends OpMode
         telemetry.addData("Lift Angle", liftAngle);
 
         // Lightning's teleop from last year
+        // changes the x and y move values based on which dpad buttons are being held down
         if(gamepad1.dpad_right){
             x = 1;
         }
@@ -287,7 +290,7 @@ public class BasicTeleop extends OpMode
 
 
 
-        r = gamepad1.right_stick_x; //handles the robot turning
+        r = gamepad1.right_stick_x; // handles the robot turning
 
         x = Range.clip(x, -1, 1);
         y = Range.clip(y, -1, 1);
@@ -453,7 +456,7 @@ public class BasicTeleop extends OpMode
             backLeft = frontRight = power;
         }
 
-        //this is irrelevant because we are separating dpad from the joysticks
+        // this is irrelevant because we are separating dpad from the joysticks
         /*
         if(zone == 2)// up
         {
@@ -467,7 +470,7 @@ public class BasicTeleop extends OpMode
         }
         */
 
-        //the two joysticks moving up and down provide tank controls
+        // the two joysticks moving up and down provide tank controls
         if(gamepad1.left_stick_y == 1){
             frontLeft = backLeft = power;
         }
@@ -516,6 +519,7 @@ public class BasicTeleop extends OpMode
         }
         */
 
+        // apply rotation (?)
         frontLeft = ((frontLeft) + r) * 0.707;
         frontRight = ((frontRight) - r) * 0.707;
         backLeft = ((backLeft) + r) * 0.707;
