@@ -20,8 +20,16 @@ import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynchImpl;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 import java.lang.Math;
@@ -43,11 +51,11 @@ public class AutonomousMethodMaster extends LinearOpMode {
 
     /** Declaring the motor variables **/
     /** ---------------------------------------------------------------------------------------- **/
-    private DcMotor motorL;                       // Left Side Motor
-    private DcMotor motorR;                       // Right Side Motor
+    public DcMotor motorL;                       // Left Side Motor
+    public DcMotor motorR;                       // Right Side Motor
     private DcMotorController motorControllerDrive;
-    private Servo squeeze;
-    private DcMotor motor_lift;
+    public Servo squeeze;
+    public DcMotor motor_lift;
     /** ---------------------------------------------------------------------------------------- **/
 
     /** For Encoders and specific turn values **/

@@ -56,7 +56,6 @@ public class ThunderBot {
 
         //Direction of motors: Forward = CCW
         motorL.setDirection(DcMotor.Direction.REVERSE);
-        motorR.setDirection(DcMotor.Direction.REVERSE);
 
         //Set it so the motors use encoders
         setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -75,8 +74,8 @@ public class ThunderBot {
 
     //this is what we would do if we wanted a TeleOp run through LinearOp mode
     public void manualDrive(){
-        setAxial(-myOpMode.gamepad1.left_stick_y); //sets the axial position to what the gamepad's y direction is (forward is -1 so we negate that with a *-1)
-        setYaw(-myOpMode.gamepad1.left_stick_x); //sets the Yaw to the gamepad's x, right is positive 1, but since we want the yaw to be negative to represent turn CW we make it so it's negative
+        setAxial(-myOpMode.gamepad1.left_stick_x); //sets the axial position to what the gamepad's x direction is (forward is -1 so we negate that with a *-1)
+        setYaw(-myOpMode.gamepad1.left_stick_y); //sets the Yaw to the gamepad's y, right is positive 1, but since we want the yaw to be negative to represent turn CW we make it so it's negative
     }
 
     public void moveBot(){
@@ -86,8 +85,8 @@ public class ThunderBot {
             Want to move forward? Axial > 0
             Want to move back? Axial < 0
          */
-        double left = Yaw - Axial; //whenever bot needs to rotate CCW (forward left or back right), the left must be less than the right
-        double right = Yaw + Axial; //whenever bot needs to rotate CW (forward right or back left), the right must be less than the left
+        double left = Yaw >= 0 ? Yaw + Axial: Yaw - Axial;
+        double right = Yaw >= 0 ? Yaw - Axial: Yaw + Axial;
 
         //chooses the maximum value of these two variables
         double max = Math.max(Math.abs(left), Math.abs(right));
