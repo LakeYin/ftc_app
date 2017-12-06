@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.util.Range;
 //import static java.lang.Thread.sleep;
 
 
-@TeleOp(name="OCT", group ="WeAreLivingALie_")
+@TeleOp(name="OLD LIGHTNING TELEOP", group ="Examples")
 //@Disabled
 
 public class oct extends OpMode {

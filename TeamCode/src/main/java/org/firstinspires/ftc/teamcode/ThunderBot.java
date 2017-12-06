@@ -59,14 +59,10 @@ public class ThunderBot {
         backRight = myOpMode.hardwareMap.dcMotor.get("backRight");
 
         //Direction of motors: Forward = CCW
-<<<<<<< HEAD
-        motorL.setDirection(DcMotor.Direction.REVERSE);
-=======
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
         frontRight.setDirection(DcMotor.Direction.REVERSE);
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.REVERSE);
->>>>>>> b2fa0defedb4deece4512918b9e4b4cf8a634cb5
 
         //Set it so the motors use encoders
         setMode(DcMotor.RunMode.RUN_USING_ENCODER);
