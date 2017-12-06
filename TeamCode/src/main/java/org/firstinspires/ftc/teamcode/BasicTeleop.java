@@ -438,8 +438,8 @@ public class BasicTeleop extends OpMode
             }
         }
 
-        //this is irrelevant because we are seperating dpad from the joysticks
-        /*
+
+
         if(zone == 0)// right
         {
             frontLeft = backRight = power;
@@ -450,6 +450,9 @@ public class BasicTeleop extends OpMode
             frontLeft = backRight = -power;
             backLeft = frontRight = power;
         }
+        
+        //this is irrelevant because we are separating dpad from the joysticks
+        /*
         if(zone == 2)// up
         {
             frontLeft = backRight = power;
