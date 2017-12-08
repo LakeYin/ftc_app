@@ -57,19 +57,19 @@ public class DraftAutoVuforiaR1 extends AutonomousMethodMaster{
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
 
-            move_inches = 2;
+            move_inches = 4;
         }
         if(vuMark == RelicRecoveryVuMark.CENTER){
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
 
-            move_inches = 6;
+            move_inches = 12;
         }
         if(vuMark == RelicRecoveryVuMark.RIGHT){
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
 
-            move_inches = 10;
+            move_inches = 20;
         }
 
         encoderStrafeRight(1, -move_inches);
@@ -77,6 +77,10 @@ public class DraftAutoVuforiaR1 extends AutonomousMethodMaster{
         encoderMove(1, 12, 12);
 
         // place glyph
+
+        encoderMove(1, 12, 12);
+
+        // make servos dump glyphs
     }
 
 }
