@@ -57,7 +57,6 @@ public class BasicTeleop extends OpMode
         motorFR.setDirection(DcMotor.Direction.REVERSE);            //Because the motors rotate CCW, the right motors need to be reversed
         motorBR.setDirection(DcMotor.Direction.REVERSE);
         motorFL.setDirection(DcMotor.Direction.REVERSE);            //The front motors are reversed because of the gears on the back motors
-        motorFR.setDirection(DcMotor.Direction.REVERSE);
 
         motorFlyL.setDirection(DcMotor.Direction.REVERSE);
         //motorL.setDirection(DcMotorSimple.Direction.REVERSE);
