@@ -28,8 +28,8 @@ public class BasicTeleop extends OpMode
 {
     // Initialize the components of the robot
     /* ---------------------------------------- */
-    private DcMotorController motorControllerDrive;
-    private DcMotor motorFR, motorBR, motorFL, motorBL, motorLift, motorFlyL, motorFlyR;
+    //private DcMotorController motorControllerDrive;
+    private DcMotor motorFR, motorBR, motorFL, motorBL,/* motorLift,*/ motorFlyL, motorFlyR;
     private Servo servoL, servoR, servoLift1, servoLift2; // also, this goes in port one of the servo controller
     /* ---------------------------------------- */
 
@@ -38,7 +38,7 @@ public class BasicTeleop extends OpMode
     {   // Assign values to hardware components here (match them to phone configuration)
         // Motor and motor controller hardware declaration
         /* ---------------------------------------- */
-        motorControllerDrive = hardwareMap.dcMotorController.get("MC_D");
+        //motorControllerDrive = hardwareMap.dcMotorController.get("MC_D");
 
         motorFL = hardwareMap.dcMotor.get("motorFL"); //these are the 4 motors that move the robot
         motorFR = hardwareMap.dcMotor.get("motorFR");
@@ -56,6 +56,7 @@ public class BasicTeleop extends OpMode
         // Flipped the motors (11/10/17)
         motorFR.setDirection(DcMotor.Direction.REVERSE);
         motorBR.setDirection(DcMotor.Direction.REVERSE);
+        motorFlyR.setDirection(DcMotor.Direction.REVERSE);
         //motorL.setDirection(DcMotorSimple.Direction.REVERSE);
         /* ---------------------------------------- */
 
@@ -63,7 +64,7 @@ public class BasicTeleop extends OpMode
         //servoR = hardwareMap.servo.get("servoR");
         servoLift1 = hardwareMap.servo.get("servoLift1"); // these are the two servos that move the thing on the lift
         servoLift2 = hardwareMap.servo.get("servoLift2");
-        motorLift = hardwareMap.dcMotor.get("motorLift"); // this is the motor that moves the lift
+        //motorLift = hardwareMap.dcMotor.get("motorLift"); // this is the motor that moves the lift
     }
     double x, y, r;
     double slope, power;
@@ -222,7 +223,7 @@ public class BasicTeleop extends OpMode
         // moves the lift motor
         liftPower = gamepad2.left_stick_y;
         liftPower = Range.clip(liftPower, -1, 1);
-        motorLift.setPower(liftPower);
+        //motorLift.setPower(liftPower);
 
         // dealing with the motor controlling the lift
         /*
