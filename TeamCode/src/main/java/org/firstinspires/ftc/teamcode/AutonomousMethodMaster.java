@@ -51,12 +51,8 @@ public class AutonomousMethodMaster extends LinearOpMode {
 
     /** Declaring the motor variables **/
     /** ---------------------------------------------------------------------------------------- **/
-<<<<<<< HEAD
-=======
-
     public DcMotor motorL;                       // Left Side Motor
     public DcMotor motorR;                       // Right Side Motor
->>>>>>> 1663b6d3356df16c863b1fbfad301bcfaec8428f
     private DcMotor frontLeft;                       // Front Left Motor
     private DcMotor backLeft;                       // Back Left Motor
     private DcMotor frontRight;                      // Front Right Motor
