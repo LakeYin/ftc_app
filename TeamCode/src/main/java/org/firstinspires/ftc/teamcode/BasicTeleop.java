@@ -66,7 +66,7 @@ public class BasicTeleop extends OpMode
         servoLift2 = hardwareMap.servo.get("servoLift2");
         //motorLift = hardwareMap.dcMotor.get("motorLift"); // this is the motor that moves the lift
     }
-    double x, y, r;
+    double x, y, r = 0;
     double slope, power;
     double temporary;
 
@@ -289,6 +289,9 @@ public class BasicTeleop extends OpMode
 
         // Lightning's teleop from last year
         // changes the x and y move values based on which dpad buttons are being held down
+
+        x = y = 0;
+
         if(gamepad1.dpad_right){
             x = 1;
         }
@@ -305,12 +308,14 @@ public class BasicTeleop extends OpMode
         }
 
 
-
-        r = gamepad1.right_stick_x; // handles the robot turning
+        //We're using tank drive so r isn't really necessary
+        //r = gamepad1.right_stick_x; // handles the robot turning
 
         x = Range.clip(x, -1, 1);
         y = Range.clip(y, -1, 1);
-        r = Range.clip(r, -1, 1);
+
+        //We're using tank drive so r isn't really necessary
+        //r = Range.clip(r, -1, 1);
 
         if(gamepad1.dpad_right && speed < 1)
         {
@@ -352,7 +357,10 @@ public class BasicTeleop extends OpMode
 
         telemetry.addData("x", x);
         telemetry.addData("y", y);
-        telemetry.addData("r", r);
+
+        //We're using tank drive so r isn't really necessary
+        //telemetry.addData("r", r);
+
         telemetry.update();
 
         telemetry.addData("Speed", speed);
@@ -360,11 +368,16 @@ public class BasicTeleop extends OpMode
 
         x *= speed;
         y *= speed;
-        r *= speed;
+
+        //We're using tank drive so r isn't really necessary
+        //r *= speed;
 
         telemetry.addData("x", x);
         telemetry.addData("y", y);
-        telemetry.addData("r", r);
+
+        //We're using tank drive so r isn't really necessary
+        //telemetry.addData("r", r);
+
         telemetry.update();
 
 //        x = x * x * x;
@@ -390,7 +403,7 @@ public class BasicTeleop extends OpMode
         int zone = -1;// 0 is right, 1 is up-right, 2 is up, 3 is up-left,
         // 4 is left, 5 is down-left, 6 is down, 7 is down-right
 
-        if(y == 0) {
+        if (y == 0) {
             // Right
             if (x > 0) zone = 0;
             // Left
@@ -398,68 +411,37 @@ public class BasicTeleop extends OpMode
             // Nothing
             if (x == 0) zone = -1;
         }
-        if(y > 0){
+
+        if (y > 0)
+        {
             // Forward
             if (x == 0) zone = 2;
             // Up-Right
-            if (x > 0) {
-                slope = Math.sqrt(2);
-                // If up
-                if (x * slope < y) zone = 2;
-                else
-                {
-                    slope = 1 / slope;
-                    // If right
-                    if (x * slope > y) zone = 0;
-                    else zone = 1;
-                }
+            if (x > 0)
+            {
+                zone = 1;
             }
             // up-left
             if (x < 0) {
-                slope = -Math.sqrt(2);
-                // if up
-                if (x * slope < y) zone = 2;
-                else
-                {
-                    slope = 1 / slope;
-                    // if left
-                    if (x * slope > y) zone = 4;
-                    else zone = 3;
-                }
+                zone = 3;
             }
         }
         if(y < 0){
             // Backward
             if (x == 0) zone = 6;
             // Down-Right
-            if (x > 0) {
-                slope = -Math.sqrt(2);
-                // If down
-                if (x * slope > y) zone = 6;
-                else
-                {
-                    slope = 1 / slope;
-                    // If right
-                    if (x * slope < y) zone = 0;
-                    else zone = 7;
-                }
+            if (x > 0)
+            {
+                zone = 7;
             }
             // down-left
-            if (x < 0) {
-                slope = Math.sqrt(2);
-                // if up
-                if (x * slope > y) zone = 6;
-                else
-                {
-                    slope = 1 / slope;
-                    // if left
-                    if (x * slope < y) zone = 4;
-                    else zone = 5;
-                }
+            if (x < 0)
+            {
+                zone = 5;
             }
         }
 
-
+        power = 1;
 
         if(zone == 0)// right
         {
@@ -487,20 +469,13 @@ public class BasicTeleop extends OpMode
         */
 
         // the two joysticks moving up and down provide tank controls
-        if(gamepad1.left_stick_y == 1){
-            frontLeft = backLeft = power;
-        }
-        if(gamepad1.left_stick_y == 0){
-            frontLeft = backLeft = -power;
+        if(gamepad1.left_stick_y != 0){
+            frontLeft = backLeft = gamepad1.left_stick_y;
         }
 
-        if(gamepad1.right_stick_y == 1){
-            frontRight = backRight = power;
+        if(gamepad1.right_stick_y != 0){
+            frontRight = backRight = gamepad1.right_stick_y;
         }
-        if(gamepad1.left_stick_y == 0){
-            frontRight = backRight = -power;
-        }
-
 
         if(zone == 1)// up-right
         {
