@@ -56,7 +56,7 @@ public class BasicTeleop extends OpMode
         // Flipped the motors (11/10/17)
         motorFR.setDirection(DcMotor.Direction.REVERSE);
         motorBR.setDirection(DcMotor.Direction.REVERSE);
-        motorFlyR.setDirection(DcMotor.Direction.REVERSE);
+        motorFlyL.setDirection(DcMotor.Direction.REVERSE);
         //motorL.setDirection(DcMotorSimple.Direction.REVERSE);
         /* ---------------------------------------- */
 
@@ -192,11 +192,10 @@ public class BasicTeleop extends OpMode
 
 
         //New gamepad2 flywheel code (trigger instead of bumper)
-        leftFlywheel = gamepad2.left_trigger * flyMaxPower * ((gamepad2.left_bumper) ? -1 : 1);
-        rightFlywheel = gamepad2.right_trigger * flyMaxPower * ((gamepad2.right_bumper) ? -1 : 1);
-
+        leftFlywheel = (gamepad2.right_trigger - gamepad2.left_trigger) * flyMaxPower;
         leftFlywheel = Range.clip(leftFlywheel, -1, 1);
-        rightFlywheel = Range.clip(rightFlywheel, -1, 1);
+
+        rightFlywheel = leftFlywheel;
 
         //servoL.setPosition(leftFlywheel);
         //servoR.setPosition(rightFlywheel);
