@@ -29,7 +29,7 @@ public class BasicTeleop extends OpMode
     // Initialize the components of the robot
     /* ---------------------------------------- */
     private DcMotorController motorControllerDrive;
-    private DcMotor motorFR, motorBR, motorFL, motorBL, motorLift;
+    private DcMotor motorFR, motorBR, motorFL, motorBL, motorLift, motorFlyL, motorFlyR;
     private Servo servoL, servoR, servoLift1, servoLift2; // also, this goes in port one of the servo controller
     /* ---------------------------------------- */
 
@@ -44,6 +44,9 @@ public class BasicTeleop extends OpMode
         motorFR = hardwareMap.dcMotor.get("motorFR");
         motorBL = hardwareMap.dcMotor.get("motorBL");
         motorBR = hardwareMap.dcMotor.get("motorBR");
+
+        motorFlyL = hardwareMap.dcMotor.get("motorFlyL");
+        motorFlyR = hardwareMap.dcMotor.get("motorFlyR");
         /* ---------------------------------------- */
         // Encoder stuff - Run Without Encoders is depreciated
         /* ---------------------------------------- */
@@ -56,8 +59,8 @@ public class BasicTeleop extends OpMode
         //motorL.setDirection(DcMotorSimple.Direction.REVERSE);
         /* ---------------------------------------- */
 
-        servoL = hardwareMap.servo.get("servoL"); // these are the two flywheel motor/servos
-        servoR = hardwareMap.servo.get("servoR");
+        //servoL = hardwareMap.servo.get("servoL"); // these are the two flywheel motor/servos
+        //servoR = hardwareMap.servo.get("servoR");
         servoLift1 = hardwareMap.servo.get("servoLift1"); // these are the two servos that move the thing on the lift
         servoLift2 = hardwareMap.servo.get("servoLift2");
         motorLift = hardwareMap.dcMotor.get("motorLift"); // this is the motor that moves the lift
@@ -88,6 +91,8 @@ public class BasicTeleop extends OpMode
         boolean gear_ratio_is_07 = true;
         boolean flip_front = false;
         double gearRatio;
+
+        double flyMaxPower = 0.5;                //The maximum power of the motors for the flywheels (-0.5 to 0.5). Added to making operations easier
 
         if(gamepad1.right_bumper)
         {
@@ -163,6 +168,7 @@ public class BasicTeleop extends OpMode
         }
         */
 
+        /*
         // left bumper -> flywheels suck it in
         if(gamepad2.left_bumper)
         {
@@ -181,11 +187,21 @@ public class BasicTeleop extends OpMode
             rightFlywheel = 0;
         }
 
-        leftFlywheel = Range.clip(leftFlywheel, -0.5, 0.5);
-        rightFlywheel = Range.clip(rightFlywheel, -0.5, 0.5);
+        */
 
-        servoL.setPosition(leftFlywheel);
-        servoR.setPosition(rightFlywheel);
+
+        //New gamepad2 flywheel code (trigger instead of bumper)
+        leftFlywheel = gamepad2.left_trigger * flyMaxPower * ((gamepad2.left_bumper) ? -1 : 1);
+        rightFlywheel = gamepad2.right_trigger * flyMaxPower * ((gamepad2.right_bumper) ? -1 : 1);
+
+        leftFlywheel = Range.clip(leftFlywheel, -1, 1);
+        rightFlywheel = Range.clip(rightFlywheel, -1, 1);
+
+        //servoL.setPosition(leftFlywheel);
+        //servoR.setPosition(rightFlywheel);
+
+        motorFlyL.setPower(leftFlywheel);
+        motorFlyR.setPower(rightFlywheel);
 
         // this stuff moves the servos on the lift
         while(gamepad2.dpad_right)
