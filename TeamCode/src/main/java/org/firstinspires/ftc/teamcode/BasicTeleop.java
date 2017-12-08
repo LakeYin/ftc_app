@@ -29,7 +29,7 @@ public class BasicTeleop extends OpMode
     // Initialize the components of the robot
     /* ---------------------------------------- */
     //private DcMotorController motorControllerDrive;
-    private DcMotor motorFR, motorBR, motorFL, motorBL,/* motorLift,*/ motorFlyL, motorFlyR;
+    private DcMotor motorFR, motorBR, motorFL, motorBL, motorLift, motorFlyL, motorFlyR;
     private Servo servoL, servoR, servoLift1, servoLift2; // also, this goes in port one of the servo controller
     /* ---------------------------------------- */
 
@@ -77,7 +77,7 @@ public class BasicTeleop extends OpMode
 
     double leftFlywheel = 0;
     double rightFlywheel = 0;
-    double liftServo = 0;
+    double liftServo = 180;
     double flywheel = 0.5;
     double liftAngle = 0.1;
     double frontRight, frontLeft, backRight, backLeft;
@@ -224,7 +224,7 @@ public class BasicTeleop extends OpMode
         // moves the lift motor
         liftPower = gamepad2.left_stick_y;
         liftPower = Range.clip(liftPower, -1, 1);
-        //motorLift.setPower(liftPower);
+        motorLift.setPower(liftPower);
 
         // dealing with the motor controlling the lift
         /*
@@ -289,19 +289,18 @@ public class BasicTeleop extends OpMode
         telemetry.addData("Servo Power", flywheel);
         telemetry.addData("Lift Angle", liftAngle);
 
-        // Lightning's teleop from last year
+        // A modified version Lightning's teleop from last year
         // changes the x and y move values based on which dpad buttons are being held down
 
         x = y = 0;
 
         if(gamepad1.dpad_right){
-            x = 1;
-        }
-        if(gamepad1.dpad_left){
             x = -1;
         }
+        if(gamepad1.dpad_left){
+            x = 1;
+        }
 
-        //only y is inversed
         if(gamepad1.dpad_up){
             y = -1;
         }
@@ -368,8 +367,8 @@ public class BasicTeleop extends OpMode
         telemetry.addData("Speed", speed);
         telemetry.update();
 
-        x *= speed;
-        y *= speed;
+        /*x *= speed;
+        y *= speed;*/
 
         //We're using tank drive so r isn't really necessary
         //r *= speed;
@@ -456,8 +455,6 @@ public class BasicTeleop extends OpMode
             backLeft = frontRight = power;
         }
 
-        // this is irrelevant because we are separating dpad from the joysticks
-        /*
         if(zone == 2)// up
         {
             frontLeft = backRight = power;
@@ -468,15 +465,15 @@ public class BasicTeleop extends OpMode
             frontLeft = backRight = -power;
             backLeft = frontRight = -power;
         }
-        */
-
         // the two joysticks moving up and down provide tank controls
         if(gamepad1.left_stick_y != 0){
             frontLeft = backLeft = gamepad1.left_stick_y;
+            zone = -2;
         }
 
         if(gamepad1.right_stick_y != 0){
             frontRight = backRight = gamepad1.right_stick_y;
+            zone = -2;
         }
 
         if(zone == 1)// up-right
@@ -499,6 +496,10 @@ public class BasicTeleop extends OpMode
             frontLeft = backRight = 0;
             backLeft = frontRight = -power;
         }
+        if(zone == -1)//Nothing pressed (stop)
+        {
+            frontLeft = frontRight = backLeft = backRight = 0;
+        }
 
         /*
         if(swap_front_back)
@@ -513,10 +514,10 @@ public class BasicTeleop extends OpMode
         */
 
         // apply rotation (?)
-        frontLeft = ((frontLeft) + r) * 0.707;
-        frontRight = ((frontRight) - r) * 0.707;
-        backLeft = ((backLeft) + r) * 0.707;
-        backRight = ((backRight) - r) * 0.707;
+//      /*frontLeft = ((frontLeft) + r) * 0.707;
+//      frontRight = ((frontRight) - r) * 0.707;
+//      backLeft = ((backLeft) + r) * 0.707;
+//      backRight = ((backRight) - r) * 0.707;*/
 
         frontLeft = Range.clip(frontLeft, -1, 1);
         frontRight = Range.clip(frontRight, -1, 1);
