@@ -30,7 +30,8 @@ public class BasicTeleop extends OpMode
     /** ------------------------------------------------------------------------------------ **/
     //private DcMotorController motorControllerDrive;
     private DcMotor motorFR, motorBR, motorFL, motorBL, motorLift, motorFlyL, motorFlyR;
-    private Servo servoL, servoR, servoLift1, servoLift2; // also, this goes in port one of the servo controller
+    private Servo servoLift1, servoLift2; // also, this goes in port one of the servo controller
+    //private Servo servoL, servoR;
     /** ------------------------------------------------------------------------------------ **/
 
 
