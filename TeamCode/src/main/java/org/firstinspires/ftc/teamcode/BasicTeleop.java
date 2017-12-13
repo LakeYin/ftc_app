@@ -1,6 +1,6 @@
 /*
  * V 2.0 - 
- * Add fuctionality of changing the power given to motors based on state of the right bumper
+ * Add functionality of changing the power given to motors based on state of the right bumper
  * pressed makes gear ratio .7 while non pressed makes gear ratio .3
  * 
  * V 1.0 - Loops through and sets power to motors based on joystick position
@@ -28,10 +28,10 @@ public class BasicTeleop extends OpMode
 {
     /** Initialize the components of the robot **/
     /** ------------------------------------------------------------------------------------ **/
-    //private DcMotorController motorControllerDrive;
+    private DcMotorController motorControllerDrive;
     private DcMotor motorFR, motorBR, motorFL, motorBL, motorLift, motorFlyL, motorFlyR;
     private Servo servoLift1, servoLift2; // also, this goes in port one of the servo controller
-    //private Servo servoL, servoR;
+    //private Servo servoL, servoR; in case we need to switch back to servos for the flywheels
     /** ------------------------------------------------------------------------------------ **/
 
 
@@ -76,7 +76,7 @@ public class BasicTeleop extends OpMode
     {   /** Assign values to hardware components here (match them to phone configuration)
          *  Motor and motor controller hardware declaration **/
         /** ------------------------------------------------------------------------------------ **/
-        //motorControllerDrive = hardwareMap.dcMotorController.get("MC_D");
+        motorControllerDrive = hardwareMap.dcMotorController.get("MC_D");
 
         motorFL = hardwareMap.dcMotor.get("motorFL");           // Drive motors of the robot
         motorFR = hardwareMap.dcMotor.get("motorFR");
@@ -86,7 +86,7 @@ public class BasicTeleop extends OpMode
         motorFlyL = hardwareMap.dcMotor.get("motorFlyL");       // Flywheel motors of the robot
         motorFlyR = hardwareMap.dcMotor.get("motorFlyR");
 
-        //motorLift = hardwareMap.dcMotor.get("motorLift");     // Lift motor
+        motorLift = hardwareMap.dcMotor.get("motorLift");     // Lift motor
         /** ------------------------------------------------------------------------------------ **/
 
 
@@ -489,10 +489,13 @@ public class BasicTeleop extends OpMode
         //telemetry.addData("r", r);
 
         telemetry.update();
+
+
+
+
+        /** Some old squeezer code
+         *      In case we switch back to the squeezer system                                                                            **/
         /** ------------------------------------------------------------------------------------ **/
-
-
-
 
 
 
