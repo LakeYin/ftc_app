@@ -28,7 +28,7 @@ public class BasicTeleop extends OpMode
 {
     /** Initialize the components of the robot **/
     /** ------------------------------------------------------------------------------------ **/
-    //private DcMotorController motorControllerDrive;
+    private DcMotorController motorControllerDrive;
     private DcMotor motorFR, motorBR, motorFL, motorBL, motorLift, motorFlyL, motorFlyR;
     private Servo servoLift1, servoLift2; // also, this goes in port one of the servo controller
     //private Servo servoL, servoR;
@@ -76,7 +76,7 @@ public class BasicTeleop extends OpMode
     {   /** Assign values to hardware components here (match them to phone configuration)
          *  Motor and motor controller hardware declaration **/
         /** ------------------------------------------------------------------------------------ **/
-        //motorControllerDrive = hardwareMap.dcMotorController.get("MC_D");
+        motorControllerDrive = hardwareMap.dcMotorController.get("MC_D");
 
         motorFL = hardwareMap.dcMotor.get("motorFL");           // Drive motors of the robot
         motorFR = hardwareMap.dcMotor.get("motorFR");
@@ -86,7 +86,7 @@ public class BasicTeleop extends OpMode
         motorFlyL = hardwareMap.dcMotor.get("motorFlyL");       // Flywheel motors of the robot
         motorFlyR = hardwareMap.dcMotor.get("motorFlyR");
 
-        //motorLift = hardwareMap.dcMotor.get("motorLift");     // Lift motor
+        motorLift = hardwareMap.dcMotor.get("motorLift");     // Lift motor
         /** ------------------------------------------------------------------------------------ **/
 
 
