@@ -194,7 +194,7 @@ public class BasicTeleop extends OpMode
             liftServo = PLATFORM_FLAT;
         }
 
-        liftServo = Range.clip(liftServo, 0.0, 0.5);
+        liftServo = Range.clip(liftServo, 0.0, 1);
 
         servoLift1.setPosition(liftServo);
         servoLift2.setPosition(liftServo);
