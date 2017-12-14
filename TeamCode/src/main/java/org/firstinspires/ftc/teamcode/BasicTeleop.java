@@ -53,9 +53,9 @@ public class BasicTeleop extends OpMode
 
     // Lift variables
     double liftServo = 180;
-    static double PLATFORM_LOAD = 1;
-    static double PLATFORM_FLAT = 0.9;
-    static double PLATFORM_PLACE = 0.6;
+    static double PLATFORM_LOAD = 0.85; //0 = up completely, 1 = down completely, 0.8 = flat
+    static double PLATFORM_REST = 0.8;
+    static double PLATFORM_PLACE = 0.2;
     double liftPower;
 
     boolean swap_front_back;
@@ -86,7 +86,7 @@ public class BasicTeleop extends OpMode
         motorFlyL = hardwareMap.dcMotor.get("motorFlyL");       // Flywheel motors of the robot
         motorFlyR = hardwareMap.dcMotor.get("motorFlyR");
 
-        //motorLift = hardwareMap.dcMotor.get("motorLift");     // Lift motor
+        motorLift = hardwareMap.dcMotor.get("motorLift");     // Lift motor
         /** ------------------------------------------------------------------------------------ **/
 
 
@@ -181,17 +181,18 @@ public class BasicTeleop extends OpMode
          *      - else, hold platform at flat position **/
         /** ------------------------------------------------------------------------------------ **/
         // Determines which position to use (default is loading)
-        if (gamepad2.y && !gamepad2.a)
+
+        if (gamepad2.y && !gamepad2.a)//when you press y
         {
             liftServo = PLATFORM_PLACE;
         }
-        else if (!gamepad2.y && gamepad2.a)
+        else if (!gamepad2.y && gamepad2.a) //when you press a
         {
             liftServo = PLATFORM_LOAD;
         }
         else
         {
-            liftServo = PLATFORM_FLAT;
+            liftServo = PLATFORM_REST;
         }
 
         liftServo = Range.clip(liftServo, 0.0, 1);
@@ -202,7 +203,7 @@ public class BasicTeleop extends OpMode
         // Moves the lift motor
         liftPower = gamepad2.left_stick_y;
         liftPower = Range.clip(liftPower, -1, 1);
-        //motorLift.setPower(liftPower);
+        motorLift.setPower(liftPower);
         /** ------------------------------------------------------------------------------------ **/
 
 
