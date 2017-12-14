@@ -58,7 +58,7 @@ public class AutonomousMethodMaster extends LinearOpMode {
     private DcMotor backLeft;                       // Back Left Motor
     private DcMotor frontRight;                      // Front Right Motor
     private DcMotor backRight;                      // Back Right Motor
-    private DcMotorController motorControllerDrive;
+    //private DcMotorController motorControllerDrive;
     public Servo squeeze;
     public DcMotor motor_lift;
     /** ---------------------------------------------------------------------------------------- **/
@@ -177,7 +177,7 @@ public class AutonomousMethodMaster extends LinearOpMode {
             //Assign values to hardware components here (match them to phone configuration)
             // Motor and motor controller hardware declaration
         /* ---------------------------------------- */
-            motorControllerDrive = hardwareMap.dcMotorController.get("MC_D");
+            //motorControllerDrive = hardwareMap.dcMotorController.get("MC_D");
 
             frontLeft = hardwareMap.dcMotor.get("frontLeft");
             backLeft = hardwareMap.dcMotor.get("backLeft");
@@ -196,7 +196,7 @@ public class AutonomousMethodMaster extends LinearOpMode {
         /* ---------------------------------------- */
 
             squeeze = hardwareMap.servo.get("squeeze");
-            motor_lift = hardwareMap.dcMotor.get("lift");
+            //motor_lift = hardwareMap.dcMotor.get("lift");
         }
     }
 

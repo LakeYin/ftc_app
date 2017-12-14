@@ -28,7 +28,7 @@ public class BasicTeleop extends OpMode
 {
     /** Initialize the components of the robot **/
     /** ------------------------------------------------------------------------------------ **/
-    private DcMotorController motorControllerDrive;
+    //private DcMotorController motorControllerDrive;
     private DcMotor motorFR, motorBR, motorFL, motorBL, motorLift, motorFlyL, motorFlyR;
     private Servo servoLift1, servoLift2; // also, this goes in port one of the servo controller
     //private Servo servoL, servoR; in case we need to switch back to servos for the flywheels
@@ -76,7 +76,7 @@ public class BasicTeleop extends OpMode
     {   /** Assign values to hardware components here (match them to phone configuration)
          *  Motor and motor controller hardware declaration **/
         /** ------------------------------------------------------------------------------------ **/
-        motorControllerDrive = hardwareMap.dcMotorController.get("MC_D");
+        //motorControllerDrive = hardwareMap.dcMotorController.get("MC_D");
 
         motorFL = hardwareMap.dcMotor.get("motorFL");           // Drive motors of the robot
         motorFR = hardwareMap.dcMotor.get("motorFR");
@@ -86,7 +86,7 @@ public class BasicTeleop extends OpMode
         motorFlyL = hardwareMap.dcMotor.get("motorFlyL");       // Flywheel motors of the robot
         motorFlyR = hardwareMap.dcMotor.get("motorFlyR");
 
-        motorLift = hardwareMap.dcMotor.get("motorLift");     // Lift motor
+        //motorLift = hardwareMap.dcMotor.get("motorLift");     // Lift motor
         /** ------------------------------------------------------------------------------------ **/
 
 
@@ -202,7 +202,7 @@ public class BasicTeleop extends OpMode
         // Moves the lift motor
         liftPower = gamepad2.left_stick_y;
         liftPower = Range.clip(liftPower, -1, 1);
-        motorLift.setPower(liftPower);
+        //motorLift.setPower(liftPower);
         /** ------------------------------------------------------------------------------------ **/
 
 
