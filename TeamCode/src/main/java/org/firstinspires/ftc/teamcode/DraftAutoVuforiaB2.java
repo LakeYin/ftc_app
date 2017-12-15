@@ -69,6 +69,7 @@ public class DraftAutoVuforiaB2 extends AutonomousMethodMaster{
 
             move_inches = 20;
         }
+        encoderRotateDegrees(0, 1, 90); // rotate into direction
 
         encoderStrafeRight(1, move_inches); // move direction based on VuMark
 
