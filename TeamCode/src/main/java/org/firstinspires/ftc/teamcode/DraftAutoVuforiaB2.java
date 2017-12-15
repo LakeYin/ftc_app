@@ -70,17 +70,11 @@ public class DraftAutoVuforiaB2 extends AutonomousMethodMaster{
             move_inches = 20;
         }
 
-        encoderRotateDegrees(0, 1, 90);
+        encoderStrafeRight(1, move_inches); // move direction based on VuMark
 
-        encoderStrafeRight(1, move_inches);
+        encoderMove(1, 12, 12); // move forward to position
 
-        encoderMove(1, 12, 12);
-
-        // place glyph
-
-        encoderMove(1, 12, 12);
-
-        // make servos dump glyphs
+        dumpGlyph(); // dump the glyph
     }
 
 }
