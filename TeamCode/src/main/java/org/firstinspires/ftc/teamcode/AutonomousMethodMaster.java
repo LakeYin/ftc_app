@@ -412,7 +412,7 @@ public class AutonomousMethodMaster extends LinearOpMode {
 
         servoLift1.setPosition(PLATFORM_PLACE);
         servoLift2.setPosition(PLATFORM_PLACE);
-        sleepNew(100);
+        sleepNew(1000);
         servoLift1.setPosition(PLATFORM_REST);
         servoLift2.setPosition(PLATFORM_REST);
     }
