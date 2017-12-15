@@ -55,7 +55,7 @@ public class BasicTeleop extends OpMode
     double liftServo = 180;
     static double PLATFORM_LOAD = 0.85; //0 = up completely, 1 = down completely, 0.8 = flat
     static double PLATFORM_REST = 0.8;
-    static double PLATFORM_PLACE = 0.2;
+    static double PLATFORM_PLACE = 0;
     double liftPower;
 
     boolean swap_front_back;
@@ -247,6 +247,7 @@ public class BasicTeleop extends OpMode
 
         //We're using tank drive so r isn't really necessary
         //r = Range.clip(r, -1, 1);
+
 
         // Speed Control for the movement
         /*
