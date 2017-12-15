@@ -61,6 +61,8 @@ public class AutonomousMethodMaster extends LinearOpMode {
     //private DcMotorController motorControllerDrive;
     public Servo squeeze;
     public DcMotor motor_lift;
+    private Servo servoLift1;                        // the two platform servos
+    private Servo servoLift2;
     /** ---------------------------------------------------------------------------------------- **/
 
     /** For Encoders and specific turn values **/
@@ -74,6 +76,9 @@ public class AutonomousMethodMaster extends LinearOpMode {
 
     double wheelDiameter = 4.0;                     // Diameter of the current omniwheels in inches
     double ticksPerInchNeverest40 = (ticksPerRevNeverest40 / (wheelDiameter * Math.PI));        // The number of encoder ticks per inch (specific to NeveRest 40s
+    static double PLATFORM_LOAD = 0.85; //0 = up completely, 1 = down completely, 0.8 = flat
+    static double PLATFORM_REST = 0.8;
+    static double PLATFORM_PLACE = 0;
     /* ------------------------------------------------------------------------------------------ */
 
 
@@ -398,6 +403,18 @@ public class AutonomousMethodMaster extends LinearOpMode {
                 sleepTime = wakeupTime - System.currentTimeMillis();
             }
         }
+    }
+
+    // method to dump the glyphs during autonomous
+    public void dumpGlyph()
+    {
+        PLATFORM_PLACE = Range.clip(PLATFORM_PLACE, 0.0, 1);
+
+        servoLift1.setPosition(PLATFORM_PLACE);
+        servoLift2.setPosition(PLATFORM_PLACE);
+        sleepNew(1000);
+        servoLift1.setPosition(PLATFORM_REST);
+        servoLift2.setPosition(PLATFORM_REST);
     }
     /** ----------------------------------------- **/
         /*
