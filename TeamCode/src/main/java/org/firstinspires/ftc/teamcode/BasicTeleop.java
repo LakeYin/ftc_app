@@ -56,7 +56,7 @@ public class BasicTeleop extends OpMode
     static double PLATFORM_LOAD = 0.85; //0 = up completely, 1 = down completely, 0.8 = flat
     static double PLATFORM_REST = 0.8;
     static double PLATFORM_PLACE = 0;
-    double liftPower;
+    double liftPower = 0;
 
     boolean swap_front_back;
     boolean toggleServo = true;
@@ -202,7 +202,14 @@ public class BasicTeleop extends OpMode
 
         // Moves the lift motor
         liftPower = gamepad2.left_stick_y;
-        liftPower = Range.clip(liftPower, -1, 1);
+        if(liftPower < 0){
+            liftPower /= 2;
+        }
+        else{
+            liftPower /= 4;
+        }
+//        liftPower = liftPower * liftPower * liftPower;
+        liftPower = Range.clip(liftPower, -0.5,0.5 );
         motorLift.setPower(liftPower);
         /** ------------------------------------------------------------------------------------ **/
 
