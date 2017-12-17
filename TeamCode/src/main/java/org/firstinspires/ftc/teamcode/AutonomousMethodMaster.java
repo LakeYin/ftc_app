@@ -52,19 +52,10 @@ public class AutonomousMethodMaster extends LinearOpMode {
     /** Declaring the motor variables **/
     /** ---------------------------------------------------------------------------------------- **/
 
-    public DcMotor motorL;                       // Left Side Motor
-    public DcMotor motorR;                       // Right Side Motor
-    private DcMotor frontLeft;                       // Front Left Motor
-    private DcMotor backLeft;                       // Back Left Motor
-    private DcMotor frontRight;                      // Front Right Motor
-    private DcMotor backRight;                      // Back Right Motor
-    //private DcMotorController motorControllerDrive;
-    public Servo squeeze;
-    public DcMotor motor_lift;
-    private Servo servoLift1;                        // the two platform servos
-    private Servo servoLift2;
-    /** ---------------------------------------------------------------------------------------- **/
+    private DcMotor motorFR, motorBR, motorFL, motorBL, motorLift, motorFlyL, motorFlyR;
+    private Servo servoLift1, servoLift2; // also, this goes in port one of the servo controller
 
+    /** ---------------------------------------------------------------------------------------- **/
     /** For Encoders and specific turn values **/
     /* ------------------------------------------------------------------------------------------ */
     double ticksPerRevNeverest40 = 1120;            // This is the specific value for NeveRest 40s
@@ -125,34 +116,34 @@ public class AutonomousMethodMaster extends LinearOpMode {
          *  **/
         if (mode == 0) {
             /** Sets the encoded motors to RUN_TO_POSITION **/
-            frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorFL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorBL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorFR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorBR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         } else if (mode == 1) {
             /** Sets the encoders to RUN_USING_ENCODERS **/
-            frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motorBL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         } else if (mode == 2) {
             /** Sets the encoders to RUN_WITHOUT_ENCODERS **/
-            frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            motorFL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            motorBL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            motorFR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            motorBR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         } else if (mode == 3) {
             /** Stops and resets the encoder values on each of the drive motors **/
-            frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         } else if (mode == 4) {
             /** Resets the encoder values on each of the drive motors **/
-            frontLeft.setMode(DcMotor.RunMode.RESET_ENCODERS);
-            backLeft.setMode(DcMotor.RunMode.RESET_ENCODERS);
-            frontRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
-            backRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
+            motorFL.setMode(DcMotor.RunMode.RESET_ENCODERS);
+            motorBL.setMode(DcMotor.RunMode.RESET_ENCODERS);
+            motorFR.setMode(DcMotor.RunMode.RESET_ENCODERS);
+            motorBR.setMode(DcMotor.RunMode.RESET_ENCODERS);
         }
     }
 
@@ -163,10 +154,10 @@ public class AutonomousMethodMaster extends LinearOpMode {
 
     public void stopMotion() {
         /** Stops all drive motor motion **/
-        frontLeft.setPower(0);
-        backLeft.setPower(0);
-        frontRight.setPower(0);
-        backRight.setPower(0);
+        motorFL.setPower(0);
+        motorBL.setPower(0);
+        motorFR.setPower(0);
+        motorBR.setPower(0);
     }
     /** ----------------------------------------- **/
 
@@ -174,6 +165,7 @@ public class AutonomousMethodMaster extends LinearOpMode {
     /**
      * These methods are used to set up the robot
      **/
+
     /** ----------------------------------------- **/
     public void initElectronics(int mode){
         // To make the initialization of electronics much easier and nicer to read
@@ -184,10 +176,10 @@ public class AutonomousMethodMaster extends LinearOpMode {
         /* ---------------------------------------- */
             //motorControllerDrive = hardwareMap.dcMotorController.get("MC_D");
 
-            frontLeft = hardwareMap.dcMotor.get("frontLeft");
-            backLeft = hardwareMap.dcMotor.get("backLeft");
-            frontRight = hardwareMap.dcMotor.get("frontRight");
-            backRight = hardwareMap.dcMotor.get("backRight");
+            motorFL = hardwareMap.dcMotor.get("motorFL");
+            motorBL = hardwareMap.dcMotor.get("motorBL");
+            motorFR = hardwareMap.dcMotor.get("motorFR");
+            motorBR = hardwareMap.dcMotor.get("motorBR");
         /* ---------------------------------------- */
 
             // Encoder stuff - Run Without Encoders is depreciated
@@ -195,12 +187,20 @@ public class AutonomousMethodMaster extends LinearOpMode {
             encoderMode(1);
 
             // Flipped the motors (11/10/17)
-            frontRight.setDirection(DcMotor.Direction.REVERSE);
-            backRight.setDirection(DcMotor.Direction.REVERSE);
+            motorFR.setDirection(DcMotor.Direction.REVERSE);
+            motorBR.setDirection(DcMotor.Direction.REVERSE);
             //motorL.setDirection(DcMotorSimple.Direction.REVERSE);
         /* ---------------------------------------- */
 
-            squeeze = hardwareMap.servo.get("squeeze");
+            motorFlyL = hardwareMap.dcMotor.get("motorFlyL");       // Flywheel motors of the robot
+            motorFlyR = hardwareMap.dcMotor.get("motorFlyR");
+
+            motorLift = hardwareMap.dcMotor.get("motorLift");     // Lift motor
+
+            servoLift1 = hardwareMap.servo.get("servoLift1");       // Glyph platform servos
+            servoLift2 = hardwareMap.servo.get("servoLift2");       // -> they rotate the platform on the robot that controls the lift
+
+            //squeeze = hardwareMap.servo.get("squeeze");
             //motor_lift = hardwareMap.dcMotor.get("lift");
         }
     }
@@ -215,30 +215,30 @@ public class AutonomousMethodMaster extends LinearOpMode {
         power = Range.clip(power, -1, 1);
 
         // Setting the target positions
-        frontLeft.setTargetPosition((int)(leftInches * -ticksPerInchNeverest40));
-        backLeft.setTargetPosition((int)(leftInches * -ticksPerInchNeverest40));
-        frontRight.setTargetPosition((int)(rightInches * -ticksPerInchNeverest40));
-        backRight.setTargetPosition((int)(rightInches * -ticksPerInchNeverest40));
+        motorFL.setTargetPosition((int)(leftInches * -ticksPerInchNeverest40));
+        motorBL.setTargetPosition((int)(leftInches * -ticksPerInchNeverest40));
+        motorFR.setTargetPosition((int)(rightInches * -ticksPerInchNeverest40));
+        motorBR.setTargetPosition((int)(rightInches * -ticksPerInchNeverest40));
 
         // Set encoder mode to RUN_TO_POSITION
         encoderMode(0);
 
         // Sets the motors' position
-        frontLeft.setPower(power);
-        backLeft.setPower(power);
-        frontRight.setPower(power);
-        backRight.setPower(power);
+        motorFL.setPower(power);
+        motorBL.setPower(power);
+        motorFR.setPower(power);
+        motorBR.setPower(power);
 
         // While loop for updating telemetry
-        while(frontLeft.isBusy() && frontRight.isBusy() && opModeIsActive()){
+        while(motorFL.isBusy() && motorFR.isBusy() && opModeIsActive()){
 
             // Updates the position of the motors
-            double LPos = frontLeft.getCurrentPosition();
-            double RPos = frontRight.getCurrentPosition();
+            double LPos = motorFL.getCurrentPosition();
+            double RPos = motorFR.getCurrentPosition();
 
             // Adds telemetry of the drive motors
-            telemetry.addData("frontLeft Pos", LPos);
-            telemetry.addData("frontRight Pos", RPos);
+            telemetry.addData("motorFL Pos", LPos);
+            telemetry.addData("motorFR Pos", RPos);
 
             // Updates the telemetry
             telemetry.update();
@@ -263,29 +263,29 @@ public class AutonomousMethodMaster extends LinearOpMode {
         power = Range.clip(power, -1, 1);
 
         // Setting the target positions
-        frontLeft.setTargetPosition((int)(rightInches * -ticksPerInchNeverest40));
-        backLeft.setTargetPosition((int)(rightInches * ticksPerInchNeverest40));
-        frontRight.setTargetPosition((int)(rightInches * ticksPerInchNeverest40));
-        backRight.setTargetPosition((int)(rightInches * -ticksPerInchNeverest40));
+        motorFL.setTargetPosition((int)(rightInches * -ticksPerInchNeverest40));
+        motorBL.setTargetPosition((int)(rightInches * ticksPerInchNeverest40));
+        motorFR.setTargetPosition((int)(rightInches * ticksPerInchNeverest40));
+        motorBR.setTargetPosition((int)(rightInches * -ticksPerInchNeverest40));
 
         // Set encoder mode to RUN_TO_POSITION
         encoderMode(0);
 
-        frontRight.setPower(power);
-        backLeft.setPower(power);
-        frontLeft.setPower(power);
-        backRight.setPower(power);
+        motorFR.setPower(power);
+        motorBL.setPower(power);
+        motorFL.setPower(power);
+        motorBR.setPower(power);
 
         // While loop for updating telemetry
-        while(frontLeft.isBusy() && frontRight.isBusy() && opModeIsActive()){
+        while(motorFL.isBusy() && motorFR.isBusy() && opModeIsActive()){
 
             // Updates the position of the motors
-            double LPos = frontLeft.getCurrentPosition();
-            double RPos = frontRight.getCurrentPosition();
+            double LPos = motorFL.getCurrentPosition();
+            double RPos = motorFR.getCurrentPosition();
 
             // Adds telemetry of the drive motors
-            telemetry.addData("frontLeft Pos", LPos);
-            telemetry.addData("frontRight Pos", RPos);
+            telemetry.addData("motorFL Pos", LPos);
+            telemetry.addData("motorFR Pos", RPos);
 
             // Updates the telemetry
             telemetry.update();
@@ -316,37 +316,37 @@ public class AutonomousMethodMaster extends LinearOpMode {
         // Setting the target positions
         if (direction == 1)
         { //counterclockwise (left)
-            frontLeft.setTargetPosition((int)(robotTurn));
-            backLeft.setTargetPosition((int)(robotTurn));
-            frontRight.setTargetPosition((int)(-robotTurn));
-            backRight.setTargetPosition((int)(-robotTurn));
+            motorFL.setTargetPosition((int)(robotTurn));
+            motorBL.setTargetPosition((int)(robotTurn));
+            motorFR.setTargetPosition((int)(-robotTurn));
+            motorBR.setTargetPosition((int)(-robotTurn));
         }
         else
         { //clockwise (right)
-            frontLeft.setTargetPosition((int)(-robotTurn));
-            backLeft.setTargetPosition((int)(-robotTurn));
-            frontRight.setTargetPosition((int)(robotTurn));
-            backRight.setTargetPosition((int)(robotTurn));
+            motorFL.setTargetPosition((int)(-robotTurn));
+            motorBL.setTargetPosition((int)(-robotTurn));
+            motorFR.setTargetPosition((int)(robotTurn));
+            motorBR.setTargetPosition((int)(robotTurn));
         }
 
         encoderMode(0);
 
         // Sets the motors' positions
-        frontLeft.setPower(power);
-        backLeft.setPower(power);
-        frontRight.setPower(power);
-        backRight.setPower(power);
+        motorFL.setPower(power);
+        motorBL.setPower(power);
+        motorFR.setPower(power);
+        motorBR.setPower(power);
 
         // While loop for updating telemetry
-        while(frontLeft.isBusy() && frontRight.isBusy() && opModeIsActive())
+        while(motorFL.isBusy() && motorFR.isBusy() && opModeIsActive())
         {
             // Updates the position of the motors
-            double LPos = frontLeft.getCurrentPosition();
-            double RPos = frontRight.getCurrentPosition();
+            double LPos = motorFL.getCurrentPosition();
+            double RPos = motorFR.getCurrentPosition();
 
             // Adds telemetry of the drive motors
-            telemetry.addData("frontLeft Pos", LPos);
-            telemetry.addData("frontRight Pos", RPos);
+            telemetry.addData("motorFL Pos", LPos);
+            telemetry.addData("motorFR Pos", RPos);
 
             // Updates the telemetry
             telemetry.update();
@@ -410,9 +410,14 @@ public class AutonomousMethodMaster extends LinearOpMode {
     {
         PLATFORM_PLACE = Range.clip(PLATFORM_PLACE, 0.0, 1);
 
+        // tells the servos to dump the glyph
         servoLift1.setPosition(PLATFORM_PLACE);
         servoLift2.setPosition(PLATFORM_PLACE);
+
+        // sleep for 1 second
         sleepNew(1000);
+
+        // restore platform to resting position
         servoLift1.setPosition(PLATFORM_REST);
         servoLift2.setPosition(PLATFORM_REST);
     }
