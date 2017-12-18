@@ -41,8 +41,8 @@ public class DraftAutoVuforiaB1 extends AutonomousMethodMaster{
 
         waitForStart();
 
-        // red1
-        encoderStrafeRight(1, 24);
+        // blue1
+        //encoderStrafeRight(1, 24);
 
         int move_inches = 0;
 
@@ -72,9 +72,11 @@ public class DraftAutoVuforiaB1 extends AutonomousMethodMaster{
             move_inches = 20;
         }
 
-        encoderStrafeRight(1, move_inches); // move direction based on VuMark
+        encoderMove(.5, -32 + move_inches, -32 + move_inches); // move direction based on VuMark
 
-        encoderMove(1, 12, 12); // move forward to position
+        encoderRotateDegrees(0,1,180);
+        
+        encoderMove(.5, 4,4);
 
         dumpGlyph(); // dump the glyph
 
