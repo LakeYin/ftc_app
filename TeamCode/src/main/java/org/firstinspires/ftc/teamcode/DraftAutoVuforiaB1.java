@@ -44,9 +44,14 @@ public class DraftAutoVuforiaB1 extends AutonomousMethodMaster{
 
         waitForStart();
 
+<<<<<<< HEAD
         // red1
         //encoderStrafeRight(1, -4);
         encoderMove(.3, 2,2);
+=======
+        // blue1
+        //encoderStrafeRight(1, 24);
+>>>>>>> 8a385b96249ca0190301bc1b763d3e1b6d4dc4bf
 
 
         int move_inches = 0;
@@ -82,6 +87,7 @@ public class DraftAutoVuforiaB1 extends AutonomousMethodMaster{
             telemetry.addData("VuMark", "is not visible; moving center");
             telemetry.update();
 
+<<<<<<< HEAD
             move_inches = 12;
         }
 
@@ -89,6 +95,13 @@ public class DraftAutoVuforiaB1 extends AutonomousMethodMaster{
         //encoderMove(0.2, move_inches, move_inches); //move forward 6 in
         encoderRotateDegrees(0, 0.2, 90); //rotate cw 90 degrees
         encoderMove(0.2, -12, -12); //move forward 6 in
+=======
+        encoderMove(.5, -32 + move_inches, -32 + move_inches); // move direction based on VuMark
+
+        encoderRotateDegrees(0,1,180);
+        
+        encoderMove(.5, 4,4);
+>>>>>>> 8a385b96249ca0190301bc1b763d3e1b6d4dc4bf
 
 
 
