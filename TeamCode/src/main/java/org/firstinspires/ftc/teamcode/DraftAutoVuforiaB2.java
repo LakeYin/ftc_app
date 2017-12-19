@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -9,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 /**
  * Created by justin on 12/1/17.
  */
-
+@Autonomous(name="VuforiaB2", group="Autonomous")
 public class DraftAutoVuforiaB2 extends AutonomousMethodMaster{
 
     public void runOpMode()
@@ -45,11 +47,26 @@ public class DraftAutoVuforiaB2 extends AutonomousMethodMaster{
         encoderStrafeRight(1, 24);
 
         int move_inches = 0;
+        int timesChecked = 0;
+
         // identify which vumark
-        while (vuMark == null){
+        while (vuMark == null && timesChecked <= 3){
             //motorL.setPower(0.25);
             //motorR.setPower(0.25);
             vuMark = RelicRecoveryVuMark.from(relicTemplate);
+            sleep(250);
+            timesChecked ++;
+            if(timesChecked %2 ==1) {
+                telemetry.addData("VuMark", "is not visible; re-aligning");
+                telemetry.update();
+                encoderStrafeRight(1, 1);
+            }
+            else
+            {
+                telemetry.addData("VuMark", "is not visible; re-aligning");
+                telemetry.update();
+                encoderStrafeRight(1, -1);
+            }
         }
         if(vuMark == RelicRecoveryVuMark.LEFT){
             telemetry.addData("VuMark", "%s visible", vuMark);
@@ -57,18 +74,24 @@ public class DraftAutoVuforiaB2 extends AutonomousMethodMaster{
 
             move_inches = 4;
         }
-        if(vuMark == RelicRecoveryVuMark.CENTER){
+        else if(vuMark == RelicRecoveryVuMark.CENTER){
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
 
             move_inches = 12;
         }
-        if(vuMark == RelicRecoveryVuMark.RIGHT){
+        else if(vuMark == RelicRecoveryVuMark.RIGHT){
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
 
             move_inches = 20;
         }
+        else{
+                telemetry.addData("VuMark", "is not visible; Moving to center");
+                telemetry.update();
+                move_inches = 12;
+        }
+
         encoderRotateDegrees(0, 1, 90); // rotate into direction
 
         encoderStrafeRight(1, move_inches); // move direction based on VuMark

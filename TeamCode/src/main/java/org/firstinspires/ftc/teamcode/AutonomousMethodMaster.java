@@ -65,11 +65,11 @@ public class AutonomousMethodMaster extends LinearOpMode {
     double tickTurnRatio = ticksPer360Turn / 360;   // The ratio for multiplication
     double inchToMm = 25.4;                         // For conversion between the vectors
 
-    double wheelDiameter = 4.0;                     // Diameter of the current omniwheels in inches
+    double wheelDiameter = 4.5;                     // Diameter of the current mecanum wheels in inches
     double ticksPerInchNeverest40 = (ticksPerRevNeverest40 / (wheelDiameter * Math.PI));        // The number of encoder ticks per inch (specific to NeveRest 40s
-    static double PLATFORM_LOAD = 0.85; //0 = up completely, 1 = down completely, 0.8 = flat
+    static double PLATFORM_LOAD = 0.92; //0 = up completely, 1 = down completely, 0.8 = flat
     static double PLATFORM_REST = 0.8;
-    static double PLATFORM_PLACE = 0;
+    static double PLATFORM_PLACE = 0.2;
     /* ------------------------------------------------------------------------------------------ */
 
 
@@ -187,7 +187,7 @@ public class AutonomousMethodMaster extends LinearOpMode {
             encoderMode(1);
 
             // Flipped the motors (11/10/17)
-            motorFR.setDirection(DcMotor.Direction.REVERSE);
+            motorFL.setDirection(DcMotor.Direction.REVERSE);
             motorBR.setDirection(DcMotor.Direction.REVERSE);
             //motorL.setDirection(DcMotorSimple.Direction.REVERSE);
         /* ---------------------------------------- */
@@ -408,14 +408,12 @@ public class AutonomousMethodMaster extends LinearOpMode {
     // method to dump the glyphs during autonomous
     public void dumpGlyph()
     {
-        PLATFORM_PLACE = Range.clip(PLATFORM_PLACE, 0.0, 1);
-
         // tells the servos to dump the glyph
         servoLift1.setPosition(PLATFORM_PLACE);
         servoLift2.setPosition(PLATFORM_PLACE);
 
         // sleep for 1 second
-        sleepNew(1000);
+        sleep(1000);
 
         // restore platform to resting position
         servoLift1.setPosition(PLATFORM_REST);

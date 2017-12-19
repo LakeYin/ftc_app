@@ -53,9 +53,9 @@ public class BasicTeleop extends OpMode
 
     // Lift variables
     double liftServo = 180;
-    static double PLATFORM_LOAD = 0.85; //0 = up completely, 1 = down completely, 0.8 = flat
-    static double PLATFORM_REST = 0.8;
-    static double PLATFORM_PLACE = 0;
+    static double PLATFORM_LOAD = 0.92; //0 = up completely, 1 = down completely, 0.8 = flat
+    static double PLATFORM_REST = 0.75;
+    static double PLATFORM_PLACE = 0.28;
     double liftPower = 0;
 
     boolean swap_front_back;
