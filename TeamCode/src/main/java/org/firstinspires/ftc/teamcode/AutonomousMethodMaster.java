@@ -422,8 +422,40 @@ public class AutonomousMethodMaster extends LinearOpMode {
     /** ----------------------------------------- **/
         /*
     * colour Sensor code set up Josh K.
+    *
+    *
     * */
+        public void setUpColourSensor()
+        {
+            // bLedOn represents the state of the LED.
+            boolean bLedOff = false;
+
+            // get a reference to our ColorSensor object.
+            colorSensor = hardwareMap.get(ColorSensor.class, "sensor_color");
+
+            // Set the LED off in the beginning
+            colorSensor.enableLed(bLedOff);
+        }
+
     /** ----------------------------------------- **/
+
+    /** ----------------------------------------- **/
+        /*
+    * GyroScope code set up Josh K.
+    *
+    *
+    * */
+    public void setUpGyroScopeHT()
+    {
+        //gets the refrence to the hardware for the NxtSensor as well
+        NxtGyroSensor = hardwareMap.get(HiTechnicNxtGyroSensor.class, "gyro");
+
+        //giving time to calibrate the gryroscope
+        telemetry.log().add("calibrating...");
+        NxtGyroSensor.calibrate(3000, 100);
+        telemetry.log().add("...done...waiting for start...");
+
+    }
 
 /*
     public void runColorMode() {
