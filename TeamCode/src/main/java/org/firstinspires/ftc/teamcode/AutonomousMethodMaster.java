@@ -70,6 +70,8 @@ public class AutonomousMethodMaster extends LinearOpMode {
     static double PLATFORM_LOAD = 0.92; //0 = up completely, 1 = down completely, 0.8 = flat
     static double PLATFORM_REST = 0.8;
     static double PLATFORM_PLACE = 0.2;
+    ColorSensor colorSensor;
+    HiTechnicNxtGyroSensor NxtGyroSensor;
     /* ------------------------------------------------------------------------------------------ */
 
 
