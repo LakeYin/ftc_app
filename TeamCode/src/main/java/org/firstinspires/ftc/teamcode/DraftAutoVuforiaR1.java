@@ -113,12 +113,14 @@ public class DraftAutoVuforiaR1 extends AutonomousMethodMaster{
             move_inches = 12;
         }
 
+        /*
         //whether its rawZ or not will depend on how you orientate the phone
         while(NxtGyroSensor.rawZ() >= 7)
         {
             telemetry.addData("GyroDegrees", "02x",NxtGyroSensor.rawZ());
             encoderMove(.3,1,1); //move 1 inch every time not flat
         }
+        */
         encoderMove(.5,  move_inches,  move_inches); // move direction based on VuMark
 
         encoderRotateDegrees(0,1,90);

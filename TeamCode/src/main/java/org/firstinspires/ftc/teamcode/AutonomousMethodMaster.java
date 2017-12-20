@@ -72,7 +72,8 @@ public class AutonomousMethodMaster extends LinearOpMode {
     static double PLATFORM_REST = 0.8;
     static double PLATFORM_PLACE = 0.2;
     ColorSensor colorSensor;
-    HiTechnicNxtGyroSensor NxtGyroSensor;
+
+    //HiTechnicNxtGyroSensor NxtGyroSensor;
     /* ------------------------------------------------------------------------------------------ */
 
 
@@ -451,11 +452,11 @@ public class AutonomousMethodMaster extends LinearOpMode {
     public void setUpGyroScopeHT()
     {
         //gets the refrence to the hardware for the NxtSensor as well
-        NxtGyroSensor = hardwareMap.get(HiTechnicNxtGyroSensor.class, "gyro");
+        //NxtGyroSensor = hardwareMap.get(HiTechnicNxtGyroSensor.class, "gyro");
 
         //giving time to calibrate the gryroscope
         telemetry.log().add("calibrating...");
-        NxtGyroSensor.calibrate(3000, 100);
+        //NxtGyroSensor.calibrate(3000, 100);
         telemetry.log().add("...done...waiting for start...");
 
     }
