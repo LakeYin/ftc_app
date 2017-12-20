@@ -1,6 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.app.Activity;
+import android.view.View;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+import com.qualcomm.robotcore.hardware.SwitchableLight;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
@@ -11,8 +18,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 /**
  * Created by justin on 12/1/17.
  */
-@Autonomous(name="VuforiaR1", group="Autonomous")
+@Autonomous(name="Vuforia R1", group="Autonomous")
 public class DraftAutoVuforiaR1 extends AutonomousMethodMaster{
+
+    /** The colorSensor field will contain a reference to our color sensor hardware object */
+    /** The relativeLayout field is used to aid in providing interesting visual feedback
+     * in this sample application; you probably *don't* need something analogous when you
+     * use a color sensor on your robot */
+    View relativeLayout;
 
     public void runOpMode()
     {
@@ -39,30 +52,40 @@ public class DraftAutoVuforiaR1 extends AutonomousMethodMaster{
 
         relicTrackables.activate();
 
+        setUpColourSensor();
+        setUpGyroScopeHT();
+
         RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
 
 
         waitForStart();
 
         // red1
-<<<<<<< HEAD
-        //encoderStrafeRight(1, -4);
-        encoderMove(.3, 2,2);
-=======
-        //encoderStrafeRight(1, -24);
->>>>>>> 8a385b96249ca0190301bc1b763d3e1b6d4dc4bf
+        //encoderStrafeRight(1, -24)
+
+        if(colorSensor.red() >= 200)
+        {
+            //drop arm
+            encoderMove(.3, 5, 5);
+        }
+        else
+        {
+            //drop arm
+            encoderMove(.3,-5,-5);
+            encoderMove(.3,10,10);
+        }
+
+        telemetry.addData("Red", "02x", colorSensor.red());
+        telemetry.addData("Blue", "02x", colorSensor.blue());
+        telemetry.addData("Green", "02x", colorSensor.green());
 
 
         int move_inches = 0;
-        int timesChecked = 0;
-
         // identify which vumark
-        while (vuMark == null && timesChecked <=  3){
+        while (vuMark == null){
             //motorL.setPower(0.25);
             //motorR.setPower(0.25);
             vuMark = RelicRecoveryVuMark.from(relicTemplate);
-            sleep(250);
-            timesChecked ++;
         }
         if(vuMark == RelicRecoveryVuMark.LEFT){
             telemetry.addData("VuMark", "%s visible", vuMark);
@@ -70,38 +93,36 @@ public class DraftAutoVuforiaR1 extends AutonomousMethodMaster{
 
             move_inches = 4;
         }
-        else if(vuMark == RelicRecoveryVuMark.CENTER){
+        if(vuMark == RelicRecoveryVuMark.CENTER){
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
 
             move_inches = 12;
         }
-        else if(vuMark == RelicRecoveryVuMark.RIGHT){
+        if(vuMark == RelicRecoveryVuMark.RIGHT) {
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
 
-            move_inches = 20;
+            move_inches = 18;
         }
-        else{
-            telemetry.addData("VuMark", "is not visible; moving center");
+        else
+        {
+            telemetry.addData("VuMark", "Couldn't be captured");
             telemetry.update();
 
             move_inches = 12;
         }
 
-        encoderMove(0.2,  32, 32);  // move forward 12 in
-        //encoderMove(0.2, move_inches, move_inches); //move forward 6 in
-        encoderRotateDegrees(1, 0.2, 90); //rotate cw 90 degrees
-        encoderMove(0.2, 12, 12); //move forward 6 in
+        //whether its rawZ or not will depend on how you orientate the phone
+        while(NxtGyroSensor.rawZ() >= 7)
+        {
+            telemetry.addData("GyroDegrees", "02x",NxtGyroSensor.rawZ());
+            encoderMove(.3,1,1); //move 1 inch every time not flat
+        }
+        encoderMove(.5,  move_inches,  move_inches); // move direction based on VuMark
 
-<<<<<<< HEAD
-
-=======
-        encoderMove(.5, 32 + move_inches, 32 + move_inches); // move direction based on VuMark
-
-        encoderRotateDegrees(1,1,90);
+        encoderRotateDegrees(0,1,90);
         encoderMove(.5, 4,4);
->>>>>>> 8a385b96249ca0190301bc1b763d3e1b6d4dc4bf
 
         dumpGlyph(); // dump the glyph
     }
