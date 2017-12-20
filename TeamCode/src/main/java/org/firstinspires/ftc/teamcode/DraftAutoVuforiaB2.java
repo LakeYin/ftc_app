@@ -86,7 +86,6 @@ public class DraftAutoVuforiaB2 extends AutonomousMethodMaster{
 
             move_inches = 20;
         }
-<<<<<<< HEAD
         else{
                 telemetry.addData("VuMark", "is not visible; Moving to center");
                 telemetry.update();
@@ -98,7 +97,6 @@ public class DraftAutoVuforiaB2 extends AutonomousMethodMaster{
         encoderStrafeRight(1, move_inches); // move direction based on VuMark
 
         encoderMove(1, 12, 12); // move forward to position
-=======
         encoderMove(.5, -32 + move_inches, -32 + move_inches); // move direction based on VuMark
 
         encoderRotateDegrees(0,0.5,90);
@@ -108,9 +106,7 @@ public class DraftAutoVuforiaB2 extends AutonomousMethodMaster{
         encoderRotateDegrees(0,0.5,90);
         
         encoderMove(0.5, 2,2);
-        
-        
->>>>>>> 8a385b96249ca0190301bc1b763d3e1b6d4dc4bf
+
 
         dumpGlyph(); // dump the glyph
     }
