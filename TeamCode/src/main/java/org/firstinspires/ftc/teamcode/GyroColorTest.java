@@ -24,7 +24,7 @@ public class GyroColorTest extends AutonomousMethodMaster {
         setUpGyroScopeHT();
         setUpColourSensor();
 
-        while(true)
+        while(opModeIsActive())
         {
             telemetry.addData("GyroDegrees X", "02x",NxtGyroSensor.rawX()); // all of the possible degrees
             telemetry.addData("GyroDegrees Y", "02x",NxtGyroSensor.rawY());
@@ -37,5 +37,5 @@ public class GyroColorTest extends AutonomousMethodMaster {
             telemetry.update();
         }
     }
-    
+
 }

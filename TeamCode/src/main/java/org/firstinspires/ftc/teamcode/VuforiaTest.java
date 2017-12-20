@@ -166,7 +166,16 @@ public class VuforiaTest extends LinearOpMode {
                     double rX = rot.firstAngle;
                     double rY = rot.secondAngle;
                     double rZ = rot.thirdAngle;
+
+                    telemetry.addData("X translation", tX);
+                    telemetry.addData("Y translation", tY);
+                    telemetry.addData("Z translation", tZ);
+
+                    telemetry.addData("X rotation", rX);
+                    telemetry.addData("Y rotation", rY);
+                    telemetry.addData("Z rotation", rZ);
                 }
+
             }
             else {
                 telemetry.addData("VuMark", "not visible");
