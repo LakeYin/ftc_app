@@ -126,42 +126,42 @@ public class R1TestBot extends AutonomousMethodMaster{
 
             move_inches = 12;
         }
-        OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)relicTemplate.getListener()).getPose();
-        telemetry.addData("Pose", format(pose));
 
         /* We further illustrate how to decompose the pose into useful rotational and
          * translational components */
-        boolean first = false;
         double tX = 0, tY = 0, tZ = 0;
-        while (pose != null && (!first || tX < 20)) // 20 as in 20 inches
+        while (vuMark != RelicRecoveryVuMark.UNKNOWN && (tY > -500)) // 20 as in 20 inches
         {
-            first = true;
-            pose = ((VuforiaTrackableDefaultListener)relicTemplate.getListener()).getPose();
-            VectorF trans = pose.getTranslation();
+            vuMark = RelicRecoveryVuMark.from(relicTemplate);
+            OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)relicTemplate.getListener()).getPose();
+            telemetry.addData("Pose", format(pose));
+            if(pose != null) {
+                VectorF trans = pose.getTranslation();
 
-            Orientation rot = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+                Orientation rot = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
 
-            // Extract the X, Y, and Z components of the offset of the target relative to the robot
-            tX = trans.get(0);
-            tY = trans.get(1);
-            tZ = trans.get(2);
+                // Extract the X, Y, and Z components of the offset of the target relative to the robot
+                tX = trans.get(0);
+                tY = trans.get(1);
+                tZ = trans.get(2);
 
-            // Extract the rotational components of the target relative to the robot
-            double rX = rot.firstAngle;
-            double rY = rot.secondAngle;
-            double rZ = rot.thirdAngle;
+                // Extract the rotational components of the target relative to the robot
+                double rX = rot.firstAngle;
+                double rY = rot.secondAngle;
+                double rZ = rot.thirdAngle;
 
-            telemetry.addData("X translation", tX);
-            telemetry.addData("Y translation", tY);
-            telemetry.addData("Z translation", tZ);
+                telemetry.addData("X translation", tX);
+                telemetry.addData("Y translation", tY);
+                telemetry.addData("Z translation", tZ);
 
-            telemetry.addData("X rotation", rX);
-            telemetry.addData("Y rotation", rY);
-            telemetry.addData("Z rotation", rZ);
+                telemetry.addData("X rotation", rX);
+                telemetry.addData("Y rotation", rY);
+                telemetry.addData("Z rotation", rZ);
 
-            telemetry.update();
+                telemetry.update();
 
-            TestBotMove(1,1,1); // just move...
+                TestBotMove(1, 1, 1); // just move...
+            }
         }
 
         /*
@@ -172,12 +172,15 @@ public class R1TestBot extends AutonomousMethodMaster{
             encoderMove(.3,1,1); //move 1 inch every time not flat
         }-
         */
-        TestBotMove(.5,  move_inches,  move_inches); // move direction based on VuMark
 
-        TestBotRotate(0,1,90);
-        TestBotMove(.5, 4,4);
+        telemetry.addData("0", "done with loop, moving to cryptobox");
+        telemetry.update();
 
-        dumpGlyph(); // dump the glyph
+        //TestBotMove(.5,  move_inches,  move_inches); // move direction based on VuMark
+
+        //TestBotRotate(0,1,90);
+        //TestBotMove(.5, 4,4);
+
     }
 
     String format(OpenGLMatrix transformationMatrix) {

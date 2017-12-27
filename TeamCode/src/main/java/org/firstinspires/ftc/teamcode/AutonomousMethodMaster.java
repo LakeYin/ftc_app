@@ -320,7 +320,7 @@ public class AutonomousMethodMaster extends LinearOpMode {
             motorRight.setPower(power);
         }
 
-        sleep((int)(1000 * sec_p_in * robotTurn));
+        sleep((int)(10 * sec_p_in * robotTurn));
 
         motorLeft.setPower(0);
         motorRight.setPower(0);
