@@ -25,7 +25,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 /**
  * Created by justin on 12/27/17.
  */
-
+@Autonomous(name="TestBot R1", group="Autonomous")
 public class R1TestBot extends AutonomousMethodMaster{
 
     /** The colorSensor field will contain a reference to our color sensor hardware object */
@@ -93,10 +93,13 @@ public class R1TestBot extends AutonomousMethodMaster{
 
         int move_inches = 0;
         // identify which vumark
-        while (vuMark == null){
+        vuMark = RelicRecoveryVuMark.UNKNOWN;
+        while (vuMark == RelicRecoveryVuMark.UNKNOWN){
             //motorL.setPower(0.25);
             //motorR.setPower(0.25);
             vuMark = RelicRecoveryVuMark.from(relicTemplate);
+            telemetry.addData("VuMark", "Searching...");
+            telemetry.update();
         }
         if(vuMark == RelicRecoveryVuMark.LEFT){
             telemetry.addData("VuMark", "%s visible", vuMark);
@@ -133,7 +136,9 @@ public class R1TestBot extends AutonomousMethodMaster{
         while (pose != null && (!first || tX < 20)) // 20 as in 20 inches
         {
             first = true;
+            pose = ((VuforiaTrackableDefaultListener)relicTemplate.getListener()).getPose();
             VectorF trans = pose.getTranslation();
+
             Orientation rot = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
 
             // Extract the X, Y, and Z components of the offset of the target relative to the robot
@@ -154,7 +159,9 @@ public class R1TestBot extends AutonomousMethodMaster{
             telemetry.addData("Y rotation", rY);
             telemetry.addData("Z rotation", rZ);
 
-            TestBotMove(1,0.1,0.1); // just move...
+            telemetry.update();
+
+            TestBotMove(1,1,1); // just move...
         }
 
         /*
@@ -163,7 +170,7 @@ public class R1TestBot extends AutonomousMethodMaster{
         {
             telemetry.addData("GyroDegrees", "02x",NxtGyroSensor.rawZ());
             encoderMove(.3,1,1); //move 1 inch every time not flat
-        }
+        }-
         */
         TestBotMove(.5,  move_inches,  move_inches); // move direction based on VuMark
 

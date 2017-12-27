@@ -246,8 +246,10 @@ public class AutonomousMethodMaster extends LinearOpMode {
 
     public void initTestBot(int mode)
     {
-        motorLeft = hardwareMap.dcMotor.get("left");
-        motorRight = hardwareMap.dcMotor.get("right");
+        motorLeft = hardwareMap.dcMotor.get("motorL");
+        motorRight = hardwareMap.dcMotor.get("motorR");
+
+        motorLeft.setDirection(DcMotor.Direction.REVERSE);
 
         TestBotMode(1);
     }
@@ -255,52 +257,46 @@ public class AutonomousMethodMaster extends LinearOpMode {
     public void TestBotMove(double power, double leftInches, double rightInches)
     {
         /** This method makes the motors move a certain distance **/
-        // Set the encoder mode to 3 (STOP_AND_RESET_ENCODERS)
-        TestBotMode(3);
+
+        //telemetry.addData("0", "before movement");
+        //telemetry.update();
 
         // Sets the power range
         power = Range.clip(power, -1, 1);
 
-        // Setting the target positions
-        motorLeft.setTargetPosition((int)(leftInches * -ticksPerInchNeverest40));
-        motorRight.setTargetPosition((int)(rightInches * -ticksPerInchNeverest40));
+        //telemetry.addData("0.2", "before power set");
+        //telemetry.update();
 
-        // Set encoder mode to RUN_TO_POSITION
-        TestBotMode(0);
+        //telemetry.addData("0.5", "%f", power);
+        //telemetry.update();
 
         // Sets the motors' position
         motorLeft.setPower(power);
         motorRight.setPower(power);
 
-        // While loop for updating telemetry
-        while(motorLeft.isBusy() && motorRight.isBusy() && opModeIsActive()){
+        //telemetry.addData("7", "after power set");
+        //telemetry.update();
 
-            // Updates the position of the motors
-            double LPos = motorLeft.getCurrentPosition();
-            double RPos = motorRight.getCurrentPosition();
+        double sec_p_in = 0.3; // ? no idea, just a guess
+        // test bot doesn't have encoders
 
-            // Adds telemetry of the drive motors
-            telemetry.addData("motorFL Pos", LPos);
-            telemetry.addData("motorFR Pos", RPos);
+        //telemetry.addData("1","before sleep");
+        //telemetry.update();
 
-            // Updates the telemetry
-            telemetry.update();
+        sleep((int)(1000 * sec_p_in * Math.min(leftInches, rightInches)));
 
-        }
+        //telemetry.addData("2","after sleep");
+        //telemetry.update();
 
         // Stops the motors
         motorLeft.setPower(0);
         motorRight.setPower(0);
-
-        // Resets to run using encoders mode
-        TestBotMode(1);
     }
 
     public void TestBotRotate(int direction, double power, int robotDegrees)
     {
         /** This method, given an input amount of degrees, makes the robot turn
          *  the amount of degrees specified around ITS center of rotation **/
-        TestBotMode(3);
 
         // Sets the power range
         power = Range.clip(power, -1, 1);
@@ -309,46 +305,25 @@ public class AutonomousMethodMaster extends LinearOpMode {
         // Setting variables
         double robotTurn = robotDegrees * tickTurnRatio;
 
+        double sec_p_in = 0.3; // ? no idea, just a guess
+        // test bot doesn't have encoders
+
         // Setting the target positions
         if (direction == 1)
         { //counterclockwise (left)
-            motorLeft.setTargetPosition((int)(robotTurn));
-            motorRight.setTargetPosition((int)(-robotTurn));
+            motorLeft.setPower(power);
+            motorRight.setPower(-power);
         }
         else
         { //clockwise (right)
-            motorLeft.setTargetPosition((int)(-robotTurn));
-            motorRight.setTargetPosition((int)(robotTurn));
+            motorLeft.setPower(-power);
+            motorRight.setPower(power);
         }
 
-        TestBotMode(0);
+        sleep((int)(1000 * sec_p_in * robotTurn));
 
-        // Sets the motors' positions
-        motorLeft.setPower(power);
-        motorRight.setPower(power);
-
-        // While loop for updating telemetry
-        while(motorLeft.isBusy() && motorRight.isBusy() && opModeIsActive())
-        {
-            // Updates the position of the motors
-            double LPos = motorFL.getCurrentPosition();
-            double RPos = motorFR.getCurrentPosition();
-
-            // Adds telemetry of the drive motors
-            telemetry.addData("motorL Pos", LPos);
-            telemetry.addData("motorR Pos", RPos);
-
-            // Updates the telemetry
-            telemetry.update();
-
-        }
-
-        // Stops the motors
         motorLeft.setPower(0);
         motorRight.setPower(0);
-
-        // Resets to run using encoders mode
-        TestBotMode(1);
     }
 
 
