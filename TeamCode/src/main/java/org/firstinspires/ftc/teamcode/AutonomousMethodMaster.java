@@ -53,7 +53,7 @@ public class AutonomousMethodMaster extends LinearOpMode {
     /** Declaring the motor variables **/
     /** ---------------------------------------------------------------------------------------- **/
 
-    private DcMotor motorFR, motorBR, motorFL, motorBL, motorLift, motorFlyL, motorFlyR;
+    private DcMotor motorFR, motorBR, motorFL, motorBL, motorLift, motorFlyL, motorFlyR, motorLeft, motorRight;
     private Servo servoLift1, servoLift2; // also, this goes in port one of the servo controller
 
     /** ---------------------------------------------------------------------------------------- **/
@@ -207,6 +207,148 @@ public class AutonomousMethodMaster extends LinearOpMode {
             //squeeze = hardwareMap.servo.get("squeeze");
             //motor_lift = hardwareMap.dcMotor.get("lift");
         }
+    }
+
+    public void TestBotMode(int mode)
+    {
+        /**NOTE:
+         *  This was made just for the sake of making the code look a bit neater
+         *
+         * Mode Numbers:
+         *  0 = RUN_TO_POSITION
+         *  1 = RUN_USING_ENCODER
+         *  2 = RUN_WITHOUT_ENCODER
+         *  3 = STOP_AND_RESET_ENCODERS
+         *  4 = RESET_ENCODERS
+         *  **/
+        if (mode == 0) {
+            /** Sets the encoded motors to RUN_TO_POSITION **/
+            motorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        } else if (mode == 1) {
+            /** Sets the encoders to RUN_USING_ENCODERS **/
+            motorLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motorRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        } else if (mode == 2) {
+            /** Sets the encoders to RUN_WITHOUT_ENCODERS **/
+            motorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            motorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        } else if (mode == 3) {
+            /** Stops and resets the encoder values on each of the drive motors **/
+            motorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        } else if (mode == 4) {
+            /** Resets the encoder values on each of the drive motors **/
+            motorLeft.setMode(DcMotor.RunMode.RESET_ENCODERS);
+            motorRight.setMode(DcMotor.RunMode.RESET_ENCODERS);
+        }
+    }
+
+    public void initTestBot(int mode)
+    {
+        motorLeft = hardwareMap.dcMotor.get("left");
+        motorRight = hardwareMap.dcMotor.get("right");
+
+        TestBotMode(1);
+    }
+
+    public void TestBotMove(double power, double leftInches, double rightInches)
+    {
+        /** This method makes the motors move a certain distance **/
+        // Set the encoder mode to 3 (STOP_AND_RESET_ENCODERS)
+        TestBotMode(3);
+
+        // Sets the power range
+        power = Range.clip(power, -1, 1);
+
+        // Setting the target positions
+        motorLeft.setTargetPosition((int)(leftInches * -ticksPerInchNeverest40));
+        motorRight.setTargetPosition((int)(rightInches * -ticksPerInchNeverest40));
+
+        // Set encoder mode to RUN_TO_POSITION
+        TestBotMode(0);
+
+        // Sets the motors' position
+        motorLeft.setPower(power);
+        motorRight.setPower(power);
+
+        // While loop for updating telemetry
+        while(motorLeft.isBusy() && motorRight.isBusy() && opModeIsActive()){
+
+            // Updates the position of the motors
+            double LPos = motorLeft.getCurrentPosition();
+            double RPos = motorRight.getCurrentPosition();
+
+            // Adds telemetry of the drive motors
+            telemetry.addData("motorFL Pos", LPos);
+            telemetry.addData("motorFR Pos", RPos);
+
+            // Updates the telemetry
+            telemetry.update();
+
+        }
+
+        // Stops the motors
+        motorLeft.setPower(0);
+        motorRight.setPower(0);
+
+        // Resets to run using encoders mode
+        TestBotMode(1);
+    }
+
+    public void TestBotRotate(int direction, double power, int robotDegrees)
+    {
+        /** This method, given an input amount of degrees, makes the robot turn
+         *  the amount of degrees specified around ITS center of rotation **/
+        TestBotMode(3);
+
+        // Sets the power range
+        power = Range.clip(power, -1, 1);
+        power = Math.abs(power);
+
+        // Setting variables
+        double robotTurn = robotDegrees * tickTurnRatio;
+
+        // Setting the target positions
+        if (direction == 1)
+        { //counterclockwise (left)
+            motorLeft.setTargetPosition((int)(robotTurn));
+            motorRight.setTargetPosition((int)(-robotTurn));
+        }
+        else
+        { //clockwise (right)
+            motorLeft.setTargetPosition((int)(-robotTurn));
+            motorRight.setTargetPosition((int)(robotTurn));
+        }
+
+        TestBotMode(0);
+
+        // Sets the motors' positions
+        motorLeft.setPower(power);
+        motorRight.setPower(power);
+
+        // While loop for updating telemetry
+        while(motorLeft.isBusy() && motorRight.isBusy() && opModeIsActive())
+        {
+            // Updates the position of the motors
+            double LPos = motorFL.getCurrentPosition();
+            double RPos = motorFR.getCurrentPosition();
+
+            // Adds telemetry of the drive motors
+            telemetry.addData("motorL Pos", LPos);
+            telemetry.addData("motorR Pos", RPos);
+
+            // Updates the telemetry
+            telemetry.update();
+
+        }
+
+        // Stops the motors
+        motorLeft.setPower(0);
+        motorRight.setPower(0);
+
+        // Resets to run using encoders mode
+        TestBotMode(1);
     }
 
 
@@ -429,17 +571,17 @@ public class AutonomousMethodMaster extends LinearOpMode {
     *
     *
     * */
-        public void setUpColourSensor()
-        {
-            // bLedOn represents the state of the LED.
-            boolean bLedOff = false;
+    public void setUpColourSensor()
+    {
+        // bLedOn represents the state of the LED.
+        boolean bLedOff = false;
 
-            // get a reference to our ColorSensor object.
-            colorSensor = hardwareMap.get(ColorSensor.class, "sensor_color");
+        // get a reference to our ColorSensor object.
+        colorSensor = hardwareMap.get(ColorSensor.class, "sensor_color");
 
-            // Set the LED off in the beginning
-            colorSensor.enableLed(bLedOff);
-        }
+        // Set the LED off in the beginning
+        colorSensor.enableLed(bLedOff);
+    }
 
     /** ----------------------------------------- **/
 

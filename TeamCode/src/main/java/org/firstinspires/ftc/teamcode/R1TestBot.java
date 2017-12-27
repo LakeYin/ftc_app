@@ -23,10 +23,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 /**
- * Created by justin on 12/1/17.
+ * Created by justin on 12/27/17.
  */
-@Autonomous(name="Vuforia R1", group="Autonomous")
-public class DraftAutoVuforiaR1 extends AutonomousMethodMaster{
+
+public class R1TestBot extends AutonomousMethodMaster{
 
     /** The colorSensor field will contain a reference to our color sensor hardware object */
     /** The relativeLayout field is used to aid in providing interesting visual feedback
@@ -36,7 +36,7 @@ public class DraftAutoVuforiaR1 extends AutonomousMethodMaster{
 
     public void runOpMode()
     {
-        initElectronics(0);
+        initTestBot(0);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
@@ -154,7 +154,7 @@ public class DraftAutoVuforiaR1 extends AutonomousMethodMaster{
             telemetry.addData("Y rotation", rY);
             telemetry.addData("Z rotation", rZ);
 
-            encoderMove(1,0.1,0.1); // just move...
+            TestBotMove(1,0.1,0.1); // just move...
         }
 
         /*
@@ -165,10 +165,10 @@ public class DraftAutoVuforiaR1 extends AutonomousMethodMaster{
             encoderMove(.3,1,1); //move 1 inch every time not flat
         }
         */
-        encoderMove(.5,  move_inches,  move_inches); // move direction based on VuMark
+        TestBotMove(.5,  move_inches,  move_inches); // move direction based on VuMark
 
-        encoderRotateDegrees(0,1,90);
-        encoderMove(.5, 4,4);
+        TestBotRotate(0,1,90);
+        TestBotMove(.5, 4,4);
 
         dumpGlyph(); // dump the glyph
     }
@@ -176,5 +176,4 @@ public class DraftAutoVuforiaR1 extends AutonomousMethodMaster{
     String format(OpenGLMatrix transformationMatrix) {
         return (transformationMatrix != null) ? transformationMatrix.formatAsTransform() : "null";
     }
-
 }
