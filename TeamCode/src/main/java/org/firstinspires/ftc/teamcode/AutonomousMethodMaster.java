@@ -68,7 +68,8 @@ public class AutonomousMethodMaster extends LinearOpMode {
 
     double wheelDiameter = 4.5;                     // Diameter of the current mecanum wheels in inches
     double ticksPerInchNeverest40 = (ticksPerRevNeverest40 / (wheelDiameter * Math.PI));        // The number of encoder ticks per inch (specific to NeveRest 40s
-    static double PLATFORM_LOAD = 0.92; //0 = up completely, 1 = down completely, 0.8 = flat
+
+    static double PLATFORM_LOAD = 0.92;             //0 = up completely, 1 = down completely, 0.8 = flat
     static double PLATFORM_REST = 0.8;
     static double PLATFORM_PLACE = 0.2;
     ColorSensor colorSensor;
@@ -326,7 +327,15 @@ public class AutonomousMethodMaster extends LinearOpMode {
         motorRight.setPower(0);
     }
 
-
+    /* encoderMove
+     *  - moves the robot a certain dsitance based on its wheel diameter
+     *
+     *      Takes 3 arguments (in order):
+     *      - motor power (-1 to 1, negatives making the robot drive backwards)
+     *      - inches for the left wheel to travel
+     *      - inches for the right wheel to travel
+     *
+     *      */
     public void encoderMove(double power, double leftInches, double rightInches) {
         /** This method makes the motors move a certain distance **/
         // Set the encoder mode to 3 (STOP_AND_RESET_ENCODERS)
@@ -351,7 +360,7 @@ public class AutonomousMethodMaster extends LinearOpMode {
         motorBR.setPower(power);
 
         // While loop for updating telemetry
-        while(motorFL.isBusy() && motorFR.isBusy() && opModeIsActive()){
+        while (motorFL.isBusy() && motorFR.isBusy() && opModeIsActive()){
 
             // Updates the position of the motors
             double LPos = motorFL.getCurrentPosition();
