@@ -130,7 +130,7 @@ public class R1TestBot extends AutonomousMethodMaster{
         /* We further illustrate how to decompose the pose into useful rotational and
          * translational components */
         double tX = 0, tY = 0, tZ = 0;
-        while (vuMark != RelicRecoveryVuMark.UNKNOWN && (tY > -500)) // 20 as in 20 inches
+        while (vuMark != RelicRecoveryVuMark.UNKNOWN && (tY > -300)) // 20 as in 20 inches
         {
             vuMark = RelicRecoveryVuMark.from(relicTemplate);
             OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)relicTemplate.getListener()).getPose();
@@ -160,8 +160,21 @@ public class R1TestBot extends AutonomousMethodMaster{
 
                 telemetry.update();
 
-                TestBotMove(1, 1, 1); // just move...
+                TestBotMove(0.5, 0.7, 0.7); // just move...
             }
+        }
+
+        if(vuMark == RelicRecoveryVuMark.UNKNOWN)
+        {
+            telemetry.addData("Condition 1", "can't see VuMark");
+            telemetry.update();
+            sleep(2000);
+        }
+        if(tY <= -300)
+        {
+            telemetry.addData("Condition 2", "destination reached");
+            telemetry.update();
+            sleep(2000);
         }
 
         /*
@@ -175,6 +188,8 @@ public class R1TestBot extends AutonomousMethodMaster{
 
         telemetry.addData("0", "done with loop, moving to cryptobox");
         telemetry.update();
+
+        sleep(5000);
 
         //TestBotMove(.5,  move_inches,  move_inches); // move direction based on VuMark
 

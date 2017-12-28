@@ -93,7 +93,7 @@ public class DraftAutoVuforiaR1 extends AutonomousMethodMaster{
 
         int move_inches = 0;
         // identify which vumark
-        while (vuMark == null){
+        while (vuMark == RelicRecoveryVuMark.UNKNOWN){
             //motorL.setPower(0.25);
             //motorR.setPower(0.25);
             vuMark = RelicRecoveryVuMark.from(relicTemplate);
@@ -123,39 +123,48 @@ public class DraftAutoVuforiaR1 extends AutonomousMethodMaster{
 
             move_inches = 12;
         }
-        OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)relicTemplate.getListener()).getPose();
-        telemetry.addData("Pose", format(pose));
+
+        sleep(5000);
 
         /* We further illustrate how to decompose the pose into useful rotational and
          * translational components */
-        boolean first = false;
         double tX = 0, tY = 0, tZ = 0;
-        while (pose != null && (!first || tX < 20)) // 20 as in 20 inches
+        while (vuMark != RelicRecoveryVuMark.UNKNOWN && (tY > -20 * inchToMm)) // 20 as in 20 inches
         {
-            first = true;
-            VectorF trans = pose.getTranslation();
-            Orientation rot = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+            vuMark = RelicRecoveryVuMark.from(relicTemplate);
+            OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)relicTemplate.getListener()).getPose();
+            telemetry.addData("Pose", format(pose));
+            if(pose != null) {
+                VectorF trans = pose.getTranslation();
 
-            // Extract the X, Y, and Z components of the offset of the target relative to the robot
-            tX = trans.get(0);
-            tY = trans.get(1);
-            tZ = trans.get(2);
+                Orientation rot = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
 
-            // Extract the rotational components of the target relative to the robot
-            double rX = rot.firstAngle;
-            double rY = rot.secondAngle;
-            double rZ = rot.thirdAngle;
+                // Extract the X, Y, and Z components of the offset of the target relative to the robot
+                tX = trans.get(0);
+                tY = trans.get(1);
+                tZ = trans.get(2);
 
-            telemetry.addData("X translation", tX);
-            telemetry.addData("Y translation", tY);
-            telemetry.addData("Z translation", tZ);
+                // Extract the rotational components of the target relative to the robot
+                double rX = rot.firstAngle;
+                double rY = rot.secondAngle;
+                double rZ = rot.thirdAngle;
 
-            telemetry.addData("X rotation", rX);
-            telemetry.addData("Y rotation", rY);
-            telemetry.addData("Z rotation", rZ);
+                telemetry.addData("X translation", tX);
+                telemetry.addData("Y translation", tY);
+                telemetry.addData("Z translation", tZ);
 
-            encoderMove(1,0.1,0.1); // just move...
+                telemetry.addData("X rotation", rX);
+                telemetry.addData("Y rotation", rY);
+                telemetry.addData("Z rotation", rZ);
+
+                telemetry.update();
+
+                encoderMove(0.5, -1, -1); // just move...
+            }
         }
+
+        sleep(5000);
+
 
         /*
         //whether its rawZ or not will depend on how you orientate the phone
