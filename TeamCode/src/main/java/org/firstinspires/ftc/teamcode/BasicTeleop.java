@@ -202,10 +202,10 @@ public class BasicTeleop extends OpMode
 
         // Moves the lift motor
         liftPower = gamepad2.left_stick_y;
-        if(liftPower < 0){
+        if (liftPower < 0){
             liftPower /= 2;
         }
-        else{
+        else {
             liftPower /= 4;
         }
 //        liftPower = liftPower * liftPower * liftPower;
@@ -498,7 +498,7 @@ public class BasicTeleop extends OpMode
         //telemetry.addData("r", r);
 
         telemetry.update();
-
+        /** ------------------------------------------------------------------------------------ **/
 
 
 
@@ -652,4 +652,6 @@ public class BasicTeleop extends OpMode
         */
         
     }
+
+
 }
