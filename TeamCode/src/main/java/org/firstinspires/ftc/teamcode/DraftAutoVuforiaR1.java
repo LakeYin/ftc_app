@@ -91,7 +91,7 @@ public class DraftAutoVuforiaR1 extends AutonomousMethodMaster{
         telemetry.addData("Green", "02x", colorSensor.green());*/
 
 
-        int move_inches = 0;
+        double move_inches = 0;
         // identify which vumark
         while (vuMark == RelicRecoveryVuMark.UNKNOWN){
             //motorL.setPower(0.25);
@@ -102,34 +102,34 @@ public class DraftAutoVuforiaR1 extends AutonomousMethodMaster{
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
 
-            move_inches = 4;
+            move_inches = -7.63;
         }
         else if(vuMark == RelicRecoveryVuMark.CENTER){
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
 
-            move_inches = 12;
+            move_inches = 0;
         }
         else if(vuMark == RelicRecoveryVuMark.RIGHT) {
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
 
-            move_inches = 18;
+            move_inches = 7.63;
         }
         else
         {
             telemetry.addData("VuMark", "Couldn't be captured");
             telemetry.update();
 
-            move_inches = 12;
+            move_inches = 0;
         }
 
-        sleep(5000);
+        //sleep(5000);
 
         /* We further illustrate how to decompose the pose into useful rotational and
          * translational components */
         double tX = 0, tY = 0, tZ = 0;
-        while (vuMark != RelicRecoveryVuMark.UNKNOWN && (tY > -20 * inchToMm)) // 20 as in 20 inches
+        while (vuMark != RelicRecoveryVuMark.UNKNOWN && (tY < 20 * inchToMm)) // 20 as in 20 inches
         {
             vuMark = RelicRecoveryVuMark.from(relicTemplate);
             OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)relicTemplate.getListener()).getPose();
@@ -159,11 +159,11 @@ public class DraftAutoVuforiaR1 extends AutonomousMethodMaster{
 
                 telemetry.update();
 
-                encoderMove(0.5, -1, -1); // just move...
+                encoderMove(1, -2, -2); // just move...
             }
         }
 
-        sleep(5000);
+        //sleep(5000);
 
 
         /*
@@ -177,7 +177,7 @@ public class DraftAutoVuforiaR1 extends AutonomousMethodMaster{
         encoderMove(.5,  move_inches,  move_inches); // move direction based on VuMark
 
         encoderRotateDegrees(0,1,90);
-        encoderMove(.5, 4,4);
+        encoderMove(.5, -11,-11);
 
         dumpGlyph(); // dump the glyph
     }
