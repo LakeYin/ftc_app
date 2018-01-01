@@ -45,6 +45,8 @@ public class BasicTeleop extends OpMode
 
     double speed = 1.0;
     double change_speed = 0, prev = 0;
+    double angle;
+    double hypotenuse;
 
     // Flywheel variables
     double leftFlywheel = 0;
@@ -53,9 +55,11 @@ public class BasicTeleop extends OpMode
 
     // Lift variables
     double liftServo = 180;
-    static double PLATFORM_LOAD = 0.92; //0 = up completely, 1 = down completely, 0.8 = flat
+    static double PLATFORM_LOAD = 0.92;         //0 = up completely, 1 = down completely, 0.8 = flat
     static double PLATFORM_REST = 0.75;
     static double PLATFORM_PLACE = 0.28;
+    static double MAX_LIFT_POWER_UP = 0.5;
+    static double MAX_LIFT_POWER_DOWN = 0.25;
     double liftPower = 0;
 
     boolean swap_front_back;
@@ -65,7 +69,7 @@ public class BasicTeleop extends OpMode
     boolean flip_front = false;
     double gearRatio;
 
-    double flyMaxPower = 0.5;                //The maximum power of the motors for the flywheels (-0.5 to 0.5). Added to making operations easier
+    double flyMaxPower = 0.5;                   //The maximum power of the motors for the flywheels (-0.5 to 0.5). Added to making operations easier
     /** ------------------------------------------------------------------------------------ **/
 
 
@@ -141,10 +145,11 @@ public class BasicTeleop extends OpMode
         gearRatio = gear_ratio_is_07 ? 0.7 : 0.2;
         // If right_bumper toggles gear ratio, the default gearRatio is 0.7. Otherwise, the gearRatio is 0.2
 
+        /*
         if (gamepad1.left_bumper)   // toggles front, kinda unnecessary though
         {
             flip_front = !(flip_front);
-        }
+        }*/
         /** ------------------------------------------------------------------------------------ **/
 
 
@@ -180,13 +185,12 @@ public class BasicTeleop extends OpMode
          *      - elif GP2.A, ready platform for loading
          *      - else, hold platform at flat position **/
         /** ------------------------------------------------------------------------------------ **/
-        // Determines which position to use (default is loading)
-
-        if (gamepad2.y && !gamepad2.a)//when you press y
+        // Determines which lift position to use (default is loading)
+        if (gamepad2.y && !gamepad2.a)          //when you press Y on gamepad 2
         {
             liftServo = PLATFORM_PLACE;
         }
-        else if (!gamepad2.y && gamepad2.a) //when you press a
+        else if (!gamepad2.y && gamepad2.a)     //when you press A on gamepad 2
         {
             liftServo = PLATFORM_LOAD;
         }
@@ -200,13 +204,16 @@ public class BasicTeleop extends OpMode
         servoLift1.setPosition(liftServo);
         servoLift2.setPosition(liftServo);
 
+
         // Moves the lift motor
         liftPower = gamepad2.left_stick_y;
-        if (liftPower < 0){
-            liftPower /= 2;
+        if (liftPower < 0)                      // Gamepad2 LStick Y is up
+        {
+            liftPower *= MAX_LIFT_POWER_UP;
         }
-        else {
-            liftPower /= 4;
+        else                                    // If it's down or 0
+        {
+            liftPower *= MAX_LIFT_POWER_DOWN;
         }
 //        liftPower = liftPower * liftPower * liftPower;
         liftPower = Range.clip(liftPower, -0.5,0.5 );
@@ -217,17 +224,17 @@ public class BasicTeleop extends OpMode
 
 
         /** Drive Train Code
-         *      Includes both tank drive and Dpad mecanum wheel strafing
+         *      Includes both tank drive and Dpad mecanum wheel strafing and full Mecanum movement
          *
          *  Dpad Mecanum Wheel Strafing
-            // A modified version Lightning's teleop from last year
+            // A modified version ARC Lightning's teleop from last year
             // changes the x and y move values based on which dpad buttons are being held down **/
         /** ------------------------------------------------------------------------------------ **/
         x = y = 0;
 
-        // Dpad Mapping to x and y vslues
+        // Dpad Mapping to x and y values
         /* ---------------------------------------------------------- */
-        // Horizontal Dpad
+        // Horizontal DPad
         if (gamepad1.dpad_right)
         {
             x = -1;
@@ -283,7 +290,7 @@ public class BasicTeleop extends OpMode
         prev = change_speed;
         change_speed = 0; */
 
-
+        // Limits speed to between 0 and 1
         if (speed > 1)
         {
             speed = 1;
@@ -330,6 +337,38 @@ public class BasicTeleop extends OpMode
             }
         }
         */
+
+
+        // Finding the angle (IN RADIANS, similar to unit circle)
+        // To ensure that undefined is not put into the calculation
+        if (gamepad1.left_stick_x == 0)
+        {
+            if (gamepad1.left_stick_y == 1)
+            {
+                angle = Math.PI / 2;
+            }
+            else
+            {
+                angle = 3 * Math.PI / 2;
+            }
+        }
+        else
+        {
+            angle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x);
+        }
+
+        // If it's less than 0
+        if (angle < 0)
+        {
+            angle += (2 * Math.PI);
+        }
+
+        // If it's somehow becomes more than 2PI
+        angle %= 2 * Math.PI;
+
+        // The hypotenuse (essentially the power of the joystick)
+        hypotenuse = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
+
 
         // Zone Determination
         /* ---------------------------------------------------------- */
@@ -393,6 +432,53 @@ public class BasicTeleop extends OpMode
         }
         /* ---------------------------------------------------------- */
 
+        // Full Mecanum Joystick Quadrant Code
+        /* ---------------------------------------------------------- */
+        if (gamepad1.left_bumper)
+        {
+            zone = -3;          // To prevent the DPad from being used
+            if (angle == 0)                                                 // If Right
+            {
+                frontLeft = backRight = hypotenuse;
+                frontRight = backLeft = -hypotenuse;
+            }
+            else if (angle > 0 && angle < (Math.PI / 2))                    // If Quadrant I
+            {
+                frontLeft = backRight = hypotenuse;
+                frontRight = backLeft = -hypotenuse * Math.tan((Math.PI / 4) - angle);
+            }
+            else if (angle == (Math.PI / 2))                                // If Up
+            {
+                frontLeft = backRight = hypotenuse;
+                frontRight = backLeft = hypotenuse;
+            }
+            else if (angle > (Math.PI / 2) && angle < Math.PI)              // If Quadrant II
+            {
+                frontLeft = backRight = hypotenuse * Math.tan((3 * Math.PI / 4) - angle);
+                frontRight = backLeft = hypotenuse;
+            }
+            else if (angle == Math.PI)                                      // If Left
+            {
+                frontLeft = backRight = -hypotenuse;
+                frontRight = backLeft = hypotenuse;
+            }
+            else if (angle > Math.PI && angle < (3 * Math.PI / 2))          // If Quadrant III
+            {
+                frontLeft = backRight = -hypotenuse;
+                frontRight = backLeft = hypotenuse * Math.tan((5 * Math.PI / 4) - angle);
+            }
+            else if (angle == (3 * Math.PI / 2))                            // If Down
+            {
+                frontLeft = backRight = -hypotenuse;
+                frontRight = backLeft = -hypotenuse;
+            }
+            else if (angle > (3 * Math.PI / 2) && angle < (2 * Math.PI))    // If Quadrant IV
+            {
+                frontLeft = backRight = -hypotenuse * Math.tan((7 * Math.PI / 4) - angle);
+                frontRight = backLeft = -hypotenuse;
+            }
+        }
+        /* ---------------------------------------------------------- */
 
         // Zone Control
         /* ---------------------------------------------------------- */
@@ -472,10 +558,10 @@ public class BasicTeleop extends OpMode
         backRight = Range.clip(backRight, -1, 1);
 
         // Set Power
-        motorFR.setPower(frontRight);
-        motorFL.setPower(frontLeft);
-        motorBR.setPower(backRight);
-        motorBL.setPower(backLeft);
+        motorFR.setPower(frontRight * gearRatio);
+        motorFL.setPower(frontLeft * gearRatio);
+        motorBR.setPower(backRight * gearRatio);
+        motorBL.setPower(backLeft * gearRatio);
         /** ------------------------------------------------------------------------------------ **/
 
 
@@ -494,6 +580,8 @@ public class BasicTeleop extends OpMode
         telemetry.addData("y", y);
 
         telemetry.addData("Speed", speed);
+
+        telemetry.addData("Angle", angle);
         //We're using tank drive so r isn't really necessary
         //telemetry.addData("r", r);
 
