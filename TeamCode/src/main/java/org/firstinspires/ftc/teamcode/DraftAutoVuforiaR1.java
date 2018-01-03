@@ -129,7 +129,7 @@ public class DraftAutoVuforiaR1 extends AutonomousMethodMaster{
         /* We further illustrate how to decompose the pose into useful rotational and
          * translational components */
         double tX = 0, tY = 0, tZ = 0;
-        int phone_displacement = 10;
+        double phone_displacement = 6.5;
         while (vuMark != RelicRecoveryVuMark.UNKNOWN && (tY > -(33 + phone_displacement) * inchToMm)) // 20 as in 20 inches
         {
             vuMark = RelicRecoveryVuMark.from(relicTemplate);
