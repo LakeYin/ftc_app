@@ -130,7 +130,7 @@ public class DraftAutoVuforiaR1 extends AutonomousMethodMaster{
          * translational components */
         double tX = 0, tY = 0, tZ = 0;
         double phone_displacement = 6.5;
-        while (vuMark != RelicRecoveryVuMark.UNKNOWN && (tY > -(33 + phone_displacement) * inchToMm)) // 20 as in 20 inches
+        while (vuMark != RelicRecoveryVuMark.UNKNOWN && (tY > -(33 - phone_displacement) * inchToMm)) // 20 as in 20 inches
         {
             vuMark = RelicRecoveryVuMark.from(relicTemplate);
             OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)relicTemplate.getListener()).getPose();
