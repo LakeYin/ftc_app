@@ -3,9 +3,16 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 /**
@@ -35,7 +42,6 @@ public class DraftAutoVuforiaB1 extends AutonomousMethodMaster{
 
         telemetry.addData(">", "Press Play to start");
         telemetry.update();
-        waitForStart();
 
         relicTrackables.activate();
 
@@ -44,62 +50,100 @@ public class DraftAutoVuforiaB1 extends AutonomousMethodMaster{
 
         waitForStart();
 
-        // red1
-        //encoderStrafeRight(1, -4);
-        encoderMove(.3, 2,2);
-        // blue1
-        //encoderStrafeRight(1, 24);
-
-
-        int move_inches = 0;
-        int timesChecked = 0;
-
+        double move_inches = 0;
         // identify which vumark
-        while (vuMark == null && timesChecked <=  3){
+        while (vuMark == RelicRecoveryVuMark.UNKNOWN){
             //motorL.setPower(0.25);
             //motorR.setPower(0.25);
             vuMark = RelicRecoveryVuMark.from(relicTemplate);
-            sleep(250);
-            timesChecked ++;
         }
         if(vuMark == RelicRecoveryVuMark.LEFT){
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
 
-            move_inches = 4;
+            move_inches = -7.63;
         }
         else if(vuMark == RelicRecoveryVuMark.CENTER){
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
 
-            move_inches = 12;
+            move_inches = 0;
         }
-        else if(vuMark == RelicRecoveryVuMark.RIGHT){
+        else if(vuMark == RelicRecoveryVuMark.RIGHT) {
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
 
-            move_inches = 20;
+            move_inches = 7.63;
         }
-        else{
-            telemetry.addData("VuMark", "is not visible; moving center");
+        else
+        {
+            telemetry.addData("VuMark", "Couldn't be captured");
             telemetry.update();
 
-            move_inches = 12;
+            move_inches = 0;
         }
 
-        encoderMove(0.2,  32, 32);  // move forward 12 in
-        //encoderMove(0.2, move_inches, move_inches); //move forward 6 in
-        encoderRotateDegrees(0, 0.2, 90); //rotate cw 90 degrees
-        encoderMove(0.2, -12, -12); //move forward 6 in
-        encoderMove(.5, -32 + move_inches, -32 + move_inches); // move direction based on VuMark
+        //sleep(5000);
 
-        encoderRotateDegrees(0,1,180);
-        
-        encoderMove(.5, 4,4);
+        /* We further illustrate how to decompose the pose into useful rotational and
+         * translational components */
+        double tX = 0, tY = 0, tZ = 0;
+        int phone_displacement = 10;
+        while (vuMark != RelicRecoveryVuMark.UNKNOWN && (tY < (33 + phone_displacement) * inchToMm)) // 20 as in 20 inches
+        {
+            vuMark = RelicRecoveryVuMark.from(relicTemplate);
+            OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)relicTemplate.getListener()).getPose();
+            telemetry.addData("Pose", format(pose));
+            if(pose != null) {
+                VectorF trans = pose.getTranslation();
+
+                Orientation rot = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+
+                // Extract the X, Y, and Z components of the offset of the target relative to the robot
+                tX = trans.get(0);
+                tY = trans.get(1);
+                tZ = trans.get(2);
+
+                // Extract the rotational components of the target relative to the robot
+                double rX = rot.firstAngle;
+                double rY = rot.secondAngle;
+                double rZ = rot.thirdAngle;
+
+                telemetry.addData("X translation", tX);
+                telemetry.addData("Y translation", tY);
+                telemetry.addData("Z translation", tZ);
+
+                telemetry.addData("X rotation", rX);
+                telemetry.addData("Y rotation", rY);
+                telemetry.addData("Z rotation", rZ);
+
+                telemetry.update();
+
+                encoderMove(1, 1, 1); // just move...
+            }
+        }
+
+        //sleep(5000);
 
 
+        /*
+        //whether its rawZ or not will depend on how you orientate the phone
+        while(NxtGyroSensor.rawZ() >= 7)
+        {
+            telemetry.addData("GyroDegrees", "02x",NxtGyroSensor.rawZ());
+            encoderMove(.3,1,1); //move 1 inch every time not flat
+        }
+        */
+        encoderMove(.5,  -move_inches,  -move_inches); // move direction based on VuMark
+
+        encoderRotateDegrees(1,1,90);
+        encoderMove(.5, -11,-11);
 
         dumpGlyph(); // dump the glyph
+    }
+
+    String format(OpenGLMatrix transformationMatrix) {
+        return (transformationMatrix != null) ? transformationMatrix.formatAsTransform() : "null";
     }
 
 }
