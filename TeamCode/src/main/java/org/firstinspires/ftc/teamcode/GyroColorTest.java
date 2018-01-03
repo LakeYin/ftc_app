@@ -31,7 +31,7 @@ public class GyroColorTest extends AutonomousMethodMaster {
             telemetry.addData("GyroDegrees Y", "02x", NxtGyroSensor.rawY());
             telemetry.addData("GyroDegrees Z", "02x", NxtGyroSensor.rawZ());
             */
-            
+
             telemetry.addData("Red", "02x", colorSensor.red()); // values of all of the colors
             telemetry.addData("Blue", "02x", colorSensor.blue());
             telemetry.addData("Green", "02x", colorSensor.green());
