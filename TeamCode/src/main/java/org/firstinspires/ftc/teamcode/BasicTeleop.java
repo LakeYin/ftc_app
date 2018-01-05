@@ -357,10 +357,6 @@ public class BasicTeleop extends OpMode
         else
         {
             angle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x);
-            if (gamepad1.left_stick_x < 0)
-            {
-                angle += Math.PI;
-            }
         }
 
         // If it's less than 0
