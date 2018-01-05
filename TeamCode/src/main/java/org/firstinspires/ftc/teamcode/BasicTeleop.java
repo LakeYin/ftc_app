@@ -118,6 +118,7 @@ public class BasicTeleop extends OpMode
         motorFL.setDirection(DcMotor.Direction.REVERSE);        // The front motors are reversed because of the gears on the back motors
 
         motorFlyR.setDirection(DcMotor.Direction.REVERSE);
+        motorLift.setDirection(DcMotor.Direction.REVERSE);
         //motorL.setDirection(DcMotorSimple.Direction.REVERSE)
         /** ------------------------------------------------------------------------------------ **/
 
@@ -138,11 +139,12 @@ public class BasicTeleop extends OpMode
          *      the front of the robot
          *      Slow Mode slows down the robot to make it easier to maneuver slowly **/
         /** ------------------------------------------------------------------------------------ **/
+        /*
         if (gamepad1.right_bumper)
         {
             gear_ratio_is_07 = !(gear_ratio_is_07);
-        }
-        gearRatio = gear_ratio_is_07 ? 0.7 : 0.2;
+        }*/
+        gearRatio = gamepad1.right_bumper ? 1 : 0.2;
         // If right_bumper toggles gear ratio, the default gearRatio is 0.7. Otherwise, the gearRatio is 0.2
 
         /*
@@ -355,6 +357,10 @@ public class BasicTeleop extends OpMode
         else
         {
             angle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x);
+            if (gamepad1.left_stick_x < 0)
+            {
+                angle += Math.PI;
+            }
         }
 
         // If it's less than 0
