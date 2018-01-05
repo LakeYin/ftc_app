@@ -575,7 +575,7 @@ public class AutonomousMethodMaster extends LinearOpMode {
     *
     *
     * */
-    public void setUpGyroScopeHT()
+    /*public void setUpGyroScopeHT()
     {
         //gets the refrence to the hardware for the NxtSensor as well
         //NxtGyroSensor = hardwareMap.get(HiTechnicNxtGyroSensor.class, "gyro");
@@ -585,7 +585,59 @@ public class AutonomousMethodMaster extends LinearOpMode {
         //NxtGyroSensor.calibrate(3000, 100);
         telemetry.log().add("...done...waiting for start...");
 
+    }*/
+
+    public void parkR1()
+    {
+        encoderMove(1, -28, -28);           //Moves off the stone. Moves backwards because of the way the robot will be oriented in position R1.
+        encoderRotateDegrees(0, 1, 90);    //Rotates 90 degrees clockwise so it can back into the parking zone.
+        encoderMove(1, -8, -8);             //Backs into the parking zone.
+        stopMotion();                                                   //Stops all motors - a failsafe for our failsafe.
     }
+
+    public void parkR2()
+    {
+        encoderMove(1, -28, -28);           //Moves off the stone. Moves backwards because of the way the robot will be oriented in position R2.
+        encoderRotateDegrees(1, 1, 90);    //Rotates 90 degrees counterclockwise so it can back into the parking zone.
+        encoderMove(1, -8, -8);             //Backs into the parking zone.
+        stopMotion();                                                   //Stops all motors - a failsafe for our failsafe.
+    }
+
+    public void parkB1()
+    {
+        encoderMove(1, 28, 28);             //Moves off the stone. Moves forwards because of the way the robot will be oriented in position B1.
+        encoderRotateDegrees(0, 1, 90);    //Rotates 90 degrees clockwise so it can back into the parking zone.
+        encoderMove(1, 8, 8);               //Backs into the parking zone.
+        stopMotion();                                                  //Stops all motors - a failsafe for our failsafe.
+    }
+
+    public void parkB2()
+    {
+        encoderMove(1, 28, 28);             //Moves off the stone. Moves backwards because of the way the robot will be oriented in position B2.
+        encoderRotateDegrees(1, 1, 90);    //Rotates 90 degrees counterclockwise so it can back into the parking zone.
+        encoderMove(1, 8, 8);                //Backs into the parking zone.
+        stopMotion();                                                   //Stops all motors - a failsafe for our failsafe.
+    }
+
+    public boolean isFlat(double rotationZ)                     //Returns true if the rotation is within the margin of error of it being flat (on flat ground)
+    {
+        double marginOfError = 5;                               //Margin of error in degrees
+
+        if(rotationZ >= -90 - marginOfError && rotationZ <= -90 + marginOfError)//Is it within the margin of error?
+            return true;
+        else
+            return false;
+    }
+    public boolean isParallel(double rotationY)                 //Returns true if the rotation is within the margin of error of it being parallel to the wall (lined up so it won't go too far off course)
+    {
+        double marginOfError = 2.5;                               //Margin of error in degrees
+
+        if(rotationY >= 0 - marginOfError && rotationY <= 0 + marginOfError)//Is it within the margin of error?
+            return true;
+        else
+            return false;
+    }
+
 
 /*
     public void runColorMode() {

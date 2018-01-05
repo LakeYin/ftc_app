@@ -26,18 +26,22 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 /**
  * Created by Justin Zhu
+ * NOTE:
+ * This is for R2 (Bottom Red)
  */
-@Autonomous(name="Basic Encoders Turn Left", group="Autonomous")
-public class BasicAutoEncoders extends AutonomousMethodMaster{
+@Autonomous(name="Parking R2", group="Autonomous")
+public class ParkingR2 extends AutonomousMethodMaster{
     public void runOpMode() {
 
         initElectronics(0);
 
         waitForStart();
 
-        encoderMove(0.2,  28, 28);  // move forward 12 in
-        encoderRotateDegrees(1, 0.2, 90); //rotate ccw 90 degrees
-        encoderMove(0.2, 8, 8); //move forward 6 in
-        stopMotion(); //should be parked by now
+//        encoderMove(0.2,  28, 28);  // move forward 28 in
+//        encoderRotateDegrees(1, 0.2, 90); //rotate ccw 90 degrees
+//        encoderMove(0.2, 8, 8); //move forward 8 in
+//        stopMotion(); //should be parked by now
+
+        parkR2();
     }
 }

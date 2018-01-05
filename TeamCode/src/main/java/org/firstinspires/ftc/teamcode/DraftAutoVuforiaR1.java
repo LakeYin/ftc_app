@@ -25,7 +25,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 /**
  * Created by justin on 12/1/17.
  */
-@Autonomous(name="Vuforia R1", group="Autonomous")
+//@Autonomous(name="Vuforia R1", group="Autonomous")
 public class DraftAutoVuforiaR1 extends AutonomousMethodMaster{
 
     /** The colorSensor field will contain a reference to our color sensor hardware object */
@@ -128,7 +128,7 @@ public class DraftAutoVuforiaR1 extends AutonomousMethodMaster{
 
         /* We further illustrate how to decompose the pose into useful rotational and
          * translational components */
-        double tX = 0, tY = 0, tZ = 0;
+        double tX = 0, tY = 0, tZ = 0;                                                                //Translation X, Y, and Z.
         double phone_displacement = 6.5;
         while (vuMark != RelicRecoveryVuMark.UNKNOWN && (tY > -(33 - phone_displacement) * inchToMm)) // 20 as in 20 inches
         {
@@ -146,9 +146,9 @@ public class DraftAutoVuforiaR1 extends AutonomousMethodMaster{
                 tZ = trans.get(2);
 
                 // Extract the rotational components of the target relative to the robot
-                double rX = rot.firstAngle;
-                double rY = rot.secondAngle;
-                double rZ = rot.thirdAngle;
+                double rX = rot.firstAngle;                                                             //Rotation along X-axis
+                double rY = rot.secondAngle;                                                            //Rotation along Y-axis
+                double rZ = rot.thirdAngle;                                                             //Rotation along Z-axis
 
                 telemetry.addData("X translation", tX);
                 telemetry.addData("Y translation", tY);
@@ -160,7 +160,7 @@ public class DraftAutoVuforiaR1 extends AutonomousMethodMaster{
 
                 telemetry.update();
 
-                encoderMove(1, -1, -1); // just move...
+                encoderMove(1, -1.5, -1.5); // just move...
             }
         }
 

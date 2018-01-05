@@ -16,10 +16,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 /**
- * Created by justin on 12/1/17.
+ * Created by daniv on 1/5/18.
  */
-//@Autonomous(name="VuforiaB1", group="Autonomous")
-public class DraftAutoVuforiaB1 extends AutonomousMethodMaster{
+@Autonomous(name="VuforiaB1", group="Autonomous")
+public class VuforiaB1 extends AutonomousMethodMaster{
 
     public void runOpMode()
     {
@@ -50,12 +50,21 @@ public class DraftAutoVuforiaB1 extends AutonomousMethodMaster{
 
         waitForStart();
 
+        int timesScanned = 0;
         double move_inches = 0;
-        // identify which vumark
+        // identify which vumark. If it doesn't pick one up after 1,000 tries, it defaults to simple parking.
         while (vuMark == RelicRecoveryVuMark.UNKNOWN){
+            timesScanned++;
             //motorL.setPower(0.25);
             //motorR.setPower(0.25);
+            telemetry.addData("Vumark not found, retrying. Retry attempt: ", timesScanned );
+            telemetry.update();
             vuMark = RelicRecoveryVuMark.from(relicTemplate);
+            if(timesScanned >= 1000)
+            {
+                parkB1();
+                return;
+            }
         }
         if(vuMark == RelicRecoveryVuMark.LEFT){
             telemetry.addData("VuMark", "%s visible", vuMark);
@@ -89,6 +98,8 @@ public class DraftAutoVuforiaB1 extends AutonomousMethodMaster{
          * translational components */
         double tX = 0, tY = 0, tZ = 0;
         double phone_displacement = 6.5;
+        boolean isOnStone = true;                                                                     //Is it on the balancing stone? Defaults to true.
+        boolean isMovingOffStone = false;                                                             //Is it moving off the stone? Defaults to false.
         while (vuMark != RelicRecoveryVuMark.UNKNOWN && (tY < (33 + phone_displacement) * inchToMm)) // 20 as in 20 inches
         {
             vuMark = RelicRecoveryVuMark.from(relicTemplate);
@@ -118,8 +129,30 @@ public class DraftAutoVuforiaB1 extends AutonomousMethodMaster{
                 telemetry.addData("Z rotation", rZ);
 
                 telemetry.update();
-
-                encoderMove(1, 1, 1); // just move...
+                if(isFlat(rZ) && !isOnStone && !isParallel(rY))
+                {
+                    encoderRotateDegrees((rY < 90 ? 0:1), 1, (int)Math.round(Math.abs(rY)));
+                    continue;
+                }
+                if(!isFlat(rZ))
+                {
+                    isMovingOffStone = true;
+                }
+                if(isFlat(rZ) && isMovingOffStone)
+                {
+                    isOnStone = false;
+                    isMovingOffStone = false;
+                }
+                if(!isOnStone)
+                {
+                    double distanceToDestination = Math.abs(tY - ((33 + phone_displacement)*inchToMm));           //The distance to the destination
+                    encoderMove(1, distanceToDestination/inchToMm, distanceToDestination/inchToMm); //Move to the destination
+                    break;
+                }
+                else if(isOnStone)
+                {
+                    encoderMove(1, 1, 1); // just move...
+                }
             }
         }
 
