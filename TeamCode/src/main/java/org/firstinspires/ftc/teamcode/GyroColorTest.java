@@ -21,8 +21,8 @@ public class GyroColorTest extends AutonomousMethodMaster {
     public void runOpMode(){
 
         initElectronics(0); // initialize and set up everything
-        setUpGyroScopeHT();
-        setUpColourSensor();
+        //setUpGyroScopeHT();
+        //setUpColourSensor();
 
         while(opModeIsActive())
         {
