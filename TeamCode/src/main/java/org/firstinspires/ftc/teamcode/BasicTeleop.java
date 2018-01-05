@@ -144,7 +144,7 @@ public class BasicTeleop extends OpMode
         {
             gear_ratio_is_07 = !(gear_ratio_is_07);
         }*/
-        gearRatio = gamepad1.right_bumper ? 1 : 0.2;
+        gearRatio = gamepad1.right_bumper ? 0.2 : 0.7;
         // If right_bumper toggles gear ratio, the default gearRatio is 0.7. Otherwise, the gearRatio is 0.2
 
         /*
