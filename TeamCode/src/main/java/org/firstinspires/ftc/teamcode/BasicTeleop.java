@@ -144,8 +144,8 @@ public class BasicTeleop extends OpMode
         {
             gear_ratio_is_07 = !(gear_ratio_is_07);
         }*/
-        gearRatio = gamepad1.right_bumper ? 0.2 : 0.7;
-        // If right_bumper toggles gear ratio, the default gearRatio is 0.7. Otherwise, the gearRatio is 0.2
+        gearRatio = gamepad1.right_bumper ? 0.2 : 0.6;
+        // If right_bumper toggles gear ratio, the default gearRatio is 0.6. Otherwise, the gearRatio is 0.2
 
         /*
         if (gamepad1.left_bumper)   // toggles front, kinda unnecessary though
@@ -183,17 +183,17 @@ public class BasicTeleop extends OpMode
          *      Includes the glyph platform and lift winch motor codes
          *
          *      Glyph Platform -
-         *      - if GP2.Y, then put glyphs into place position
-         *      - elif GP2.A, ready platform for loading
+         *      - if GP2.Y and flywheels off, then put glyphs into place position
+         *      - elif GP2.A OR flywheels on, ready platform for loading
          *      - else, hold platform at flat position **/
         /** ------------------------------------------------------------------------------------ **/
         // Determines which lift position to use (default is loading)
-        if (gamepad2.y && !gamepad2.a)          //when you press Y on gamepad 2
+        if (gamepad2.y && !gamepad2.a && leftFlywheel == 0)          //when you press Y on gamepad 2
         {
             liftServo = PLATFORM_PLACE;
         }
-        else if (!gamepad2.y && gamepad2.a)     //when you press A on gamepad 2
-        {
+        else if ((!gamepad2.y && gamepad2.a) || leftFlywheel != 0)   //when you press A on gamepad 2
+        {                                                            // or if flywheels are moving
             liftServo = PLATFORM_LOAD;
         }
         else
@@ -584,6 +584,7 @@ public class BasicTeleop extends OpMode
         telemetry.addData("Speed", speed);
 
         telemetry.addData("Angle", angle);
+        telemetry.addData("Hypotenuse (Power)", hypotenuse);
         //We're using tank drive so r isn't really necessary
         //telemetry.addData("r", r);
 
