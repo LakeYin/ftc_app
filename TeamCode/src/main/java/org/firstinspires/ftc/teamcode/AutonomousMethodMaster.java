@@ -62,7 +62,7 @@ public class AutonomousMethodMaster extends LinearOpMode {
     double ticksPerRevNeverest40 = 1120;            // This is the specific value for NeveRest 40s
     double ticksPerRevNeverest20 = 560;             // The specific value for NeveRest 20s
     double ticksPerRevTetrix = 1440;                // The specific value for Tetrix, since only one encoded Tetrix motor (launcher arm)
-    double ticksPer360Turn = 4600 * 2;                  // The amount of ticks for a robot 360 degree turn (AndyMark NeveRest 40s)
+    double ticksPer360Turn = 4600 * 2 * 55 / 56;                  // The amount of ticks for a robot 360 degree turn (AndyMark NeveRest 40s)
     double tickTurnRatio = ticksPer360Turn / 360;   // The ratio for multiplication
     double inchToMm = 25.4;                         // For conversion between the vectors
 
@@ -545,6 +545,18 @@ public class AutonomousMethodMaster extends LinearOpMode {
         // sleep for 1 second
         sleep(1000);
 
+        encoderMove(0.25, 8.5, 8.5);
+
+        sleep(500);
+
+        encoderMove(0.25, -6, -6);
+
+        sleep(500);
+
+        encoderMove(0.25, 4, 4);
+
+        sleep(500);
+
         // restore platform to resting position
         servoLift1.setPosition(PLATFORM_REST);
         servoLift2.setPosition(PLATFORM_REST);
@@ -589,33 +601,41 @@ public class AutonomousMethodMaster extends LinearOpMode {
 
     public void parkR1()
     {
-        encoderMove(1, -28, -28);           //Moves off the stone. Moves backwards because of the way the robot will be oriented in position R1.
-        encoderRotateDegrees(0, 1, 90);    //Rotates 90 degrees clockwise so it can back into the parking zone.
-        encoderMove(1, -8, -8);             //Backs into the parking zone.
+        encoderMove(0.2, -41, -41);           //Moves off the stone. Moves backwards because of the way the robot will be oriented in position R1.
+        encoderRotateDegrees(0, .15, 90);    //Rotates 90 degrees clockwise so it can back into the parking zone.
+        encoderMove(0.5, -14, -14);             //Backs into the parking zone.
+        dumpGlyph();
         stopMotion();                                                   //Stops all motors - a failsafe for our failsafe.
     }
 
     public void parkR2()
     {
-        encoderMove(1, -28, -28);           //Moves off the stone. Moves backwards because of the way the robot will be oriented in position R2.
-        encoderRotateDegrees(1, 1, 90);    //Rotates 90 degrees counterclockwise so it can back into the parking zone.
-        encoderMove(1, -8, -8);             //Backs into the parking zone.
+        encoderMove(0.2, -28, -28);          //Moves off the stone. Moves backwards because of the way the robot will be oriented in position R2.
+        encoderRotateDegrees(1, .15, 90);   //Rotates 90 degrees counterclockwise so it can back into the parking zone.
+        encoderMove(0.5, -7.75, -7.75);              //Backs into the parking zone.
+        encoderRotateDegrees(0, .15, 90);   //Turns
+        encoderMove(0.5, -8, -8);
+        dumpGlyph();
         stopMotion();                                                   //Stops all motors - a failsafe for our failsafe.
     }
 
     public void parkB1()
     {
-        encoderMove(1, 28, 28);             //Moves off the stone. Moves forwards because of the way the robot will be oriented in position B1.
-        encoderRotateDegrees(0, 1, 90);    //Rotates 90 degrees clockwise so it can back into the parking zone.
-        encoderMove(1, 8, 8);               //Backs into the parking zone.
+        encoderMove(0.2, 39, 39);             //Moves off the stone. Moves forwards because of the way the robot will be oriented in position B1.
+        encoderRotateDegrees(0, .15, 90);    //Rotates 90 degrees clockwise so it can back into the parking zone.
+        encoderMove(0.5, -14, -14);               //Backs into the parking zone.
+        dumpGlyph();
         stopMotion();                                                  //Stops all motors - a failsafe for our failsafe.
     }
 
     public void parkB2()
     {
-        encoderMove(1, 28, 28);             //Moves off the stone. Moves backwards because of the way the robot will be oriented in position B2.
-        encoderRotateDegrees(1, 1, 90);    //Rotates 90 degrees counterclockwise so it can back into the parking zone.
-        encoderMove(1, 8, 8);                //Backs into the parking zone.
+        encoderMove(0.2, 28, 28);             //Moves off the stone. Moves backwards because of the way the robot will be oriented in position B2.
+        encoderRotateDegrees(0, .15, 90);    //Rotates 90 degrees clockwise so it can back into the parking zone.
+        encoderMove(0.5, 11, 11);                //Drives into the parking zone.
+        encoderRotateDegrees(0, .15, 90);    //Rotates 90 degrees clockwise so it can back into the parking zone.
+        encoderMove(0.5, -8, -8);
+        dumpGlyph();
         stopMotion();                                                   //Stops all motors - a failsafe for our failsafe.
     }
 
@@ -637,7 +657,6 @@ public class AutonomousMethodMaster extends LinearOpMode {
         else
             return false;
     }
-
 
 /*
     public void runColorMode() {

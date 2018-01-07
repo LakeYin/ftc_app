@@ -100,7 +100,7 @@ public class VuforiaR1 extends AutonomousMethodMaster{
             telemetry.addData("Vumark not found, retrying. Retry attempt: ", timesScanned );
             telemetry.update();
             vuMark = RelicRecoveryVuMark.from(relicTemplate);
-            if(timesScanned >= 10000)
+            if(timesScanned >= 100000)
             {
                 parkR1();
                 return;
@@ -192,7 +192,7 @@ public class VuforiaR1 extends AutonomousMethodMaster{
                 }
                 else if(isOnStone)
                 {
-                    encoderMove(0.5, -1, -1); // just move...
+                    encoderMove(0.2, -1, -1); // just move...
                 }
             }
         }
@@ -211,7 +211,6 @@ public class VuforiaR1 extends AutonomousMethodMaster{
         encoderMove(.5,  move_inches,  move_inches); // move direction based on VuMark
 
         encoderRotateDegrees(0,0.5,90);
-        encoderMove(.5, -11,-11);
 
         dumpGlyph(); // dump the glyph
     }
