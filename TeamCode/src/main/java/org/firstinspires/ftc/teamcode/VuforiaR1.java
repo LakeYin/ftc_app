@@ -100,7 +100,7 @@ public class VuforiaR1 extends AutonomousMethodMaster{
             telemetry.addData("Vumark not found, retrying. Retry attempt: ", timesScanned );
             telemetry.update();
             vuMark = RelicRecoveryVuMark.from(relicTemplate);
-            if(timesScanned >= 1000)
+            if(timesScanned >= 10000)
             {
                 parkR1();
                 return;
@@ -172,7 +172,7 @@ public class VuforiaR1 extends AutonomousMethodMaster{
 
                 if(isFlat(rZ) && !isOnStone && !isParallel(rY))
                 {
-                    encoderRotateDegrees((rY < 90 ? 0:1), 1, (int)Math.round(Math.abs(rY)));
+                    encoderRotateDegrees((rY < 90 ? 0:1), 0.5, (int)Math.round(Math.abs(rY)));
                     continue;
                 }
                 if(!isFlat(rZ))
@@ -187,12 +187,12 @@ public class VuforiaR1 extends AutonomousMethodMaster{
                 if(!isOnStone)
                 {
                     double distanceToDestination = Math.abs(tY -((33 - phone_displacement)*inchToMm));           //The distance to the destination
-                    encoderMove(1, -distanceToDestination/inchToMm, -distanceToDestination/inchToMm); //Move to the destination
+                    encoderMove(0.5, -distanceToDestination/inchToMm, -distanceToDestination/inchToMm); //Move to the destination
                     break;
                 }
                 else if(isOnStone)
                 {
-                    encoderMove(1, -1, -1); // just move...
+                    encoderMove(0.5, -1, -1); // just move...
                 }
             }
         }
@@ -210,7 +210,7 @@ public class VuforiaR1 extends AutonomousMethodMaster{
         */
         encoderMove(.5,  move_inches,  move_inches); // move direction based on VuMark
 
-        encoderRotateDegrees(0,1,90);
+        encoderRotateDegrees(0,0.5,90);
         encoderMove(.5, -11,-11);
 
         dumpGlyph(); // dump the glyph
