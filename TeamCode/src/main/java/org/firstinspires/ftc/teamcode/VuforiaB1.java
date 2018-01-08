@@ -98,9 +98,10 @@ public class VuforiaB1 extends AutonomousMethodMaster{
          * translational components */
         double tX = 0, tY = 0, tZ = 0;
         double phone_displacement = 6.5;
+        double pictograph_displacement = ((double) 3 + 5.75);
         boolean isOnStone = true;                                                                     //Is it on the balancing stone? Defaults to true.
         boolean isMovingOffStone = false;                                                             //Is it moving off the stone? Defaults to false.
-        while (vuMark != RelicRecoveryVuMark.UNKNOWN && (tY < (39 + phone_displacement) * inchToMm)) // 20 as in 20 inches
+        while (vuMark != RelicRecoveryVuMark.UNKNOWN && (tY < ((double) 36 + phone_displacement + pictograph_displacement) * inchToMm)) // 36 as in 36 inches
         {
             vuMark = RelicRecoveryVuMark.from(relicTemplate);
             OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)relicTemplate.getListener()).getPose();
