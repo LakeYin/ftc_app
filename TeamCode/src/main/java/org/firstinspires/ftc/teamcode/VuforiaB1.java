@@ -63,8 +63,6 @@ public class VuforiaB1 extends AutonomousMethodMaster{
             if(timesScanned >= 10000)
             {
                 parkB1();
-                dumpGlyph();
-                stopMotion();
                 return;
             }
         }
