@@ -21,7 +21,5 @@ public class ParkingB2 extends AutonomousMethodMaster{
 //        stopMotion(); //should be parked by now
 
         parkB2();
-        dumpGlyph();
-        stopMotion();                                                   //Stops all motors - a failsafe for our failsafe.
     }
 }

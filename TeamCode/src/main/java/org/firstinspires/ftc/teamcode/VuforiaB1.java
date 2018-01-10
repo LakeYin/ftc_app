@@ -64,6 +64,7 @@ public class VuforiaB1 extends AutonomousMethodMaster{
             {
                 parkB1();
                 dumpGlyph();
+                stopMotion();
                 return;
             }
         }

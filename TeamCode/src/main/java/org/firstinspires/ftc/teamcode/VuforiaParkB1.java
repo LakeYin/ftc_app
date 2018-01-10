@@ -63,7 +63,6 @@ public class VuforiaParkB1 extends AutonomousMethodMaster{
             if(timesScanned >= 10000)
             {
                 parkB1();
-                dumpGlyph();
                 return;
             }
         }
@@ -96,8 +95,9 @@ public class VuforiaParkB1 extends AutonomousMethodMaster{
 
         //sleep(5000);
 
-        parkB1(); // drive to the zone
+        parkVuforiaB1(); // drive to the zone
         encoderStrafeRight(0.5, move_inches); // move based on vumark
+        encoderMove(0.5, -14, -14);               //Backs into the parking zone.
         dumpGlyph();
         stopMotion(); //Stops all motors - a failsafe for our failsafe.
     }

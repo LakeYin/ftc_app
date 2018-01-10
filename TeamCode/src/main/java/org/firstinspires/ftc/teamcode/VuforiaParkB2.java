@@ -27,7 +27,7 @@ import static com.sun.tools.javac.util.Constants.format;
 /**
  * Created by Lake Yin on 1/10/18.
  */
-@Autonomous(name="VuforiaB2", group="Autonomous")
+@Autonomous(name="Vuforia Park B2", group="Autonomous")
 public class VuforiaParkB2 extends AutonomousMethodMaster{
 
     public void runOpMode()
@@ -75,7 +75,6 @@ public class VuforiaParkB2 extends AutonomousMethodMaster{
             if(timesScanned >= 10000)
             {
                 parkB2();
-                dumpGlyph();
                 return;
             }
         }
@@ -104,8 +103,9 @@ public class VuforiaParkB2 extends AutonomousMethodMaster{
             move_inches = 0;
         }
 
-        parkB2(); // drive to the zone
+        parkVuforiaB2(); // drive to the zone
         encoderStrafeRight(0.5, move_inches); // move based on vumark
+        encoderMove(0.5, -8, -8); // back into zone
         dumpGlyph();
         stopMotion(); //Stops all motors - a failsafe for our failsafe.
     }

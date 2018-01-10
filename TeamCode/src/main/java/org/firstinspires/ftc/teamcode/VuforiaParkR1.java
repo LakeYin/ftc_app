@@ -25,7 +25,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 /**
  * Created by Lake Yin on 1/10/18.
  */
-//@Autonomous(name="Vuforia Park R1", group="Autonomous")
+@Autonomous(name="Vuforia Park R1", group="Autonomous")
 public class VuforiaParkR1 extends AutonomousMethodMaster{
 
     /** The colorSensor field will contain a reference to our color sensor hardware object */
@@ -104,7 +104,6 @@ public class VuforiaParkR1 extends AutonomousMethodMaster{
             if(timesScanned >= 10000)
             {
                 parkR1();
-                dumpGlyph();
                 return;
             }
         }
@@ -136,8 +135,9 @@ public class VuforiaParkR1 extends AutonomousMethodMaster{
 
         //sleep(5000);
 
-        parkR1(); // drive to the zone
+        parkVuforiaR1(); // drive to the zone
         encoderStrafeRight(0.5, move_inches); // move based on vumark
+        encoderMove(0.5, -14, -14);             //Backs into the parking zone.
         dumpGlyph();
         stopMotion(); //Stops all motors - a failsafe for our failsafe.
     }

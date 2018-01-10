@@ -104,6 +104,7 @@ public class VuforiaR1 extends AutonomousMethodMaster{
             {
                 parkR1();
                 dumpGlyph();
+                stopMotion();
                 return;
             }
         }
@@ -142,7 +143,7 @@ public class VuforiaR1 extends AutonomousMethodMaster{
         double pictograph_displacement = (double) 3 + 5.75;
         boolean isOnStone = true;                                                                     //Is it on the balancing stone? Defaults to true.
         boolean isMovingOffStone = false;                                                             //Is it moving off the stone? Defaults to false.
-        while (vuMark != RelicRecoveryVuMark.UNKNOWN && (tY > -((double) 36 - phone_displacement - pictograph_displacement) * inchToMm)) // 36 as in 36 inches
+        while (vuMark != RelicRecoveryVuMark.UNKNOWN /*&& (tY > -((double) 36 - phone_displacement - pictograph_displacement) * inchToMm)*/) // 36 as in 36 inches
         {
             vuMark = RelicRecoveryVuMark.from(relicTemplate);
             OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)relicTemplate.getListener()).getPose();
@@ -213,6 +214,7 @@ public class VuforiaR1 extends AutonomousMethodMaster{
         encoderMove(.5,  move_inches,  move_inches); // move direction based on VuMark
 
         encoderRotateDegrees(0,0.5,90);
+        encoderMove(.5, -8, -8);
 
         dumpGlyph(); // dump the glyph
     }
