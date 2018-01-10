@@ -19,6 +19,9 @@ public class ParkingB2 extends AutonomousMethodMaster{
 //        encoderRotateDegrees(0, 0.2, 90); //rotate cw 90 degrees
 //        encoderMove(0.2, 8, 8); //move forward 8 in
 //        stopMotion(); //should be parked by now
+
         parkB2();
+        dumpGlyph();
+        stopMotion();                                                   //Stops all motors - a failsafe for our failsafe.
     }
 }

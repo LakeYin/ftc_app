@@ -16,10 +16,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 /**
- * Created by daniv on 1/5/18.
+ * Created by Lake Yin on 1/10/18.
  */
-@Autonomous(name="VuforiaB1", group="Autonomous")
-public class VuforiaB1 extends AutonomousMethodMaster{
+@Autonomous(name="Vuforia Park B1", group="Autonomous")
+public class VuforiaParkB1 extends AutonomousMethodMaster{
 
     public void runOpMode()
     {
@@ -67,6 +67,7 @@ public class VuforiaB1 extends AutonomousMethodMaster{
                 return;
             }
         }
+
         if(vuMark == RelicRecoveryVuMark.LEFT){
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
@@ -95,86 +96,10 @@ public class VuforiaB1 extends AutonomousMethodMaster{
 
         //sleep(5000);
 
-        /* We further illustrate how to decompose the pose into useful rotational and
-         * translational components */
-        double tX = 0, tY = 0, tZ = 0;
-        double phone_displacement = 6.5;
-        double pictograph_displacement = ((double) 3 + 5.75);
-        boolean isOnStone = true;                                                                     //Is it on the balancing stone? Defaults to true.
-        boolean isMovingOffStone = false;                                                             //Is it moving off the stone? Defaults to false.
-        while (vuMark != RelicRecoveryVuMark.UNKNOWN && (tY < ((double) 36 + phone_displacement + pictograph_displacement) * inchToMm)) // 36 as in 36 inches
-        {
-            vuMark = RelicRecoveryVuMark.from(relicTemplate);
-            OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)relicTemplate.getListener()).getPose();
-            telemetry.addData("Pose", format(pose));
-            if(pose != null) {
-                VectorF trans = pose.getTranslation();
-
-                Orientation rot = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
-
-                // Extract the X, Y, and Z components of the offset of the target relative to the robot
-                tX = trans.get(0);
-                tY = trans.get(1);
-                tZ = trans.get(2);
-
-                // Extract the rotational components of the target relative to the robot
-                double rX = rot.firstAngle;
-                double rY = rot.secondAngle;
-                double rZ = rot.thirdAngle;
-
-                telemetry.addData("X translation", tX);
-                telemetry.addData("Y translation", tY);
-                telemetry.addData("Z translation", tZ);
-
-                telemetry.addData("X rotation", rX);
-                telemetry.addData("Y rotation", rY);
-                telemetry.addData("Z rotation", rZ);
-
-                telemetry.update();
-                if(isFlat(rZ) && !isOnStone && !isParallel(rY))
-                {
-                    encoderRotateDegrees((rY < 90 ? 0:1), 0.5, (int)Math.round(Math.abs(rY)));
-                    continue;
-                }
-                if(!isFlat(rZ))
-                {
-                    isMovingOffStone = true;
-                }
-                if(isFlat(rZ) && isMovingOffStone)
-                {
-                    isOnStone = false;
-                    isMovingOffStone = false;
-                }
-                if(!isOnStone)
-                {
-                    double distanceToDestination = Math.abs(tY - ((33 + phone_displacement)*inchToMm));           //The distance to the destination
-                    encoderMove(0.5, distanceToDestination/inchToMm, distanceToDestination/inchToMm); //Move to the destination
-                    break;
-                }
-                else if(isOnStone)
-                {
-                    encoderMove(0.2, 1, 1); // just move...
-                }
-            }
-        }
-
-        //sleep(5000);
-
-
-        /*
-        //whether its rawZ or not will depend on how you orientate the phone
-        while(NxtGyroSensor.rawZ() >= 7)
-        {
-            telemetry.addData("GyroDegrees", "02x",NxtGyroSensor.rawZ());
-            encoderMove(.3,1,1); //move 1 inch every time not flat
-        }
-        */
-        encoderMove(.5,  -move_inches,  -move_inches); // move direction based on VuMark
-
-        encoderRotateDegrees(1,0.5,90);
-        encoderMove(.5, -11,-11);
-
-        dumpGlyph(); // dump the glyph
+        parkB1(); // drive to the zone
+        encoderStrafeRight(0.5, move_inches); // move based on vumark
+        dumpGlyph();
+        stopMotion(); //Stops all motors - a failsafe for our failsafe.
     }
 
     String format(OpenGLMatrix transformationMatrix) {

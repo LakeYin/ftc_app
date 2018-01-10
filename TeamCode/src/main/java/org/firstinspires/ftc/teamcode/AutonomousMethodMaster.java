@@ -604,8 +604,7 @@ public class AutonomousMethodMaster extends LinearOpMode {
         encoderMove(0.2, -41, -41);           //Moves off the stone. Moves backwards because of the way the robot will be oriented in position R1.
         encoderRotateDegrees(0, .15, 90);    //Rotates 90 degrees clockwise so it can back into the parking zone.
         encoderMove(0.5, -14, -14);             //Backs into the parking zone.
-        dumpGlyph();
-        stopMotion();                                                   //Stops all motors - a failsafe for our failsafe.
+
     }
 
     public void parkR2()
@@ -615,8 +614,7 @@ public class AutonomousMethodMaster extends LinearOpMode {
         encoderMove(0.5, -7.75, -7.75);              //Backs into the parking zone.
         encoderRotateDegrees(0, .15, 90);   //Turns
         encoderMove(0.5, -8, -8);
-        dumpGlyph();
-        stopMotion();                                                   //Stops all motors - a failsafe for our failsafe.
+
     }
 
     public void parkB1()
@@ -624,8 +622,7 @@ public class AutonomousMethodMaster extends LinearOpMode {
         encoderMove(0.2, 39, 39);             //Moves off the stone. Moves forwards because of the way the robot will be oriented in position B1.
         encoderRotateDegrees(0, .15, 90);    //Rotates 90 degrees clockwise so it can back into the parking zone.
         encoderMove(0.5, -14, -14);               //Backs into the parking zone.
-        dumpGlyph();
-        stopMotion();                                                  //Stops all motors - a failsafe for our failsafe.
+
     }
 
     public void parkB2()
@@ -635,8 +632,7 @@ public class AutonomousMethodMaster extends LinearOpMode {
         encoderMove(0.5, 11, 11);                //Drives into the parking zone.
         encoderRotateDegrees(0, .15, 90);    //Rotates 90 degrees clockwise so it can back into the parking zone.
         encoderMove(0.5, -8, -8);
-        dumpGlyph();
-        stopMotion();                                                   //Stops all motors - a failsafe for our failsafe.
+
     }
 
     public boolean isFlat(double rotationZ)                     //Returns true if the rotation is within the margin of error of it being flat (on flat ground)

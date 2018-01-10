@@ -103,6 +103,7 @@ public class VuforiaR1 extends AutonomousMethodMaster{
             if(timesScanned >= 100000)
             {
                 parkR1();
+                dumpGlyph();
                 return;
             }
         }
