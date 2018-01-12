@@ -27,7 +27,7 @@ import static com.sun.tools.javac.util.Constants.format;
 /**
  * Created by justin on 12/1/17.
  */
-@Autonomous(name="Vuforia R2", group="Autonomous")
+//@Autonomous(name="Vuforia R2", group="Autonomous")
 public class DraftAutoVuforiaR2 extends AutonomousMethodMaster{
 
     public void runOpMode()

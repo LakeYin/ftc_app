@@ -1,13 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.app.Activity;
 import android.view.View;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
-import com.qualcomm.robotcore.hardware.SwitchableLight;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
@@ -23,10 +18,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 /**
- * Created by daniv on 1/5/18.
+ * Created by Lake Yin on 1/12/2018.
  */
-@Autonomous(name="Vuforia R1", group="Autonomous")
-public class VuforiaR1 extends AutonomousMethodMaster{
+
+@Autonomous(name="Vuforia R2", group="Autonomous")
+public class VuforiaR2 extends AutonomousMethodMaster{
 
     /** The colorSensor field will contain a reference to our color sensor hardware object */
     /** The relativeLayout field is used to aid in providing interesting visual feedback
@@ -211,7 +207,7 @@ public class VuforiaR1 extends AutonomousMethodMaster{
             encoderMove(.3,1,1); //move 1 inch every time not flat
         }
         */
-        parkVuforiaR1(tY);
+        parkVuforiaR2(tY);
         encoderStrafeRight(0.5, move_inches); // move based on vumark
         encoderMove(0.5, -14, -14);               //Backs into the parking zone.
         dumpGlyph();
@@ -224,3 +220,4 @@ public class VuforiaR1 extends AutonomousMethodMaster{
     }
 
 }
+

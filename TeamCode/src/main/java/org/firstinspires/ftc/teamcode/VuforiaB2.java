@@ -1,13 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.app.Activity;
-import android.view.View;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
-import com.qualcomm.robotcore.hardware.SwitchableLight;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
@@ -22,13 +15,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
-import static com.sun.tools.javac.util.Constants.format;
-
 /**
- * Created by justin on 12/1/17.
+ * Created by Lake Yin on 1/12/2018.
  */
-//@Autonomous(name="VuforiaB2", group="Autonomous")
-public class DraftAutoVuforiaB2 extends AutonomousMethodMaster{
+
+@Autonomous(name="VuforiaB2", group="Autonomous")
+public class VuforiaB2 extends AutonomousMethodMaster{
 
     public void runOpMode()
     {
@@ -51,67 +43,66 @@ public class DraftAutoVuforiaB2 extends AutonomousMethodMaster{
 
         telemetry.addData(">", "Press Play to start");
         telemetry.update();
-        waitForStart();
 
         relicTrackables.activate();
 
         RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
 
+
         waitForStart();
 
-        // blue2
-        //encoderStrafeRight(1, 24);
-
-        int move_inches = 0;
-        int timesChecked = 0;
-
-        // identify which vumark
-        while (vuMark == null && timesChecked <= 3){
+        int timesScanned = 0;
+        double move_inches = 0;
+        // identify which vumark. If it doesn't pick one up after 1,000 tries, it defaults to simple parking.
+        while (vuMark == RelicRecoveryVuMark.UNKNOWN){
+            timesScanned++;
             //motorL.setPower(0.25);
             //motorR.setPower(0.25);
+            telemetry.addData("Vumark not found, retrying. Retry attempt: ", timesScanned );
+            telemetry.update();
             vuMark = RelicRecoveryVuMark.from(relicTemplate);
-            sleep(250);
-            timesChecked ++;
-            if(timesChecked %2 ==1) {
-                telemetry.addData("VuMark", "is not visible; re-aligning");
-                telemetry.update();
-                encoderStrafeRight(1, 1);
-            }
-            else
+            if(timesScanned >= 10000)
             {
-                telemetry.addData("VuMark", "is not visible; re-aligning");
-                telemetry.update();
-                encoderStrafeRight(1, -1);
+                parkB1();
+                return;
             }
         }
         if(vuMark == RelicRecoveryVuMark.LEFT){
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
 
-            move_inches = 4;
+            move_inches = -7.63;
         }
         else if(vuMark == RelicRecoveryVuMark.CENTER){
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
 
-            move_inches = 12;
+            move_inches = 0;
         }
-        else if(vuMark == RelicRecoveryVuMark.RIGHT){
+        else if(vuMark == RelicRecoveryVuMark.RIGHT) {
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
 
-            move_inches = 20;
+            move_inches = 7.63;
         }
-        else{
-                telemetry.addData("VuMark", "is not visible; Moving to center");
-                telemetry.update();
-                move_inches = 12;
+        else
+        {
+            telemetry.addData("VuMark", "Couldn't be captured");
+            telemetry.update();
+
+            move_inches = 0;
         }
+
+        //sleep(5000);
 
         /* We further illustrate how to decompose the pose into useful rotational and
          * translational components */
         double tX = 0, tY = 0, tZ = 0;
-        while (vuMark != RelicRecoveryVuMark.UNKNOWN && (tY < 20 * inchToMm)) // 20 as in 20 inches
+        double phone_displacement = 6.5;
+        double pictograph_displacement = ((double) 3 + 5.75);
+        boolean isOnStone = true;                                                                     //Is it on the balancing stone? Defaults to true.
+        boolean isMovingOffStone = false;                                                             //Is it moving off the stone? Defaults to false.
+        while (vuMark != RelicRecoveryVuMark.UNKNOWN && (tY < ((double) 36 + phone_displacement + pictograph_displacement) * inchToMm)) // 36 as in 36 inches
         {
             vuMark = RelicRecoveryVuMark.from(relicTemplate);
             OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)relicTemplate.getListener()).getPose();
@@ -140,28 +131,54 @@ public class DraftAutoVuforiaB2 extends AutonomousMethodMaster{
                 telemetry.addData("Z rotation", rZ);
 
                 telemetry.update();
-
-                encoderMove(1, -2, -2); // just move...
+                if(isFlat(rZ) && !isOnStone && !isParallel(rY))
+                {
+                    encoderRotateDegrees((rY < 90 ? 0:1), 0.5, (int)Math.round(Math.abs(rY)));
+                    continue;
+                }
+                if(!isFlat(rZ))
+                {
+                    isMovingOffStone = true;
+                }
+                if(isFlat(rZ) && isMovingOffStone)
+                {
+                    isOnStone = false;
+                    isMovingOffStone = false;
+                }
+                if(!isOnStone)
+                {
+                    double distanceToDestination = Math.abs(tY - ((33 + phone_displacement)*inchToMm));           //The distance to the destination
+                    encoderMove(0.5, distanceToDestination/inchToMm, distanceToDestination/inchToMm); //Move to the destination
+                    break;
+                }
+                else if(isOnStone)
+                {
+                    encoderMove(0.2, 1, 1); // just move...
+                }
             }
         }
 
-        encoderRotateDegrees(0, 1, 90); // rotate into direction
-
-        encoderStrafeRight(1, move_inches); // move direction based on VuMark
-
-        encoderMove(1, 12, 12); // move forward to position
-        encoderMove(.5, -32 + move_inches, -32 + move_inches); // move direction based on VuMark
-
-        encoderRotateDegrees(0,0.5,90);
-        
-        encoderMove(0.5, 4,4);
-        
-        encoderRotateDegrees(0,0.5,90);
-        
-        encoderMove(0.5, 2,2);
+        //sleep(5000);
 
 
-        dumpGlyph(); // dump the glyph
+        /*
+        //whether its rawZ or not will depend on how you orientate the phone
+        while(NxtGyroSensor.rawZ() >= 7)
+        {
+            telemetry.addData("GyroDegrees", "02x",NxtGyroSensor.rawZ());
+            encoderMove(.3,1,1); //move 1 inch every time not flat
+        }
+        */
+        parkVuforiaB2(tY);
+        encoderStrafeRight(0.5, move_inches); // move based on vumark
+        encoderMove(0.5, -14, -14);               //Backs into the parking zone.
+        dumpGlyph();
+        stopMotion(); //Stops all motors - a failsafe for our failsafe.
+    }
+
+    String format(OpenGLMatrix transformationMatrix) {
+        return (transformationMatrix != null) ? transformationMatrix.formatAsTransform() : "null";
     }
 
 }
+

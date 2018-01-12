@@ -645,30 +645,32 @@ public class AutonomousMethodMaster extends LinearOpMode {
         stopMotion();
     }
 
-    public void parkVuforiaB1()
+    /*
+     * adjust is the value you want to subtract from the absolute distance travelled forward from the platform
+     */
+    public void parkVuforiaB1(double adjust)
     {
-        encoderMove(0.2, 39, 39);             //Moves off the stone. Moves forwards because of the way the robot will be oriented in position B1.
+        encoderMove(0.2, 39 + adjust, 39 + adjust);             //Moves off the stone. Moves forwards because of the way the robot will be oriented in position B1.
         encoderRotateDegrees(0, .15, 90);    //Rotates 90 degrees clockwise so it can back into the parking zone.
     }
 
-    public void parkVuforiaR1()
+    public void parkVuforiaR1(double adjust)
     {
-        encoderMove(0.2, -41, -41);           //Moves off the stone. Moves backwards because of the way the robot will be oriented in position R1.
+        encoderMove(0.2, -41 + adjust, -41 + adjust);           //Moves off the stone. Moves backwards because of the way the robot will be oriented in position R1.
         encoderRotateDegrees(0, .15, 90);    //Rotates 90 degrees clockwise so it can back into the parking zone.
-
     }
 
-    public void parkVuforiaR2()
+    public void parkVuforiaR2(double adjust)
     {
-        encoderMove(0.2, -28, -28);          //Moves off the stone. Moves backwards because of the way the robot will be oriented in position R2.
+        encoderMove(0.2, -28 + adjust, -28 + adjust);          //Moves off the stone. Moves backwards because of the way the robot will be oriented in position R2.
         encoderRotateDegrees(1, .15, 90);   //Rotates 90 degrees counterclockwise so it can back into the parking zone.
         encoderMove(0.5, -7.75, -7.75);              //Backs into the parking zone.
         encoderRotateDegrees(0, .15, 90);   //Turns
     }
 
-    public void parkVuforiaB2()
+    public void parkVuforiaB2(double adjust)
     {
-        encoderMove(0.2, 28, 28);             //Moves off the stone. Moves backwards because of the way the robot will be oriented in position B2.
+        encoderMove(0.2, 28 + adjust, 28 + adjust);             //Moves off the stone. Moves backwards because of the way the robot will be oriented in position B2.
         encoderRotateDegrees(0, .15, 90);    //Rotates 90 degrees clockwise so it can back into the parking zone.
         encoderMove(0.5, 11, 11);                //Drives into the parking zone.
         encoderRotateDegrees(0, .15, 90);    //Rotates 90 degrees clockwise so it can back into the parking zone.

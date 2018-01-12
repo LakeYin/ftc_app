@@ -168,12 +168,11 @@ public class VuforiaB1 extends AutonomousMethodMaster{
             encoderMove(.3,1,1); //move 1 inch every time not flat
         }
         */
-        encoderMove(.5,  -move_inches,  -move_inches); // move direction based on VuMark
-
-        encoderRotateDegrees(1,0.5,90);
-        encoderMove(.5, -11,-11);
-
-        dumpGlyph(); // dump the glyph
+        parkVuforiaB1(tY);
+        encoderStrafeRight(0.5, move_inches); // move based on vumark
+        encoderMove(0.5, -14, -14);               //Backs into the parking zone.
+        dumpGlyph();
+        stopMotion(); //Stops all motors - a failsafe for our failsafe.
     }
 
     String format(OpenGLMatrix transformationMatrix) {

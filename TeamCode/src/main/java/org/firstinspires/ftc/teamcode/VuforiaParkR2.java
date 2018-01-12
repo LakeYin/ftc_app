@@ -104,7 +104,7 @@ public class VuforiaParkR2 extends AutonomousMethodMaster{
             move_inches = 0;
         }
 
-        parkVuforiaR2(); // drive to the zone
+        parkVuforiaR2(0); // drive to the zone
         encoderStrafeRight(0.5, move_inches); // move based on vumark
         encoderMove(0.5, -8, -8); // backs into zone
         dumpGlyph();
