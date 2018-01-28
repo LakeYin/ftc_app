@@ -37,6 +37,11 @@ public class BasicTeleop extends OpMode
 
     /** Initialize variables for loop() **/
     /** ------------------------------------------------------------------------------------ **/
+    // Numerical variables
+    static double cmToIn = 2.54;
+    static double EncoderCPR_NeveRest20 = 560;
+    //static double EncoderCPR_NeveRest40 = 1120;
+
     double x, y, r = 0;
     double slope, power;
 
@@ -58,8 +63,19 @@ public class BasicTeleop extends OpMode
     static double PLATFORM_LOAD = 0.92;         //0 = up completely, 1 = down completely, 0.8 = flat
     static double PLATFORM_REST = 0.75;
     static double PLATFORM_PLACE = 0.28;
+
     static double MAX_LIFT_POWER_UP = 0.5;
     static double MAX_LIFT_POWER_DOWN = 0.25;
+
+    static double LIFT_ROW1 = 0;                // These are in inches
+    static double LIFT_ROW2 = 6;                // These represent the height required to drop the
+    static double LIFT_ROW3 = 12;               // glyphs into their respective rows
+
+    static double WINCH_CENTER_DIAMETER = 30;   // In cm
+
+    double winchGearRatio = 1 / 3;
+    /* Current gearing: Bevel to bevel, 1:3, winch*/
+
     double liftPower = 0;
 
     boolean swap_front_back;
@@ -108,6 +124,7 @@ public class BasicTeleop extends OpMode
         /** ------------------------------------------------------------------------------------ **/
         //motorR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODERS);
         //motorL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODERS);
+        motorLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         /** ------------------------------------------------------------------------------------ **/
 
 
@@ -181,13 +198,23 @@ public class BasicTeleop extends OpMode
 
         /** Lift Code
          *      Includes the glyph platform and lift winch motor codes
+         *      1/28/18 - now includes positions for lift to go to
          *
          *      Glyph Platform -
          *      - if GP2.Y and flywheels off, then put glyphs into place position
          *      - elif GP2.A OR flywheels on, ready platform for loading
-         *      - else, hold platform at flat position **/
+         *      - else, hold platform at flat position
+         *
+         *      Lift Positions -
+         *      - Uses GP2.DPAD to move the lift up and down
+         *      - GP2.DPAD_UP moves to Row 3, GP2.DPAD_DOWN moves to Row 2, default position is Row 1
+         *      **/
+
         /** ------------------------------------------------------------------------------------ **/
-        // Determines which lift position to use (default is loading)
+        // Doubles for positional lift
+        double ratioCPR = (1 / winchGearRatio) * cmToIn * EncoderCPR_NeveRest20 / (WINCH_CENTER_DIAMETER * Math.PI);
+
+        // Determines which platform position to use (default is loading)
         if (gamepad2.y && !gamepad2.a && leftFlywheel == 0)          //when you press Y on gamepad 2
         {
             liftServo = PLATFORM_PLACE;
@@ -208,16 +235,36 @@ public class BasicTeleop extends OpMode
 
 
         // Moves the lift motor
-        liftPower = gamepad2.left_stick_y;
-        if (liftPower < 0)                      // Gamepad2 LStick Y is up
-        {
-            liftPower *= MAX_LIFT_POWER_UP;
+        if (gamepad2.left_bumper || gamepad2.dpad_down || gamepad2.dpad_up)
+        {   // If GP2.DPAD is active, do lifting positions
+            // Assume that 0 is at the very bottom
+            motorLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            int ratioCPRInt;
+            if (gamepad2.dpad_up)       // Go to Row 3
+            {
+                motorLift.setTargetPosition((int)(LIFT_ROW3 * ratioCPR));
+
+            }
+            if (gamepad2.dpad_down)     // Go to Row 2
+            {
+                motorLift.setTargetPosition((int)(LIFT_ROW2 * ratioCPR));
+            }
+            else                        // Default to Row 1
+            {
+                motorLift.setTargetPosition((int)(LIFT_ROW1 * ratioCPR));
+            }
+            liftPower = MAX_LIFT_POWER_UP;
         }
-        else                                    // If it's down or 0
-        {
-            liftPower *= MAX_LIFT_POWER_DOWN;
+        else
+        {   // Use default joystick lift
+            motorLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            // Set Power
+            liftPower = gamepad2.left_stick_y;
+            liftPower *= (liftPower < 0) ? MAX_LIFT_POWER_UP : MAX_LIFT_POWER_DOWN;
+                // If LStick is up, then multiply liftPower by POWER_UP, else by POWER_DOWN
         }
-//        liftPower = liftPower * liftPower * liftPower;
+
         liftPower = Range.clip(liftPower, -0.5,0.5 );
         motorLift.setPower(liftPower);
         /** ------------------------------------------------------------------------------------ **/
@@ -577,6 +624,7 @@ public class BasicTeleop extends OpMode
         //telemetry.addData("Left Power ", leftPower);
         telemetry.addData("Servo Power", flywheel);
         telemetry.addData("Platform Position", liftServo);
+        telemetry.addData("Lift Position", motorLift.getCurrentPosition());
 
         telemetry.addData("x", x);
         telemetry.addData("y", y);
