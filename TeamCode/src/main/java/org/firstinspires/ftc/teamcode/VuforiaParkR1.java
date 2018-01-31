@@ -32,6 +32,9 @@ public class VuforiaParkR1 extends AutonomousMethodMaster{
     /** The relativeLayout field is used to aid in providing interesting visual feedback
      * in this sample application; you probably *don't* need something analogous when you
      * use a color sensor on your robot */
+
+    //2.875,10.5, 16.25
+
     View relativeLayout;
 
     public void runOpMode()

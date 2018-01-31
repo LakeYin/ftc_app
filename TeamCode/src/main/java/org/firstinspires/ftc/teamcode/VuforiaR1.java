@@ -110,7 +110,7 @@ public class VuforiaR1 extends AutonomousMethodMaster{
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
 
-            move_inches = -7.63;
+            move_inches = 7.63;
         }
         else if(vuMark == RelicRecoveryVuMark.CENTER){
             telemetry.addData("VuMark", "%s visible", vuMark);
@@ -122,7 +122,7 @@ public class VuforiaR1 extends AutonomousMethodMaster{
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
 
-            move_inches = 7.63;
+            move_inches = -7.63;
         }
         else
         {
@@ -189,7 +189,7 @@ public class VuforiaR1 extends AutonomousMethodMaster{
                 }
                 if(!isOnStone)
                 {
-                    double distanceToDestination = Math.abs(tY -((33 - phone_displacement)*inchToMm));           //The distance to the destination
+                    double distanceToDestination = Math.abs(tY -((27.5 - phone_displacement)*inchToMm));           //The distance to the destination
                     encoderMove(0.5, -distanceToDestination/inchToMm, -distanceToDestination/inchToMm); //Move to the destination
                     break;
                 }
@@ -211,8 +211,8 @@ public class VuforiaR1 extends AutonomousMethodMaster{
             encoderMove(.3,1,1); //move 1 inch every time not flat
         }
         */
-        parkVuforiaR1(tY);
-        encoderStrafeRight(0.5, move_inches); // move based on vumark
+        encoderMove(0.5,move_inches,move_inches);
+        encoderRotateDegrees(0,0.5, 90);
         encoderMove(0.5, -14, -14);               //Backs into the parking zone.
         dumpGlyph();
         stopMotion(); //Stops all motors - a failsafe for our failsafe.

@@ -656,7 +656,7 @@ public class AutonomousMethodMaster extends LinearOpMode {
 
     public void parkVuforiaR1(double adjust)
     {
-        encoderMove(0.2, -41 + adjust, -41 + adjust);           //Moves off the stone. Moves backwards because of the way the robot will be oriented in position R1.
+        encoderMove(0.2, -36 + adjust, -36 + adjust);           //Moves off the stone. Moves backwards because of the way the robot will be oriented in position R1.
         encoderRotateDegrees(0, .15, 90);    //Rotates 90 degrees clockwise so it can back into the parking zone.
     }
 
