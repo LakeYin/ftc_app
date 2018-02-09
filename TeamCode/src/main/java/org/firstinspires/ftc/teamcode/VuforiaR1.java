@@ -189,8 +189,12 @@ public class VuforiaR1 extends AutonomousMethodMaster{
                 }
                 if(!isOnStone)
                 {
-                    double distanceToDestination = Math.abs(tY -((27.5 - phone_displacement)*inchToMm));           //The distance to the destination
-                    encoderMove(0.5, -distanceToDestination/inchToMm, -distanceToDestination/inchToMm); //Move to the destination
+                    double distanceToDestination = Math.abs(tY + ((36 - pictograph_displacement - phone_displacement)*inchToMm));//The distance to the destination
+                    distanceToDestination /= inchToMm;
+                    telemetry.addData("inches to move: ", distanceToDestination);
+                    telemetry.update();
+                    sleep(5000);
+                    encoderMove(0.5, -distanceToDestination, -distanceToDestination); //Move to the destination
                     break;
                 }
                 else if(isOnStone)

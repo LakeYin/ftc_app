@@ -64,8 +64,8 @@ public class BasicTeleop extends OpMode
     static double PLATFORM_REST = 0.75;
     static double PLATFORM_PLACE = 0.28;
 
-    static double MAX_LIFT_POWER_UP = 0.5;
-    static double MAX_LIFT_POWER_DOWN = 0.25;
+    static double MAX_LIFT_POWER_UP = 0.65;
+    static double MAX_LIFT_POWER_DOWN = 0.5;
 
     static double LIFT_ROW1 = 0;                // These are in inches
     static double LIFT_ROW2 = 6;                // These represent the height required to drop the
@@ -242,16 +242,16 @@ public class BasicTeleop extends OpMode
             int ratioCPRInt;
             if (gamepad2.dpad_up)       // Go to Row 3
             {
-                motorLift.setTargetPosition((int)(LIFT_ROW3 * ratioCPR));
+                motorLift.setTargetPosition((int)(LIFT_ROW3 * -ratioCPR));
 
             }
             if (gamepad2.dpad_down)     // Go to Row 2
             {
-                motorLift.setTargetPosition((int)(LIFT_ROW2 * ratioCPR));
+                motorLift.setTargetPosition((int)(LIFT_ROW2 * -ratioCPR));
             }
             else                        // Default to Row 1
             {
-                motorLift.setTargetPosition((int)(LIFT_ROW1 * ratioCPR));
+                motorLift.setTargetPosition((int)(LIFT_ROW1 * -ratioCPR));
             }
             liftPower = MAX_LIFT_POWER_UP;
         }
