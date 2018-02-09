@@ -242,16 +242,16 @@ public class BasicTeleop extends OpMode
             int ratioCPRInt;
             if (gamepad2.dpad_up)       // Go to Row 3
             {
-                motorLift.setTargetPosition((int)(LIFT_ROW3 * -ratioCPR));
+                motorLift.setTargetPosition((int)(LIFT_ROW3 * ratioCPR));
 
             }
             if (gamepad2.dpad_down)     // Go to Row 2
             {
-                motorLift.setTargetPosition((int)(LIFT_ROW2 * -ratioCPR));
+                motorLift.setTargetPosition((int)(LIFT_ROW2 * ratioCPR));
             }
             else                        // Default to Row 1
             {
-                motorLift.setTargetPosition((int)(LIFT_ROW1 * -ratioCPR));
+                motorLift.setTargetPosition((int)(LIFT_ROW1 * ratioCPR));
             }
             liftPower = MAX_LIFT_POWER_UP;
         }
