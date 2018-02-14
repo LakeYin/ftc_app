@@ -62,7 +62,7 @@ public class BasicTeleop extends OpMode
     double liftServo = 180;
     static double PLATFORM_LOAD = 0.92;         //0 = up completely, 1 = down completely, 0.8 = flat
     static double PLATFORM_REST = 0.75;
-    static double PLATFORM_PLACE = 0.28;
+    static double PLATFORM_PLACE = 0.18;
 
     static double MAX_LIFT_POWER_UP = 0.65;
     static double MAX_LIFT_POWER_DOWN = 0.5;
@@ -73,7 +73,7 @@ public class BasicTeleop extends OpMode
 
     static double WINCH_CENTER_DIAMETER = 30;   // In cm
 
-    double winchGearRatio = 1 / 3;
+    double winchGearRatio = 1.0 / 3.0;
     /* Current gearing: Bevel to bevel, 1:3, winch*/
 
     double liftPower = 0;

@@ -110,7 +110,7 @@ public class VuforiaR1 extends AutonomousMethodMaster{
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
 
-            move_inches = 7.63;
+            move_inches = -8; //-7.63;
         }
         else if(vuMark == RelicRecoveryVuMark.CENTER){
             telemetry.addData("VuMark", "%s visible", vuMark);
@@ -122,7 +122,7 @@ public class VuforiaR1 extends AutonomousMethodMaster{
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
 
-            move_inches = -7.63;
+            move_inches = 8; //7.63;
         }
         else
         {
@@ -138,7 +138,7 @@ public class VuforiaR1 extends AutonomousMethodMaster{
          * translational components */
         double tX = 0, tY = 0, tZ = 0;                                                                //Translation X, Y, and Z.
         double phone_displacement = (double) 6.5;
-        double pictograph_displacement = (double) 3 + 5.75;
+        double pictograph_displacement = (double) 3 + 5.5;
         boolean isOnStone = true;                                                                     //Is it on the balancing stone? Defaults to true.
         boolean isMovingOffStone = false; //Is it moving off the stone? Defaults to false.
         int inchesAdjusted = 0;
@@ -189,8 +189,9 @@ public class VuforiaR1 extends AutonomousMethodMaster{
                 }
                 if(!isOnStone)
                 {
-                    double distanceToDestination = Math.abs(tY + ((36 - pictograph_displacement - phone_displacement)*inchToMm));//The distance to the destination
+                    double distanceToDestination = Math.abs(tY+ (36 *inchToMm)); //The distance to the destination
                     distanceToDestination /= inchToMm;
+                    telemetry.addData("tY: (inches)", (tY / inchToMm));
                     telemetry.addData("inches to move: ", distanceToDestination);
                     telemetry.update();
                     sleep(5000);
@@ -215,7 +216,8 @@ public class VuforiaR1 extends AutonomousMethodMaster{
             encoderMove(.3,1,1); //move 1 inch every time not flat
         }
         */
-        encoderMove(0.5,move_inches,move_inches);
+        encoderMove(0.5, -2,-2);
+        encoderMove(0.5, move_inches, move_inches);
         encoderRotateDegrees(0,0.5, 90);
         encoderMove(0.5, -14, -14);               //Backs into the parking zone.
         dumpGlyph();
