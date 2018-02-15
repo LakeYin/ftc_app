@@ -71,10 +71,10 @@ public class BasicTeleop extends OpMode
     static double LIFT_ROW2 = 6;                // These represent the height required to drop the
     static double LIFT_ROW3 = 12;               // glyphs into their respective rows
 
-    static double WINCH_CENTER_DIAMETER = 30;   // In cm
+    static double WINCH_CENTER_DIAMETER = 3.0;  // In cm
 
-    double winchGearRatio = 1.0 / 3.0;
-    /* Current gearing: Bevel to bevel, 1:3, winch*/
+    double winchGearRatio = 1.0 / 4.0;
+    /* Current gearing: Worm Gear, winch*/
 
     double liftPower = 0;
 
@@ -212,7 +212,7 @@ public class BasicTeleop extends OpMode
 
         /** ------------------------------------------------------------------------------------ **/
         // Doubles for positional lift
-        double ratioCPR = (1 / winchGearRatio) * cmToIn * EncoderCPR_NeveRest20 / (WINCH_CENTER_DIAMETER * Math.PI);
+        double ratioCPR = (1.0 / winchGearRatio) * cmToIn * EncoderCPR_NeveRest20 / (WINCH_CENTER_DIAMETER * Math.PI);
 
         // Determines which platform position to use (default is loading)
         if (gamepad2.y && !gamepad2.a && leftFlywheel == 0)          //when you press Y on gamepad 2
@@ -394,16 +394,17 @@ public class BasicTeleop extends OpMode
         {
             if (gamepad1.left_stick_y == 1)
             {
-                angle = Math.PI / 2;
+                angle = 3 * Math.PI / 2;
             }
             else
             {
-                angle = 3 * Math.PI / 2;
+                angle = Math.PI / 2;
             }
         }
         else
         {
-            angle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x);
+            angle = Math.atan2((-gamepad1.left_stick_y), gamepad1.left_stick_x);
+                // For some reason, down on a joystick is positive y
         }
 
         // If it's less than 0
@@ -413,7 +414,7 @@ public class BasicTeleop extends OpMode
         }
 
         // If it's somehow becomes more than 2PI
-        angle %= 2 * Math.PI;
+        angle %= (2 * Math.PI);
 
         // The hypotenuse (essentially the power of the joystick)
         hypotenuse = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
@@ -486,7 +487,7 @@ public class BasicTeleop extends OpMode
         if (gamepad1.left_bumper)
         {
             zone = -3;          // To prevent the DPad from being used
-            if (angle == 0)                                                 // If Right
+            if (angle == 0 || angle == -0 || angle == (2 * Math.PI))       // If Right
             {
                 frontLeft = backRight = hypotenuse;
                 frontRight = backLeft = -hypotenuse;
@@ -526,6 +527,11 @@ public class BasicTeleop extends OpMode
                 frontLeft = backRight = -hypotenuse * Math.tan((7 * Math.PI / 4) - angle);
                 frontRight = backLeft = -hypotenuse;
             }
+
+            frontLeft = -frontLeft;
+            frontRight = -frontRight;
+            backLeft = -backLeft;
+            backRight = -backRight;
         }
         /* ---------------------------------------------------------- */
 
@@ -631,8 +637,14 @@ public class BasicTeleop extends OpMode
 
         telemetry.addData("Speed", speed);
 
-        telemetry.addData("Angle", angle);
-        telemetry.addData("Hypotenuse (Power)", hypotenuse);
+        //telemetry.addData("Angle", angle);
+        //telemetry.addData("Hypotenuse (Power)", hypotenuse);
+
+        telemetry.addData("motorFL", frontLeft * gearRatio);
+        telemetry.addData("motorFR", frontRight * gearRatio);
+        telemetry.addData("motorBL", backLeft * gearRatio);
+        telemetry.addData("motorBR", backRight * gearRatio);
+        telemetry.addData("ratioCPR", ratioCPR);
         //We're using tank drive so r isn't really necessary
         //telemetry.addData("r", r);
 
