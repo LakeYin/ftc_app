@@ -90,8 +90,8 @@ public class VuforiaR1 extends AutonomousMethodMaster{
         telemetry.addData("Blue", "02x", colorSensor.blue());
         telemetry.addData("Green", "02x", colorSensor.green());*/
 
-        int timesScanned = 0;
-        double move_inches = 0;
+        int timesScanned = 0; // How many times the robot has attempted to scan
+        double move_inches; // Variable to add depending on which VuMark
         // identify which vumark. If it doesn't pick one up after 100,000 tries, it defaults to simple parking.
         while (vuMark == RelicRecoveryVuMark.UNKNOWN){
             timesScanned++;
@@ -106,7 +106,8 @@ public class VuforiaR1 extends AutonomousMethodMaster{
                 return;
             }
         }
-        //Determines which VuMark is present
+
+        // Sets move_inches based on which VuMark is present
         if(vuMark == RelicRecoveryVuMark.LEFT){
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
@@ -152,7 +153,7 @@ public class VuforiaR1 extends AutonomousMethodMaster{
             if(pose != null) {
                 VectorF trans = pose.getTranslation();
 
-                //Gets orientation from the phone
+                // Gets orientation from the phone
                 Orientation rot = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
 
                 // Extract the X, Y, and Z components of the offset of the target relative to the robot

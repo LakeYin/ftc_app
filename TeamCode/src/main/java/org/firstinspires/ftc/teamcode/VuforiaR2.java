@@ -86,9 +86,9 @@ public class VuforiaR2 extends AutonomousMethodMaster{
         telemetry.addData("Blue", "02x", colorSensor.blue());
         telemetry.addData("Green", "02x", colorSensor.green());*/
 
-        int timesScanned = 0;
-        double move_inches = 0;
-        // identify which vumark. If it doesn't pick one up after 1,000 tries, it defaults to simple parking.
+        int timesScanned = 0; // How many times the robot has attempted to scan
+        double move_inches; // Variable to add depending on which VuMark
+        // identify which vumark. If it doesn't pick one up after 100,000 tries, it defaults to simple parking.
         while (vuMark == RelicRecoveryVuMark.UNKNOWN){
             timesScanned++;
             //motorL.setPower(0.25);
@@ -102,6 +102,8 @@ public class VuforiaR2 extends AutonomousMethodMaster{
                 return;
             }
         }
+
+        // Sets move_inches based on which VuMark is present
         if(vuMark == RelicRecoveryVuMark.LEFT){
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
@@ -147,6 +149,7 @@ public class VuforiaR2 extends AutonomousMethodMaster{
             if(pose != null) {
                 VectorF trans = pose.getTranslation();
 
+                //Gets orientation from the phone
                 Orientation rot = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
 
                 // Extract the X, Y, and Z components of the offset of the target relative to the robot
@@ -169,6 +172,7 @@ public class VuforiaR2 extends AutonomousMethodMaster{
 
                 telemetry.update();
 
+                //Checks if robot is on the stone
                 if(isFlat(rZ) && !isOnStone && !isParallel(rY))
                 {
                     encoderRotateDegrees((rY < 90 ? 0:1), 0.5, (int)Math.round(Math.abs(rY)));
@@ -183,12 +187,14 @@ public class VuforiaR2 extends AutonomousMethodMaster{
                     isOnStone = false;
                     isMovingOffStone = false;
                 }
+                //When the robot is off the stone, calculate the distance to the cryptobox
                 if(!isOnStone)
                 {
                     double distanceToDestination = Math.abs(tY -((33 - phone_displacement)*inchToMm));           //The distance to the destination
                     encoderMove(0.5, -distanceToDestination/inchToMm, -distanceToDestination/inchToMm); //Move to the destination
                     break;
                 }
+                //If robot is on stone, keep adjusting
                 else if(isOnStone)
                 {
                     encoderMove(0.2, -2, -2); // just move...

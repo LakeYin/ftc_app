@@ -50,9 +50,9 @@ public class VuforiaB1 extends AutonomousMethodMaster{
 
         waitForStart();
 
-        int timesScanned = 0;
-        double move_inches = 0;
-        // identify which vumark. If it doesn't pick one up after 1,000 tries, it defaults to simple parking.
+        int timesScanned = 0; // How many times the robot has attempted to scan the VuMark
+        double move_inches; // Variable to add depending on which VuMark
+        // identify which vumark. If it doesn't pick one up after 100,000 tries, it defaults to simple parking.
         while (vuMark == RelicRecoveryVuMark.UNKNOWN){
             timesScanned++;
             //motorL.setPower(0.25);
@@ -60,12 +60,14 @@ public class VuforiaB1 extends AutonomousMethodMaster{
             telemetry.addData("Vumark not found, retrying. Retry attempt: ", timesScanned );
             telemetry.update();
             vuMark = RelicRecoveryVuMark.from(relicTemplate);
-            if(timesScanned >= 10000)
+            if(timesScanned >= 100000)
             {
                 parkB1();
                 return;
             }
         }
+
+        //Sets value to move_inches based on which VuMark
         if(vuMark == RelicRecoveryVuMark.LEFT){
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
@@ -96,7 +98,7 @@ public class VuforiaB1 extends AutonomousMethodMaster{
 
         /* We further illustrate how to decompose the pose into useful rotational and
          * translational components */
-        double tX = 0, tY = 0, tZ = 0;
+        double tX = 0, tY = 0, tZ = 0; // translation X, translation Y, translation Z
         double phone_displacement = 6.5;
         double pictograph_displacement = ((double) 3 + 5.75);
         boolean isOnStone = true;                                                                     //Is it on the balancing stone? Defaults to true.
@@ -109,6 +111,7 @@ public class VuforiaB1 extends AutonomousMethodMaster{
             if(pose != null) {
                 VectorF trans = pose.getTranslation();
 
+                // Gets robot orientation from the phone
                 Orientation rot = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
 
                 // Extract the X, Y, and Z components of the offset of the target relative to the robot
@@ -130,6 +133,8 @@ public class VuforiaB1 extends AutonomousMethodMaster{
                 telemetry.addData("Z rotation", rZ);
 
                 telemetry.update();
+
+                // Checks if the robot is on the stone
                 if(isFlat(rZ) && !isOnStone && !isParallel(rY))
                 {
                     encoderRotateDegrees((rY < 90 ? 0:1), 0.5, (int)Math.round(Math.abs(rY)));
@@ -144,6 +149,8 @@ public class VuforiaB1 extends AutonomousMethodMaster{
                     isOnStone = false;
                     isMovingOffStone = false;
                 }
+
+                // If the robot is off the stone, calculate the distance to the cryptobox
                 if(!isOnStone)
                 {
                     /*
@@ -161,6 +168,8 @@ public class VuforiaB1 extends AutonomousMethodMaster{
                     encoderMove(0.5, distanceToDestination, distanceToDestination); //Move to the destination
                     break;
                 }
+
+                // If the robot is still on the stone, keep adjusting
                 else if(isOnStone)
                 {
                     encoderMove(0.2, 2, 2); // just move...
