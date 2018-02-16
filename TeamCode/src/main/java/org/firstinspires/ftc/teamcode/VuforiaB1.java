@@ -158,7 +158,7 @@ public class VuforiaB1 extends AutonomousMethodMaster{
                     telemetry.addData("inches to move: ", distanceToDestination);
                     telemetry.update();
                     sleep(5000);
-                    encoderMove(0.5, -distanceToDestination, -distanceToDestination); //Move to the destination
+                    encoderMove(0.5, distanceToDestination, distanceToDestination); //Move to the destination
                     break;
                 }
                 else if(isOnStone)
