@@ -182,7 +182,7 @@ public class BasicTeleop extends OpMode
          *                  left trigger is pressed. **/
         /** ------------------------------------------------------------------------------------ **/
         leftFlywheel = (gamepad2.right_trigger - gamepad2.left_trigger) * flyMaxPower;
-        leftFlywheel = Range.clip(leftFlywheel, -1, 1);
+        leftFlywheel = Range.clip(leftFlywheel, -0.75, 0.75);
 
         rightFlywheel = leftFlywheel;
 
