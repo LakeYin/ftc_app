@@ -223,7 +223,7 @@ public class Vuforia45R1 extends AutonomousMethodMaster{
         encoderMove(0.5, -(move_inches * Math.sqrt(2)), -(move_inches * Math.sqrt(2)));
         encoderMove(0.5, 4, 4);
         encoderRotateDegrees(1, 0.25, 45);
-        encoderMove(0.5, -DANWHY4INCHES?, -DANWHY4INCHES?);
+        encoderMove(0.5, -1.1715728753, -1.1715728753);
         encoderRotateDegrees(0, 0.5, 90);
         encoderMove(0.5, -12.4852813742, -12.4852813742);
         stopMotion(); //Stops all motors - a failsafe for our failsafe.
