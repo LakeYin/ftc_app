@@ -92,6 +92,8 @@ public class Vuforia45R1 extends AutonomousMethodMaster{
 
         int timesScanned = 0;
         double move_inches = 0;
+        double distanceFromWall = 4 + 4.5 * Math.sqrt(2.0);             //Distance from the wall that the robot will attempt
+        // to reach. It is necessary to stop the robot from driving into the cryptobox or getting sutck.
         // identify which vumark. If it doesn't pick one up after 1,000 tries, it defaults to simple parking.
         while (vuMark == RelicRecoveryVuMark.UNKNOWN){
             timesScanned++;
