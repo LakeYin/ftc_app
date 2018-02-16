@@ -62,8 +62,8 @@ public class AutonomousMethodMaster extends LinearOpMode {
     double ticksPerRevNeverest40 = 1120;            // This is the specific value for NeveRest 40s
     double ticksPerRevNeverest20 = 560;             // The specific value for NeveRest 20s
     double ticksPerRevTetrix = 1440;                // The specific value for Tetrix, since only one encoded Tetrix motor (launcher arm)
-    double ticksPer360Turn = 4600 * 2 * 55 / 56;                  // The amount of ticks for a robot 360 degree turn (AndyMark NeveRest 40s)
-    double tickTurnRatio = ticksPer360Turn / 360;   // The ratio for multiplication
+    double ticksPer360Turn = 4600.0 * 2.0 * 55.0 / 56.0;                  // The amount of ticks for a robot 360 degree turn (AndyMark NeveRest 40s)
+    double tickTurnRatio = ticksPer360Turn / 360.0;   // The ratio for multiplication
     double inchToMm = 25.4;                         // For conversion between the vectors
 
     double wheelDiameter = 4.5;                     // Diameter of the current mecanum wheels in inches
