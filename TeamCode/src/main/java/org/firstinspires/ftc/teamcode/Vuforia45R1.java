@@ -93,45 +93,45 @@ public class Vuforia45R1 extends AutonomousMethodMaster{
         int timesScanned = 0;
         double move_inches = 0;
         double distanceFromWall = 4 + 4.5 * Math.sqrt(2.0);             //Distance from the wall that the robot will attempt
-        // to reach. It is necessary to stop the robot from driving into the cryptobox or getting stuck.
+        // to reach. It is necessary to stop the robot from driving into the cryptobox or getting sutck.
         // identify which vumark. If it doesn't pick one up after 1,000 tries, it defaults to simple parking.
         while (vuMark == RelicRecoveryVuMark.UNKNOWN){
             timesScanned++;
             //motorL.setPower(0.25);
             //motorR.setPower(0.25);
-            telemetry.addData("Vumark no\n" +
-                    "                return;t found, retrying. Retry attempt: ", timesScanned );
+            telemetry.addData("Vumark not found, retrying. Retry attempt: ", timesScanned );
             telemetry.update();
             vuMark = RelicRecoveryVuMark.from(relicTemplate);
             if(timesScanned >= 100000)
             {
                 parkR1();
+                return;
             }
         }
         if(vuMark == RelicRecoveryVuMark.LEFT){
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
 
-            move_inches = -8; //-7.63;
+            move_inches = distanceFromWall; //-7.63;
         }
         else if(vuMark == RelicRecoveryVuMark.CENTER){
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
 
-            move_inches = 0;
+            move_inches = distanceFromWall + 8;
         }
         else if(vuMark == RelicRecoveryVuMark.RIGHT) {
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
 
-            move_inches = 8; //7.63;
+            move_inches = distanceFromWall + 16; //7.63;
         }
         else
         {
             telemetry.addData("VuMark", "Couldn't be captured");
             telemetry.update();
 
-            move_inches = 0;
+            move_inches = distanceFromWall + 8;
         }
 
         //sleep(5000);
@@ -191,7 +191,7 @@ public class Vuforia45R1 extends AutonomousMethodMaster{
                 }
                 if(!isOnStone)
                 {
-                    double distanceToDestination = Math.abs(tY+ (36 *inchToMm)); //The distance to the destination
+                    double distanceToDestination = Math.abs(tY+ (move_inches)); //The distance to the destination
                     distanceToDestination /= inchToMm;
                     telemetry.addData("tY: (inches)", (tY / inchToMm));
                     telemetry.addData("inches to move: ", distanceToDestination);
@@ -218,11 +218,14 @@ public class Vuforia45R1 extends AutonomousMethodMaster{
             encoderMove(.3,1,1); //move 1 inch every time not flat
         }
         */
-        encoderMove(0.5, -2,-2);
-        encoderMove(0.5, move_inches, move_inches);
-        encoderRotateDegrees(0,0.5, 90);
-        encoderMove(0.5, -14, -14);               //Backs into the parking zone.
-        dumpGlyph();
+
+        encoderRotateDegrees(0, 0.25, 45);
+        encoderMove(0.5, -(move_inches * Math.sqrt(2)), -(move_inches * Math.sqrt(2)));
+        encoderMove(0.5, 4, 4);
+        encoderRotateDegrees(1, 0.25, 45);
+        encoderMove(0.5, -JUSTINADDTHEHORIZONTAL, -JUSTINADDTHEHORIZONTAL);
+        encoderRotateDegrees(0, 0.5, 90);
+        encoderMove(0.5, -JUSTINADDTHEVERTICAL, -JUSTINADDTHEVERTICAL);
         stopMotion(); //Stops all motors - a failsafe for our failsafe.
 
     }
