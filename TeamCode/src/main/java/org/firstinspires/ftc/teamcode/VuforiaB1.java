@@ -81,6 +81,7 @@ public class VuforiaB1 extends AutonomousMethodMaster{
             move_inches = 0;
         }
         else if(vuMark == RelicRecoveryVuMark.RIGHT) {
+
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
 
