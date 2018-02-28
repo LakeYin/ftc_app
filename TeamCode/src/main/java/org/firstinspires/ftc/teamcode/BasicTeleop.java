@@ -19,8 +19,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-
 /**
  * Created by user on 9/22/2017.
  */
@@ -235,7 +233,6 @@ public class BasicTeleop extends OpMode
         servoLift1.setPosition(liftServo);
         servoLift2.setPosition(liftServo);
 
-        String targetLocation = "";
 
         // Moves the lift motor
         if (gamepad2.left_bumper || gamepad2.dpad_down || gamepad2.dpad_up)
@@ -246,45 +243,30 @@ public class BasicTeleop extends OpMode
             if (gamepad2.dpad_up)       // Go to Row 3
             {
                 motorLift.setTargetPosition((int)(LIFT_ROW3 * ratioCPR));
-                targetLocation="Row 3";
 
             }
             if (gamepad2.dpad_down)     // Go to Row 2
             {
                 motorLift.setTargetPosition((int)(LIFT_ROW2 * ratioCPR));
-                targetLocation="Row 2";
             }
             else                        // Default to Row 1
             {
                 motorLift.setTargetPosition((int)(LIFT_ROW1 * ratioCPR));
-                targetLocation="Row 1";
             }
             liftPower = MAX_LIFT_POWER_UP;
-
-            liftPower = Range.clip(liftPower, -0.5,0.5 );
-            motorLift.setPower(liftPower);
-
-            while(motorLift.isBusy()){
-                telemetry.addData("Lift Motor is lifting to " , targetLocation);
-                telemetry.update();
-            }
-
-            motorLift.setPower(0);
-            motorLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
         else
-        {   // Use default joystick lift(WINCH_CENTER_DIAMETER * Math.PI)
+        {   // Use default joystick lift
             motorLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             // Set Power
             liftPower = gamepad2.left_stick_y;
             liftPower *= (liftPower < 0) ? MAX_LIFT_POWER_UP : MAX_LIFT_POWER_DOWN;
                 // If LStick is up, then multiply liftPower by POWER_UP, else by POWER_DOWN
-
-            liftPower = Range.clip(liftPower, -0.5,0.5 );
-            motorLift.setPower(liftPower);
         }
 
+        liftPower = Range.clip(liftPower, -0.5,0.5 );
+        motorLift.setPower(liftPower);
         /** ------------------------------------------------------------------------------------ **/
 
 
