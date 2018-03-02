@@ -51,12 +51,11 @@ import java.lang.Math;
 public class AutonomousMethodMaster extends LinearOpMode {
 
     /** Declaring the motor variables **/
-    /** ---------------------------------------------------------------------------------------- **/
-
-    private DcMotor motorFR, motorBR, motorFL, motorBL, motorLift, motorFlyL, motorFlyR, motorLeft, motorRight;
-    private Servo servoLift1, servoLift2; // also, this goes in port one of the servo controller
+    static double PLATFORM_LOAD = 0.92;             //0 = up completely, 1 = down completely, 0.8 = flat
+    static double PLATFORM_REST = 0.8;
 
     /** ---------------------------------------------------------------------------------------- **/
+    static double PLATFORM_PLACE = 0.2;
     /** For Encoders and specific turn values **/
     /* ------------------------------------------------------------------------------------------ */
     double ticksPerRevNeverest40 = 1120;            // This is the specific value for NeveRest 40s
@@ -65,18 +64,46 @@ public class AutonomousMethodMaster extends LinearOpMode {
     double ticksPer360Turn = 4600.0 * 2.0 * 55.0 / 56.0;                  // The amount of ticks for a robot 360 degree turn (AndyMark NeveRest 40s)
     double tickTurnRatio = ticksPer360Turn / 360.0;   // The ratio for multiplication
     double inchToMm = 25.4;                         // For conversion between the vectors
-
     double wheelDiameter = 4.5;                     // Diameter of the current mecanum wheels in inches
     double ticksPerInchNeverest40 = (ticksPerRevNeverest40 / (wheelDiameter * Math.PI));        // The number of encoder ticks per inch (specific to NeveRest 40s
-
-    static double PLATFORM_LOAD = 0.92;             //0 = up completely, 1 = down completely, 0.8 = flat
-    static double PLATFORM_REST = 0.8;
-    static double PLATFORM_PLACE = 0.2;
     ColorSensor colorSensor;
+    VuforiaLocalizer vuforia;
+    /** ---------------------------------------------------------------------------------------- **/
+
+    private DcMotor motorFR, motorBR, motorFL, motorBL, motorLift, motorFlyL, motorFlyR, motorLeft, motorRight;
 
     //HiTechnicNxtGyroSensor NxtGyroSensor;
     /* ------------------------------------------------------------------------------------------ */
+    private Servo servoLift1, servoLift2; // also, this goes in port one of the servo controller
 
+    /**
+     * These methods control the encoder modes of the motor
+     *
+     * Mode Numbers:
+     *  0 = RUN_TO_POSITION
+     *  1 = RUN_USING_ENCODER
+     *  2 = RUN_WITHOUT_ENCODER
+     *  3 = STOP_AND_RESET_ENCODERS
+     *  4 = RESET_ENCODERS
+     **/
+
+    // added a new sleep method because the default one isn't working
+    public static void sleepNew(long sleepTime)
+    {
+        long wakeupTime = System.currentTimeMillis() + sleepTime;
+
+        while (sleepTime > 0)
+        {
+            try
+            {
+                Thread.sleep(sleepTime);
+            }
+            catch (InterruptedException e)
+            {
+                sleepTime = wakeupTime - System.currentTimeMillis();
+            }
+        }
+    }
 
     public void runOpMode() throws InterruptedException {
         /** This is the method that executes the code and what the robot should do **/
@@ -97,16 +124,6 @@ public class AutonomousMethodMaster extends LinearOpMode {
 
     }
 
-    /**
-     * These methods control the encoder modes of the motor
-     *
-     * Mode Numbers:
-     *  0 = RUN_TO_POSITION
-     *  1 = RUN_USING_ENCODER
-     *  2 = RUN_WITHOUT_ENCODER
-     *  3 = STOP_AND_RESET_ENCODERS
-     *  4 = RESET_ENCODERS
-     **/
     /** ----------------------------------------- **/
     public void encoderMode(int mode) {
         /**NOTE:
@@ -151,6 +168,12 @@ public class AutonomousMethodMaster extends LinearOpMode {
             motorBR.setMode(DcMotor.RunMode.RESET_ENCODERS);
         }
     }
+    /** ----------------------------------------- **/
+
+
+    /**
+     * These methods are used to set up the robot
+     **/
 
     public void addTelemetryData(String string1, String string2) {
         telemetry.addData(string1, string2);
@@ -164,12 +187,6 @@ public class AutonomousMethodMaster extends LinearOpMode {
         motorFR.setPower(0);
         motorBR.setPower(0);
     }
-    /** ----------------------------------------- **/
-
-
-    /**
-     * These methods are used to set up the robot
-     **/
 
     /** ----------------------------------------- **/
     public void initElectronics(int mode){
@@ -429,7 +446,6 @@ public class AutonomousMethodMaster extends LinearOpMode {
         encoderMode(1);
     }
 
-
     public void encoderRotateDegrees(int direction, double power, int robotDegrees) {
 
         /** This method, given an input amount of degrees, makes the robot turn
@@ -490,8 +506,6 @@ public class AutonomousMethodMaster extends LinearOpMode {
         encoderMode(1);
     }
 
-    VuforiaLocalizer vuforia;
-
     public void VuforiaSetup(){
         // set up all of the vuforia
         // tells vuforia to use the camera
@@ -517,27 +531,8 @@ public class AutonomousMethodMaster extends LinearOpMode {
         relicTrackables.activate();
     }
 
-    // added a new sleep method because the default one isn't working
-    public static void sleepNew(long sleepTime)
-    {
-        long wakeupTime = System.currentTimeMillis() + sleepTime;
-
-        while (sleepTime > 0)
-        {
-            try
-            {
-                Thread.sleep(sleepTime);
-            }
-            catch (InterruptedException e)
-            {
-                sleepTime = wakeupTime - System.currentTimeMillis();
-            }
-        }
-    }
-
     // method to dump the glyphs during autonomous
-    public void dumpGlyph()
-    {
+    public void dumpGlyph() {
         // tells the servos to dump the glyph
         servoLift1.setPosition(PLATFORM_PLACE);
         servoLift2.setPosition(PLATFORM_PLACE);
@@ -549,7 +544,7 @@ public class AutonomousMethodMaster extends LinearOpMode {
 
         sleep(500);
         int timesPushed = 0;
-        while(timesPushed < 2){
+        while (timesPushed < 2) {
 
             encoderMove(0.25, -6, -6);
 
@@ -562,11 +557,24 @@ public class AutonomousMethodMaster extends LinearOpMode {
             timesPushed++;
         }
 
+        encoderMove(0.2, -1, -1);
 
-        // restore platform to resting position
         servoLift1.setPosition(PLATFORM_REST);
         servoLift2.setPosition(PLATFORM_REST);
     }
+
+        public void liftPlatform() {
+            // tells the servos to dump the glyph
+            servoLift1.setPosition(PLATFORM_PLACE);
+            servoLift2.setPosition(PLATFORM_PLACE);
+        }
+
+        public void lowerPlatform() {
+            // tells the servos lower the platform
+            servoLift1.setPosition(PLATFORM_REST);
+            servoLift2.setPosition(PLATFORM_REST);
+        }
+
     /** ----------------------------------------- **/
         /*
     * colour Sensor code set up Josh K.

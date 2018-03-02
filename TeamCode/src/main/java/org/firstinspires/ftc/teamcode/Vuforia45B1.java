@@ -172,19 +172,46 @@ public class Vuforia45B1 extends AutonomousMethodMaster{
                 }
                 else if(isOnStone)
                 {
-                    encoderMove(0.2, -2, -2); // just move...
+                    encoderMove(0.2, -0.5, -0.5); // just move...
                 }
             }
         }
+        double halfCryptoboxWallLength = 1.75/2.54; //1.75cm in inches
+        double halfCryptoboxColumnLength = 7.63/2;
+        double verticalFromCryptobox = Math.sqrt(Math.pow(9.5, 2) - Math.pow(halfCryptoboxColumnLength, 2));
+        double lengthToTurn = (24 + halfCryptoboxWallLength + halfCryptoboxColumnLength) - (24 - verticalFromCryptobox);
+        double lengthAfterTurn = (8 - verticalFromCryptobox) * Math.sqrt(2.0);
 
+        double horizontalBackUp = 3.0 / Math.sqrt(2);
+        double verticalBackUp = 5.0;
 
-        encoderRotateDegrees(0, 0.25, 45);
-        encoderMove(0.5, -(move_inches * Math.sqrt(2)), -(move_inches * Math.sqrt(2)));
-        encoderMove(0.5, 4, 4);
+        encoderMove(0.4, lengthToTurn, lengthToTurn);
         encoderRotateDegrees(1, 0.25, 45);
-        encoderMove(0.5, -1.1715728753, -1.1715728753);
-        encoderRotateDegrees(0, 0.5, 90);
-        encoderMove(0.5, -12.4852813742, -12.4852813742);
+        encoderMove(0.4, lengthAfterTurn, lengthAfterTurn);
+        liftPlatform();
+        lowerPlatform();
+        encoderMove(0.4, -horizontalBackUp, -horizontalBackUp);
+        encoderRotateDegrees(0, 0.25, 45);
+        encoderMove(0.4, -verticalBackUp, -verticalBackUp);
+        encoderRotateDegrees(0, 0.25, 90);
+        encoderMove(0.4, horizontalBackUp, horizontalBackUp);
+        encoderRotateDegrees(1, 0.25, 90);
+        liftPlatform();
+        encoderMove(0.4, verticalBackUp + verticalFromCryptobox - 2.25, verticalBackUp + verticalFromCryptobox - 2.25);
+        sleep(500);
+        int timesPushed = 0;
+        while (timesPushed < 2) {
+
+            encoderMove(0.25, -6, -6);
+
+            sleep(500);
+
+            encoderMove(0.25, 5.75, 5.75);
+
+            sleep(500);
+
+            timesPushed++;
+        }
         stopMotion(); //Stops all motors - a failsafe for our failsafe.
 
     }
