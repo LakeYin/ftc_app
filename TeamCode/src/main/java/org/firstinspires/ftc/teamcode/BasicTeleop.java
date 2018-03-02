@@ -200,7 +200,7 @@ public class BasicTeleop extends OpMode
 
         /** ------------------------------------------------------------------------------------ **/
         // Doubles for positional lift
-        double ratioCPR = (1.0 / winchGearRatio) * cmToIn * EncoderCPR_NeveRest20 / (WINCH_CENTER_DIAMETER * Math.PI);
+        double ratioCPR = 0.5 * (1.0 / winchGearRatio) * cmToIn * EncoderCPR_NeveRest20 / (WINCH_CENTER_DIAMETER * Math.PI);
 
         // Determines which platform position to use (default is loading)
         if (gamepad2.y && !gamepad2.a && leftFlywheel == 0)          //when you press Y on gamepad 2
