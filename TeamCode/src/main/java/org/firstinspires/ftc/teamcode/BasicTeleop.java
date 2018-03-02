@@ -28,64 +28,52 @@ public class BasicTeleop extends OpMode
 {
     /** Initialize the components of the robot **/
     /** ------------------------------------------------------------------------------------ **/
-    //private DcMotorController motorControllerDrive;
-    private DcMotor motorFR, motorBR, motorFL, motorBL, motorLift, motorFlyL, motorFlyR;
-    private Servo servoLift1, servoLift2; // also, this goes in port one of the servo controller
+    // Numerical variables
+    static double cmToIn = 2.54;
+    static double EncoderCPR_NeveRest20 = 560;
     //private Servo servoL, servoR; in case we need to switch back to servos for the flywheels
     /** ------------------------------------------------------------------------------------ **/
 
 
     /** Initialize variables for loop() **/
-    /** ------------------------------------------------------------------------------------ **/
-    // Numerical variables
-    static double cmToIn = 2.54;
-    static double EncoderCPR_NeveRest20 = 560;
+    static double PLATFORM_LOAD = 0.92;         //0 = up completely, 1 = down completely, 0.8 = flat
+    static double PLATFORM_REST = 0.75;
     //static double EncoderCPR_NeveRest40 = 1120;
-
+    static double PLATFORM_PLACE = 0.18;
+    static double MAX_LIFT_POWER_UP = 0.65;
+    static double MAX_LIFT_POWER_DOWN = 0.5;
+    static double LIFT_ROW1 = 0;                // These are in inches
+    static double LIFT_ROW2 = 6.5;                // These represent the height required to drop the
+    static double LIFT_ROW3 = 12.5;               // glyphs into their respective rows
+    static double WINCH_CENTER_DIAMETER = 3.0;  // In cm
     double x, y, r = 0;
     double slope, power;
-
     // Drive motor power variables
     double frontRight, frontLeft, backRight, backLeft;
-
     double speed = 1.0;
     double change_speed = 0, prev = 0;
     double angle;
     double hypotenuse;
-
     // Flywheel variables
     double leftFlywheel = 0;
     double rightFlywheel = 0;
     double flywheel = 0.5;
-
     // Lift variables
     double liftServo = 180;
-    static double PLATFORM_LOAD = 0.92;         //0 = up completely, 1 = down completely, 0.8 = flat
-    static double PLATFORM_REST = 0.75;
-    static double PLATFORM_PLACE = 0.18;
-
-    static double MAX_LIFT_POWER_UP = 0.65;
-    static double MAX_LIFT_POWER_DOWN = 0.5;
-
-    static double LIFT_ROW1 = 0;                // These are in inches
-    static double LIFT_ROW2 = 6;                // These represent the height required to drop the
-    static double LIFT_ROW3 = 12;               // glyphs into their respective rows
-
-    static double WINCH_CENTER_DIAMETER = 3.0;  // In cm
-
     double winchGearRatio = 1.0 / 4.0;
-    /* Current gearing: Worm Gear, winch*/
-
     double liftPower = 0;
-
     boolean swap_front_back;
+    /* Current gearing: Worm Gear, winch*/
     boolean toggleServo = true;
-
     boolean gear_ratio_is_07 = true;
     boolean flip_front = false;
     double gearRatio;
-
     double flyMaxPower = 0.5;                   //The maximum power of the motors for the flywheels (-0.5 to 0.5). Added to making operations easier
+    /** ------------------------------------------------------------------------------------ **/
+    //private DcMotorController motorControllerDrive;
+    private DcMotor motorFR, motorBR, motorFL, motorBL, motorLift, motorFlyL, motorFlyR;
+    private Servo servoLift1, servoLift2; // also, this goes in port one of the servo controller
+
     /** ------------------------------------------------------------------------------------ **/
 
 
