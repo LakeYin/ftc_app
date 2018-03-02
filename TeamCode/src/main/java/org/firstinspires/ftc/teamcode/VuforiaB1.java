@@ -173,7 +173,7 @@ public class VuforiaB1 extends AutonomousMethodMaster{
                 // If the robot is still on the stone, keep adjusting
                 else if(isOnStone)
                 {
-                    encoderMove(0.2, 2, 2); // just move...
+                    encoderMove(0.5, 2, 2); // just move...
                 }
             }
         }

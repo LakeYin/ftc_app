@@ -41,10 +41,11 @@ public class BasicTeleop extends OpMode
     //static double EncoderCPR_NeveRest40 = 1120;
     static double PLATFORM_PLACE = 0.18;
     static double MAX_LIFT_POWER_UP = 0.65;
-    static double MAX_LIFT_POWER_DOWN = 0.5;
+    static double MAX_LIFT_POWER_DOWN = 0.65;
     static double LIFT_ROW1 = 0;                // These are in inches
     static double LIFT_ROW2 = 6.5;                // These represent the height required to drop the
-    static double LIFT_ROW3 = 12.5;               // glyphs into their respective rows
+    static double LIFT_ROW3 = 13;               // glyphs into their respective rows
+    String targetLocation;                      // for telemetry
     static double WINCH_CENTER_DIAMETER = 3.0;  // In cm
     double x, y, r = 0;
     double slope, power;
@@ -170,7 +171,7 @@ public class BasicTeleop extends OpMode
          *                  left trigger is pressed. **/
         /** ------------------------------------------------------------------------------------ **/
         leftFlywheel = (gamepad2.right_trigger - gamepad2.left_trigger) * flyMaxPower;
-        leftFlywheel = Range.clip(leftFlywheel, -0.75, 0.75);
+        leftFlywheel = Range.clip(leftFlywheel, -0.5, 0.5);
 
         rightFlywheel = leftFlywheel;
 
@@ -200,7 +201,7 @@ public class BasicTeleop extends OpMode
 
         /** ------------------------------------------------------------------------------------ **/
         // Doubles for positional lift
-        double ratioCPR = 0.5 * (1.0 / winchGearRatio) * cmToIn * EncoderCPR_NeveRest20 / (WINCH_CENTER_DIAMETER * Math.PI);
+        double ratioCPR = -0.5 * (1.0 / winchGearRatio) * cmToIn * EncoderCPR_NeveRest20 / (WINCH_CENTER_DIAMETER * Math.PI);
 
         // Determines which platform position to use (default is loading)
         if (gamepad2.y && !gamepad2.a && leftFlywheel == 0)          //when you press Y on gamepad 2
@@ -221,8 +222,6 @@ public class BasicTeleop extends OpMode
         servoLift1.setPosition(liftServo);
         servoLift2.setPosition(liftServo);
 
-        String targetLocation;
-
         // Moves the lift motor
         if (gamepad2.left_bumper || gamepad2.dpad_down || gamepad2.dpad_up)
         {   // If GP2.DPAD is active, do lifting positions
@@ -235,7 +234,7 @@ public class BasicTeleop extends OpMode
                 targetLocation="Row 3";
 
             }
-            if (gamepad2.dpad_down)     // Go to Row 2
+            else if (gamepad2.dpad_down)     // Go to Row 2
             {
                 motorLift.setTargetPosition((int)(LIFT_ROW2 * ratioCPR));
                 targetLocation="Row 2";
@@ -250,10 +249,10 @@ public class BasicTeleop extends OpMode
             liftPower = Range.clip(liftPower, -0.5,0.5 );
             motorLift.setPower(liftPower);
 
-            while(motorLift.isBusy()){
+            /*while(motorLift.isBusy()){
                 telemetry.addData("Lift Motor is lifting to " , targetLocation);
                 telemetry.update();
-            }
+            }*/
 
             motorLift.setPower(0);
             motorLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -267,7 +266,7 @@ public class BasicTeleop extends OpMode
             liftPower *= (liftPower < 0) ? MAX_LIFT_POWER_UP : MAX_LIFT_POWER_DOWN;
             // If LStick is up, then multiply liftPower by POWER_UP, else by POWER_DOWN
 
-            liftPower = Range.clip(liftPower, -0.5,0.5 );
+            //liftPower = Range.clip(liftPower, -0.5,0.5 );
             motorLift.setPower(liftPower);
         }
         /** ------------------------------------------------------------------------------------ **/
@@ -633,6 +632,7 @@ public class BasicTeleop extends OpMode
         //telemetry.addData("Left Power ", leftPower);
         telemetry.addData("Servo Power", flywheel);
         telemetry.addData("Platform Position", liftServo);
+        telemetry.addData("Lift Motor is lifting to " , targetLocation);
         telemetry.addData("Lift Position", motorLift.getCurrentPosition());
 
         telemetry.addData("x", x);

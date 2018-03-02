@@ -173,20 +173,21 @@ public class VuforiaR1 extends AutonomousMethodMaster{
                 telemetry.addData("X rotation", rX);
                 telemetry.addData("Y rotation", rY);
                 telemetry.addData("Z rotation", rZ);
+                telemetry.addData("isFlat", isFlat(rZ));
 
                 telemetry.update();
 
                 //Checks if the robot is on the stone
-                if(isFlat(rZ) && !isOnStone && !isParallel(rY))
+                if(isFlat(rX) && !isOnStone && !isParallel(rY))
                 {
                     encoderRotateDegrees((rY < 90 ? 0:1), 0.5, (int)Math.round(Math.abs(rY)));
                     continue;
                 }
-                if(!isFlat(rZ))
+                if(!isFlat(rX))
                 {
                     isMovingOffStone = true;
                 }
-                if(isFlat(rZ) && isMovingOffStone)
+                if(isFlat(rX) && isMovingOffStone)
                 {
                     isOnStone = false;
                     isMovingOffStone = false;
@@ -194,10 +195,11 @@ public class VuforiaR1 extends AutonomousMethodMaster{
                 //When the robot is off the stone, calculate the distance to the cryptobox
                 if(!isOnStone)
                 {
-                    double distanceToDestination = Math.abs(tY+ (36 *inchToMm)); //The distance to the destination
+                    double distanceToDestination = Math.abs(tY + (36 *inchToMm)); //The distance to the destination
                     distanceToDestination /= inchToMm;
                     telemetry.addData("tY: (inches)", (tY / inchToMm));
                     telemetry.addData("inches to move: ", distanceToDestination);
+
                     telemetry.update();
                     sleep(5000);
                     encoderMove(0.5, -distanceToDestination, -distanceToDestination); //Move to the destination
@@ -206,7 +208,7 @@ public class VuforiaR1 extends AutonomousMethodMaster{
                 //If robot is on stone, keep adjusting
                 else if(isOnStone)
                 {
-                    encoderMove(0.2, -2, -2); // just move...
+                    encoderMove(0.5, -2, -2); // just move...
                 }
             }
         }

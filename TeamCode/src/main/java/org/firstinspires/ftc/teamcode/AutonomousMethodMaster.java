@@ -384,11 +384,11 @@ public class AutonomousMethodMaster extends LinearOpMode {
             double RPos = motorFR.getCurrentPosition();
 
             // Adds telemetry of the drive motors
-            telemetry.addData("motorFL Pos", LPos);
-            telemetry.addData("motorFR Pos", RPos);
+            //telemetry.addData("motorFL Pos", LPos);
+            //telemetry.addData("motorFR Pos", RPos);
 
             // Updates the telemetry
-            telemetry.update();
+            //telemetry.update();
 
         }
 
@@ -516,7 +516,7 @@ public class AutonomousMethodMaster extends LinearOpMode {
         parameters.vuforiaLicenseKey = "AQRacK7/////AAAAGea1bsBsYEJvq6S3KuXK4PYTz4IZmGA7SV88bdM7l26beSEWkZTUb8H352Bo/ZMC6krwmfEuXiK7d7qdFkeBt8BaD0TZAYBMwHoBkb7IBgMuDF4fnx2KiQPOvwBdsIYSIFjiJgGlSj8pKZI+M5qiLb3DG3Ty884EmsqWQY0gjd6RNhtSR+6oiXazLhezm9msyHWZtX5hQFd9XoG5npm4HoGaZNdB3g5YCAQNHipjTm3Vkf71rG/Fffif8UTCI1frmKYtb4RvqiixDSPrD6OG6YmbsPOYUt2RZ6sSTreMzVL76CNfBTzmpo2V0E6KKP2y9N19hAum3GZu3G/1GEB5D+ckL/CXk4JM66sJw3PGucCs";
 
         // indicates camera direction
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
         this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
 
         // loads data for vumarks
@@ -672,7 +672,7 @@ public class AutonomousMethodMaster extends LinearOpMode {
     {
         encoderMove(0.2, -28 + adjust, -28 + adjust);          //Moves off the stone. Moves backwards because of the way the robot will be oriented in position R2.
         encoderRotateDegrees(1, .15, 90);   //Rotates 90 degrees counterclockwise so it can back into the parking zone.
-        encoderMove(0.5, -7.75, -7.75);              //Backs into the parking zone.
+        encoderMove(0.5, -7.75 - 5, -7.75 - 5);              //Backs into the parking zone.
         encoderRotateDegrees(0, .15, 90);   //Turns
     }
 
@@ -687,7 +687,7 @@ public class AutonomousMethodMaster extends LinearOpMode {
 
     public boolean isFlat(double rotationZ)                     //Returns true if the rotation is within the margin of error of it being flat (on flat ground)
     {
-        double marginOfError = 2.5;                               //Margin of error in degrees
+        double marginOfError = 4;                               //Margin of error in degrees
 
         if(rotationZ >= -90 - marginOfError && rotationZ <= -90 + marginOfError)//Is it within the margin of error?
             return true;
