@@ -659,7 +659,7 @@ public class AutonomousMethodMaster extends LinearOpMode {
     public void parkVuforiaB1(double adjust)
     {
         encoderMove(0.2, 39 + adjust, 39 + adjust);             //Moves off the stone. Moves forwards because of the way the robot will be oriented in position B1.
-        encoderRotateDegrees(0, .15, 90);    //Rotates 90 degrees clockwise so it can back into the parking zone.
+        encoderRotateDegrees(1, .15, 90);    //Rotates 90 degrees clockwise so it can back into the parking zone.
     }
 
     public void parkVuforiaR1(double adjust)
@@ -689,7 +689,7 @@ public class AutonomousMethodMaster extends LinearOpMode {
     {
         double marginOfError = 3.5;                               //Margin of error in degrees
 
-        if(rotationZ >= -90 - marginOfError && rotationZ <= -90 + marginOfError)//Is it within the margin of error?
+        if(rotationZ >= 90 - marginOfError && rotationZ <= 90 + marginOfError)//Is it within the margin of error?
             return true;
         else
             return false;

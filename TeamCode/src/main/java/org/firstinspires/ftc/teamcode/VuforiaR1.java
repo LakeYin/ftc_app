@@ -197,7 +197,7 @@ public class VuforiaR1 extends AutonomousMethodMaster{
                 //When the robot is off the stone, calculate the distance to the cryptobox
                 if(!isOnStone)
                 {
-                    double distanceToDestination = Math.abs(tY + (36 *inchToMm)); //The distance to the destination
+                    double distanceToDestination = Math.abs(-tY + (36 *inchToMm)); //The distance to the destination
                     distanceToDestination /= inchToMm;
                     telemetry.addData("tY: (inches)", (tY / inchToMm));
                     telemetry.addData("inches to move: ", distanceToDestination);

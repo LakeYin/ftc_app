@@ -73,7 +73,7 @@ public class VuforiaB2 extends AutonomousMethodMaster{
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
 
-            move_inches = -7.63;
+            move_inches = -8.00;
         }
         else if(vuMark == RelicRecoveryVuMark.CENTER){
             telemetry.addData("VuMark", "%s visible", vuMark);
@@ -85,7 +85,7 @@ public class VuforiaB2 extends AutonomousMethodMaster{
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
 
-            move_inches = 7.63;
+            move_inches = 8.00;
         }
         else
         {
@@ -152,8 +152,13 @@ public class VuforiaB2 extends AutonomousMethodMaster{
                 }
                 if(!isOnStone)
                 {
-                    double distanceToDestination = Math.abs(tY - ((33 + phone_displacement)*inchToMm));           //The distance to the destination
-                    encoderMove(0.5, distanceToDestination/inchToMm, distanceToDestination/inchToMm); //Move to the destination
+                    double distanceToDestination = Math.abs(-tY + (36 * inchToMm)); //The distance to the destination
+                    distanceToDestination /= inchToMm;
+                    telemetry.addData("tY: (inches)", (tY / inchToMm));
+                    telemetry.addData("inches to move: ", distanceToDestination);
+                    telemetry.update();
+                    sleep(5000);
+                    encoderMove(0.5, distanceToDestination, distanceToDestination); //Move to the destination
                     break;
                 }
 
@@ -176,7 +181,7 @@ public class VuforiaB2 extends AutonomousMethodMaster{
             encoderMove(.3,1,1); //move 1 inch every time not flat
         }
         */
-        parkVuforiaB2(tY);
+        parkVuforiaB2(0);
         encoderStrafeRight(0.5, move_inches); // move based on vumark
         encoderMove(0.5, -14, -14);               //Backs into the parking zone.
         dumpGlyph();

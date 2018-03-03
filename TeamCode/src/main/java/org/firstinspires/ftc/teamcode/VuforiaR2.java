@@ -108,7 +108,7 @@ public class VuforiaR2 extends AutonomousMethodMaster{
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
 
-            move_inches = -7.63;
+            move_inches = -8.00;
         }
         else if(vuMark == RelicRecoveryVuMark.CENTER){
             telemetry.addData("VuMark", "%s visible", vuMark);
@@ -120,7 +120,7 @@ public class VuforiaR2 extends AutonomousMethodMaster{
             telemetry.addData("VuMark", "%s visible", vuMark);
             telemetry.update();
 
-            move_inches = 7.63;
+            move_inches = 8.00;
         }
         else
         {
@@ -190,7 +190,11 @@ public class VuforiaR2 extends AutonomousMethodMaster{
                 //When the robot is off the stone, calculate the distance to the cryptobox
                 if(!isOnStone)
                 {
-                    double distanceToDestination = Math.abs(tY -((33 - phone_displacement)*inchToMm));           //The distance to the destination
+                    double distanceToDestination = Math.abs(-tY + (36 *inchToMm)); //The distance to the destination
+                    distanceToDestination /= inchToMm;
+                    telemetry.addData("tY: (inches)", (tY / inchToMm));
+                    telemetry.addData("inches to move: ", distanceToDestination); //The distance to the destination
+
                     encoderMove(0.5, -distanceToDestination/inchToMm, -distanceToDestination/inchToMm); //Move to the destination
                     break;
                 }
@@ -213,7 +217,7 @@ public class VuforiaR2 extends AutonomousMethodMaster{
             encoderMove(.3,1,1); //move 1 inch every time not flat
         }
         */
-        parkVuforiaR2(tY);
+        parkVuforiaR2(0);
         encoderStrafeRight(0.5, move_inches); // move based on vumark
         encoderMove(0.5, -14, -14);               //Backs into the parking zone.
         dumpGlyph();

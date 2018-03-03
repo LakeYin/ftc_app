@@ -164,7 +164,7 @@ public class VuforiaB1 extends AutonomousMethodMaster{
                     break;
                     */
 
-                    double distanceToDestination = Math.abs(tY - (36 * inchToMm)); //The distance to the destination
+                    double distanceToDestination = Math.abs(-tY + (36 * inchToMm)); //The distance to the destination
                     distanceToDestination /= inchToMm;
                     telemetry.addData("tY: (inches)", (tY / inchToMm));
                     telemetry.addData("inches to move: ", distanceToDestination);
@@ -201,7 +201,7 @@ public class VuforiaB1 extends AutonomousMethodMaster{
         stopMotion(); //Stops all motors - a failsafe for our failsafe.
         */
 
-        encoderMove(0.5, 2,2);
+        parkVuforiaB1(0);
         encoderMove(0.5, move_inches, move_inches);
         encoderRotateDegrees(1,0.5, 90);
         encoderMove(0.5, -14, -14);               //Backs into the parking zone.
