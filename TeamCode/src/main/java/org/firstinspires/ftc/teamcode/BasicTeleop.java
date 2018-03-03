@@ -40,8 +40,8 @@ public class BasicTeleop extends OpMode
     static double PLATFORM_REST = 0.75;
     //static double EncoderCPR_NeveRest40 = 1120;
     static double PLATFORM_PLACE = 0.18;
-    static double MAX_LIFT_POWER_UP = 0.65;
-    static double MAX_LIFT_POWER_DOWN = 0.65;
+    static double MAX_LIFT_POWER_UP = 0.825;
+    static double MAX_LIFT_POWER_DOWN = 0.75;
     static double LIFT_ROW1 = 0;                // These are in inches
     static double LIFT_ROW2 = 6.5;                // These represent the height required to drop the
     static double LIFT_ROW3 = 13;               // glyphs into their respective rows
@@ -246,15 +246,15 @@ public class BasicTeleop extends OpMode
             }
             liftPower = MAX_LIFT_POWER_UP;
 
-            liftPower = Range.clip(liftPower, -0.5,0.5 );
+            liftPower = Range.clip(liftPower, -0.825,0.825 );
             motorLift.setPower(liftPower);
 
             /*while(motorLift.isBusy()){
                 telemetry.addData("Lift Motor is lifting to " , targetLocation);
                 telemetry.update();
-            }*/
+            }
 
-            motorLift.setPower(0);
+            motorLift.setPower(0);*/
             motorLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
         else
