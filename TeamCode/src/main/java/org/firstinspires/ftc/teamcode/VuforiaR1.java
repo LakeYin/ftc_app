@@ -174,20 +174,22 @@ public class VuforiaR1 extends AutonomousMethodMaster{
                 telemetry.addData("Y rotation", rY);
                 telemetry.addData("Z rotation", rZ);
                 telemetry.addData("isFlat", isFlat(rZ));
+                telemetry.addData("isOnStone", isOnStone);
+                telemetry.addData("isMovingOffStone", isMovingOffStone);
 
                 telemetry.update();
 
                 //Checks if the robot is on the stone
-                if(isFlat(rX) && !isOnStone && !isParallel(rY))
+                if(isFlat(rZ) && !isOnStone && !isParallel(rY))
                 {
                     encoderRotateDegrees((rY < 90 ? 0:1), 0.5, (int)Math.round(Math.abs(rY)));
                     continue;
                 }
-                if(!isFlat(rX))
+                if(!isFlat(rZ))
                 {
                     isMovingOffStone = true;
                 }
-                if(isFlat(rX) && isMovingOffStone)
+                if(isFlat(rZ) && isMovingOffStone)
                 {
                     isOnStone = false;
                     isMovingOffStone = false;

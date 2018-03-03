@@ -133,6 +133,10 @@ public class VuforiaB1 extends AutonomousMethodMaster{
                 telemetry.addData("Y rotation", rY);
                 telemetry.addData("Z rotation", rZ);
 
+                telemetry.addData("isFlat", isFlat(rZ));
+                telemetry.addData("isOnStone", isOnStone);
+                telemetry.addData("isMovingOffStone", isMovingOffStone);
+
                 telemetry.update();
 
                 // Checks if the robot is on the stone
