@@ -687,7 +687,7 @@ public class AutonomousMethodMaster extends LinearOpMode {
 
     public boolean isFlat(double rotationZ)                     //Returns true if the rotation is within the margin of error of it being flat (on flat ground)
     {
-        double marginOfError = 4;                               //Margin of error in degrees
+        double marginOfError = 3.5;                               //Margin of error in degrees
 
         if(rotationZ >= -90 - marginOfError && rotationZ <= -90 + marginOfError)//Is it within the margin of error?
             return true;
