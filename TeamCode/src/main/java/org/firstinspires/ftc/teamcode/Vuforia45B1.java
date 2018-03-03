@@ -185,19 +185,19 @@ public class Vuforia45B1 extends AutonomousMethodMaster{
         double horizontalBackUp = 3.0 / Math.sqrt(2);
         double verticalBackUp = 5.0;
 
-        encoderMove(0.4, lengthToTurn, lengthToTurn);
+        encoderMove(0.4, -lengthToTurn, -lengthToTurn);
         encoderRotateDegrees(1, 0.25, 45);
-        encoderMove(0.4, lengthAfterTurn, lengthAfterTurn);
+        encoderMove(0.4, -lengthAfterTurn, -lengthAfterTurn);
         liftPlatform();
         lowerPlatform();
-        encoderMove(0.4, -horizontalBackUp, -horizontalBackUp);
-        encoderRotateDegrees(0, 0.25, 45);
-        encoderMove(0.4, -verticalBackUp, -verticalBackUp);
-        encoderRotateDegrees(0, 0.25, 90);
         encoderMove(0.4, horizontalBackUp, horizontalBackUp);
+        encoderRotateDegrees(0, 0.25, 45);
+        encoderMove(0.4, verticalBackUp, verticalBackUp);
+        encoderRotateDegrees(0, 0.25, 90);
+        encoderMove(0.4, -horizontalBackUp, -horizontalBackUp);
         encoderRotateDegrees(1, 0.25, 90);
         liftPlatform();
-        encoderMove(0.4, verticalBackUp + verticalFromCryptobox - 2.25, verticalBackUp + verticalFromCryptobox - 2.25);
+        encoderMove(0.4, -(verticalBackUp + verticalFromCryptobox - 2.25), -(verticalBackUp + verticalFromCryptobox - 2.25));
         sleep(500);
         int timesPushed = 0;
         while (timesPushed < 2) {
