@@ -14,7 +14,6 @@ android {
     buildToolsVersion '26.0.2'
 }
 dependencies {
-    implementation project(':openCVLibrary320')
     implementation project(':DogeCV')
-    implementation project(':endercv')
+    implementation project(':openCVLibrary320')
 }
